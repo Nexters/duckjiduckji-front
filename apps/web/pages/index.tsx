@@ -1,21 +1,10 @@
-import { useEffect } from "react";
 import { Button } from "ui";
+import Canvas from "../components/Canvas";
 
 export default function Web() {
-  function handleMouseMove(e) {
-    console.log(e);
-  }
-  useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
-
   return (
     <div>
-      <h1>Web</h1>
-      <Button />
+      <Canvas />
     </div>
   );
 }

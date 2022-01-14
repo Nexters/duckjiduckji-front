@@ -1,0 +1,8 @@
+{
+  "Insert function": {
+    "scope": "typescriptreact,typescript",
+    "prefix": "fn",
+    "body": ["function $1 () {", "  $0", "}", ""],
+    "description": "Make a react functional component"
+  }
+}
