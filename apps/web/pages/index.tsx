@@ -1,10 +1,7 @@
-import { Button } from "ui";
-import Canvas from "../components/Canvas";
+import { default as HomeComponent } from "web/components/Home";
 
-export default function Web() {
-  return (
-    <div>
-      <Canvas />
-    </div>
-  );
+function Home() {
+  return <HomeComponent />;
 }
+
+export default Home;
