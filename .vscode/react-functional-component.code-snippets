@@ -1,0 +1,23 @@
+{
+  "Make a react functional component": {
+    "scope": "typescriptreact",
+    "prefix": "rfc",
+    "body": [
+      "interface Props {",
+      "\t",
+      "}",
+      "",
+      "function ${1:${TM_FILENAME_BASE}}({}: Props) {",
+      "\treturn (",
+      "\t\t<div>",
+      "\t\t\t$0",
+      "\t\t</div>",
+      "\t)",
+      "}",
+      "",
+      "export default ${1:${TM_FILENAME_BASE}}",
+      ""
+    ],
+    "description": "Make a react functional component"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "Insert const": {
+    "scope": "typescriptreact,typescript",
+    "prefix": "c",
+    "body": "const $1 = $2;$0",
+    "description": "Insert const"
+  }
+}
