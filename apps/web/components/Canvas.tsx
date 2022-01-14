@@ -1,71 +1,77 @@
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useWindowSize } from "react-use";
+import { Stage, Layer, Rect } from "react-konva";
+
+function generatePostIts() {
+  return [...Array(10)].map((_, i) => ({
+    id: i.toString(),
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    width: 100,
+    height: 100,
+    isDragging: false,
+  }));
+}
+
+const INITIAL_STATE = generatePostIts();
 
 interface Props {}
 
 function Canvas({}: Props) {
   const { width, height } = useWindowSize();
-  const [isDrawing, setIsDrawing] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const ctxRef = useRef<CanvasRenderingContext2D>(null);
 
-  const [lines, setLines] = useState([]);
+  const [postIts, setPostIts] = useState(INITIAL_STATE);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext("2d");
-      const scale = window.devicePixelRatio;
-      canvas.width = Math.floor(width * scale);
-      canvas.height = Math.floor(height * scale);
-      ctx.scale(scale, scale);
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = 2;
-      ctxRef.current = ctx;
-    }
-  }, [width, height]);
+  const handleDragPostIt = (e) => {
+    const id = e.target.id();
+    setPostIts(
+      postIts.map((postIt) => {
+        return {
+          ...postIt,
+          isDragging: postIt.id === id,
+        };
+      })
+    );
+  };
 
-  function startDrawing() {
-    setIsDrawing(true);
-  }
-
-  function finishDrawing() {
-    setIsDrawing(false);
-  }
-
-  function drawLine(e: MouseEvent<HTMLCanvasElement>) {
-    const { clientX, clientY } = e;
-    const ctx = ctxRef.current;
-
-    if (ctxRef.current) {
-      if (isDrawing) {
-        ctx.lineTo(clientX, clientY);
-        ctx.stroke();
-      } else {
-        ctx.beginPath();
-        ctx.moveTo(clientX, clientY);
-      }
-    }
-  }
+  const handleDragEnd = (e) => {
+    setPostIts(
+      postIts.map((postIt) => {
+        return {
+          ...postIt,
+          isDragging: false,
+        };
+      })
+    );
+  };
 
   return (
-    <div ref={containerRef}>
-      <canvas
-        style={{ width: width ?? 300, height: height ?? 300 }}
-        ref={canvasRef}
-        onMouseDown={startDrawing}
-        onMouseUp={finishDrawing}
-        onMouseMove={drawLine}
-        onMouseLeave={finishDrawing}
-      ></canvas>
-      <button
-        onClick={() => ctxRef.current.scale(2, 2)}
-        style={{ position: "fixed", top: 0, left: 0 }}
-      >
-        CLICK
-      </button>
-    </div>
+    <Stage width={width ?? 300} height={height ?? 300}>
+      <Layer>
+        {postIts.map((postIt) => (
+          <Rect
+            key={postIt.id}
+            id={postIt.id}
+            x={postIt.x}
+            y={postIt.y}
+            width={postIt.width}
+            height={postIt.height}
+            fill="#feff9c"
+            opacity={0.8}
+            draggable
+            shadowColor="black"
+            shadowBlur={10}
+            shadowOpacity={0.6}
+            shadowOffsetX={postIt.isDragging ? 10 : 5}
+            shadowOffsetY={postIt.isDragging ? 10 : 5}
+            scaleX={postIt.isDragging ? 1.2 : 1}
+            scaleY={postIt.isDragging ? 1.2 : 1}
+            onDragStart={handleDragPostIt}
+            onDragEnd={handleDragEnd}
+          />
+        ))}
+      </Layer>
+    </Stage>
   );
 }
 
