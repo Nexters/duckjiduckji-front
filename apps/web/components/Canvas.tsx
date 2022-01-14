@@ -57,7 +57,7 @@ function Canvas({}: Props) {
             width={postIt.width}
             height={postIt.height}
             fill="#feff9c"
-            opacity={0.8}
+            opacity={1}
             draggable
             shadowColor="black"
             shadowBlur={10}
