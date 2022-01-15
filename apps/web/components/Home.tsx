@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
 
 const MainCanvas = dynamic(() => import("web/components/Canvas"), {
   ssr: false,
