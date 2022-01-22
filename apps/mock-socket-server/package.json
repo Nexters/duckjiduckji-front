@@ -1,0 +1,15 @@
+{
+  "name": "mock-socket-server",
+  "version": "1.0.0",
+  "description": "socketjs for Nodejs",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.15",
+    "sockjs": "^0.3.24"
+  }
+}
