@@ -1,16 +1,7 @@
-import dynamic from "next/dynamic";
-
-const MainCanvas = dynamic(() => import("web/components/Canvas"), {
-  ssr: false,
-  loading: () => <p>LOADING...</p>,
-});
-
-interface Props {}
-
-function Home({}: Props) {
+function Home() {
   return (
     <>
-      <MainCanvas />
+      <div>LANDING PAGE</div>
     </>
   );
 }
