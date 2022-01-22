@@ -63,18 +63,21 @@ function Canvas({}: Props) {
   }
 
   function handleMouseDown(e) {
+    console.log(e);
     isDrawing.current = true;
-    const pos = e.target.getStage().getPointerPosition();
+    const pos = stageRef.current.getRelativePointerPosition();
+    // console.log(e.target.getStage());
+    // console.log(pos);
     setLines([...lines, { tool, points: [pos.x, pos.y] }]);
+    // console.log(e.target.stage.x());
   }
-
+  console.log(lines);
   function handleMouseMove(e) {
     // no drawing - skipping
     if (!isDrawing.current) {
       return;
     }
-    const stage = e.target.getStage();
-    const point = stage.getPointerPosition();
+    const point = stageRef.current.getRelativePointerPosition();
     let lastLine = lines[lines.length - 1];
     // add point
     lastLine.points = lastLine.points.concat([point.x, point.y]);
