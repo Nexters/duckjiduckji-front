@@ -33,7 +33,7 @@ const Button = styled.button<{ image: string }>`
   width: 40px;
   height: 40px;
   margin: 20px;
-  padding: 5px;
+  padding: 0;
   border: none;
 
   /* border: 1px solid #000; */
@@ -48,17 +48,29 @@ const Button = styled.button<{ image: string }>`
   transition-duration: 0.4s;
 
   :hover {
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
-      rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   }
 `;
 
-export const MenuBar = () => {
+type Props = {
+  setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const MenuBar = ({ setEditOpen }: Props) => {
+  const openEditModal = () => {
+    setEditOpen(true);
+  };
+
   return (
     <Wrapper>
       <Button image={"/assets/image/cursor_ico.svg"} />
       <Button image={"/assets/image/hand_ico.svg"} />
-      <Button image={"/assets/image/postit_ico.svg"} />
+      <Button
+        onClick={() => {
+          openEditModal();
+        }}
+        image={"/assets/image/postit_ico.svg"}
+      />
       <Button image={"/assets/image/sticker_ico.svg"} />
       <Button image={"/assets/image/rotate_ico.svg"} />
       <Button image={"/assets/image/remove_ico.svg"} />

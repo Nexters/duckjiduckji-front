@@ -1,7 +1,9 @@
 import dynamic from "next/dynamic";
+import React, { useState } from "react";
 
 import { ActionBar } from "../../components/layout/ActionBar";
 import { MenuBar } from "../../components/layout/MenuBar";
+import { EditModal } from "../../components/layout/EditModal";
 
 const MainCanvas = dynamic(() => import("web/components/Canvas"), {
   ssr: false,
@@ -11,10 +13,13 @@ const MainCanvas = dynamic(() => import("web/components/Canvas"), {
 interface Props {}
 
 function WhiteBoard({}: Props) {
+  const [isEditOpen, setEditOpen] = useState<boolean>(false);
+
   return (
     <>
+      {isEditOpen && <EditModal setEditOpen={setEditOpen} />}
       <ActionBar />
-      <MenuBar />
+      <MenuBar setEditOpen={setEditOpen} />
       <MainCanvas />
     </>
   );
