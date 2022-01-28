@@ -1,32 +1,47 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { useKeyPressEvent, useWindowSize } from "react-use";
-import { Stage, Layer, Rect, Line } from "react-konva";
-
-function generatePostIts() {
-  return [...Array(10)].map((_, i) => ({
-    id: i.toString(),
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    width: 100,
-    height: 100,
-    isDragging: false,
-  }));
-}
+import { Stage, Layer } from "react-konva";
+import PostIt from "./editor/Postit";
+import Polaroid from "./editor/Polaroid";
 
 const INITIAL_STATE = generatePostIts();
 const SCALE_BY = 1.01;
-type Tools = "PEN" | "ERASER";
+
+const POLAROID_WIDTH = 306;
+const POLAROID_HEIGHT = 528;
+
+function generatePostIts() {
+  const POSTIT_WIDTH = 200;
+  const POSTIT_HEIHT = 200;
+
+  return [...Array(5)].map((_, i) => ({
+    id: i.toString(),
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    width: POSTIT_WIDTH,
+    height: POSTIT_HEIHT,
+    isDragging: false,
+  }));
+}
 
 interface Props {}
 
 function Canvas({}: Props) {
   const { width, height } = useWindowSize();
   const [postIts, setPostIts] = useState(INITIAL_STATE);
-  const [tool, setTool] = useState<Tools>("ERASER");
-  const [lines, setLines] = useState([]);
+  const [polaroids, setPolaroids] = useState([
+    {
+      id: "1",
+      x: width / 2 - POLAROID_WIDTH / 2,
+      y: height / 2 - POLAROID_HEIGHT / 2,
+      width: POLAROID_WIDTH,
+      height: POLAROID_HEIGHT,
+      isDragging: false,
+      text: "",
+    },
+  ]);
   const [isStageDraggable, setIsStageDraggable] = useState(false);
   const [cursor, setCursor] = useState<string>("auto");
-  const isDrawing = useRef(false);
   const stageRef = useRef(null);
   useKeyPressEvent(
     " ",
@@ -39,6 +54,54 @@ function Canvas({}: Props) {
       setCursor("auto");
     }
   );
+  const inputRef = useRef(null);
+  const [inputStyle, setInputStyle] = useState<any>({
+    background: "red",
+  });
+
+  const [target, setTarget] = useState<any>({});
+
+  const handleDragStart = useCallback((e) => {
+    const id = e.target.id();
+    setPostIts((oldPostIts) =>
+      oldPostIts.map((postIt) => ({
+        ...postIt,
+        isDragging: postIt.id === id,
+      }))
+    );
+  }, []);
+
+  // TODO: 드래그가 끝나는 시점에 옮겨진 좌표를 실제로 업데이트 해야 함.
+  // TODO: PostIt 과 Polaroid 타입을 구분해서 이벤트 처리 해야 함
+  const handleDragEnd = useCallback((e) => {
+    setPostIts((oldPostIts) =>
+      oldPostIts.map((postIt) => ({
+        ...postIt,
+        isDragging: false,
+      }))
+    );
+  }, []);
+
+  const handleTextAreaDoubleClick = (polaroid) => {
+    inputRef.current.value = "";
+    inputRef.current.focus();
+    setTarget(polaroid);
+    setInputStyle({
+      opacity: 1,
+      position: "fixed",
+      contain: "strict",
+      left: polaroid.x + 33 + 14,
+      top: polaroid.y + 33 + 360 + 20 + 13,
+      fontSize: 13,
+      outlineStyle: "none",
+      border: "none",
+      width: 216,
+      height: 70,
+      resize: "none",
+      fontFamily: "Pretendard",
+      color: "#595664",
+    });
+  };
 
   function handleStageWheel(e) {
     e.evt.preventDefault();
@@ -50,6 +113,8 @@ function Canvas({}: Props) {
         x: (pointerX - stage.x()) / oldScale,
         y: (pointerY - stage.y()) / oldScale,
       };
+
+      // TODO: SCALE_BY 라는 상수대신 휠의 속도를 고려한 deltaY 를 활용해야 할 듯
       const newScale =
         e.evt.deltaY < 0 ? oldScale * SCALE_BY : oldScale / SCALE_BY;
       stage.scale({ x: newScale, y: newScale });
@@ -62,58 +127,6 @@ function Canvas({}: Props) {
     }
   }
 
-  function handleMouseDown(e) {
-    console.log(e);
-    isDrawing.current = true;
-    const pos = stageRef.current.getRelativePointerPosition();
-    // console.log(e.target.getStage());
-    // console.log(pos);
-    setLines([...lines, { tool, points: [pos.x, pos.y] }]);
-    // console.log(e.target.stage.x());
-  }
-  console.log(lines);
-  function handleMouseMove(e) {
-    // no drawing - skipping
-    if (!isDrawing.current) {
-      return;
-    }
-    const point = stageRef.current.getRelativePointerPosition();
-    let lastLine = lines[lines.length - 1];
-    // add point
-    lastLine.points = lastLine.points.concat([point.x, point.y]);
-
-    // replace last
-    lines.splice(lines.length - 1, 1, lastLine);
-    setLines(lines.concat());
-  }
-
-  function handleMouseUp() {
-    isDrawing.current = false;
-  }
-
-  const handleDragPostIt = (e) => {
-    const id = e.target.id();
-    setPostIts(
-      postIts.map((postIt) => {
-        return {
-          ...postIt,
-          isDragging: postIt.id === id,
-        };
-      })
-    );
-  };
-
-  const handleDragEnd = (e) => {
-    setPostIts(
-      postIts.map((postIt) => {
-        return {
-          ...postIt,
-          isDragging: false,
-        };
-      })
-    );
-  };
-
   return (
     <div style={{ cursor }}>
       <Stage
@@ -121,58 +134,45 @@ function Canvas({}: Props) {
         draggable={isStageDraggable}
         width={width ?? 300}
         height={height ?? 300}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
         onWheel={handleStageWheel}
       >
         <Layer>
           {postIts.map((postIt) => (
-            <Rect
+            <PostIt
               key={postIt.id}
-              id={postIt.id}
-              x={postIt.x}
-              y={postIt.y}
-              width={postIt.width}
-              height={postIt.height}
-              fill="#feff9c"
-              opacity={1}
-              draggable
-              shadowColor="black"
-              shadowBlur={10}
-              shadowOpacity={0.6}
-              shadowOffsetX={postIt.isDragging ? 10 : 5}
-              shadowOffsetY={postIt.isDragging ? 10 : 5}
-              onDragStart={handleDragPostIt}
-              onDragEnd={handleDragEnd}
+              {...{
+                postIt,
+                onDragStart: handleDragStart,
+                onDragEnd: handleDragEnd,
+              }}
             />
           ))}
-          {lines.map((line, i) => (
-            <Line
-              key={i}
-              points={line.points}
-              stroke="#df4b26"
-              strokeWidth={5}
-              tension={0.5}
-              lineCap="round"
-              globalCompositeOperation={
-                line.tool === "ERASER" ? "destination-out" : "source-over"
-              }
+          {polaroids.map((polaroid) => (
+            <Polaroid
+              key={polaroid.id}
+              {...{
+                polaroid,
+                onTextAreaDoubleClick: handleTextAreaDoubleClick,
+                onDragStart: handleDragStart,
+                onDragEnd: handleDragEnd,
+              }}
             />
           ))}
         </Layer>
       </Stage>
-      <select
-        style={{ position: "fixed", bottom: "100px", left: "100px" }}
-        value={tool}
+      <textarea
+        style={inputStyle}
+        ref={inputRef}
         onChange={(e) => {
-          const targetTool = e.currentTarget.value as Tools;
-          setTool(targetTool);
+          const updatedPolaroids = polaroids.map((polaroid) => {
+            if (polaroid.id === target.id)
+              return { ...polaroid, text: e.target.value };
+            return polaroid;
+          });
+          setPolaroids(updatedPolaroids);
         }}
-      >
-        <option value="PEN">Pen</option>
-        <option value="ERASER">Eraser</option>
-      </select>
+        onBlur={() => setInputStyle({ opacity: 0 })}
+      />
     </div>
   );
 }

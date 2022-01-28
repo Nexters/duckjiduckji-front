@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 
-import { Polaroid } from "../editor/Polaroid";
+import { Polaroid } from "../editor/PolaroidHTML";
 import { Options } from "../editor/Options";
 
 const Wrapper = styled.div`
