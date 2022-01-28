@@ -37,8 +37,6 @@ function Canvas({}: Props) {
     }
   );
 
-  console.log(postIts);
-
   const handleDragStart = useCallback((e) => {
     const id = e.target.id();
 
@@ -50,6 +48,7 @@ function Canvas({}: Props) {
     );
   }, []);
 
+  // TODO: 드래그가 끝나는 시점에 옮겨진 좌표를 실제로 업데이트 해야 함.
   const handleDragEnd = useCallback((e) => {
     setPostIts((oldPostIts) =>
       oldPostIts.map((postIt) => ({
@@ -69,6 +68,8 @@ function Canvas({}: Props) {
         x: (pointerX - stage.x()) / oldScale,
         y: (pointerY - stage.y()) / oldScale,
       };
+
+      // TODO: SCALE_BY 라는 상수대신 휠의 속도를 고려한 deltaY 를 활용해야 할 듯
       const newScale =
         e.evt.deltaY < 0 ? oldScale * SCALE_BY : oldScale / SCALE_BY;
       stage.scale({ x: newScale, y: newScale });
