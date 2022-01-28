@@ -1,9 +1,9 @@
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
 
-import { ActionBar } from "../../components/layout/ActionBar";
-import { MenuBar } from "../../components/layout/MenuBar";
-import { EditModal } from "../../components/layout/EditModal";
+import { ActionBar } from "web/components/layout/ActionBar";
+import { MenuBar } from "web/components/layout/MenuBar";
+import { EditModal } from "web/components/layout/EditModal";
 
 const MainCanvas = dynamic(() => import("web/components/Canvas"), {
   ssr: false,

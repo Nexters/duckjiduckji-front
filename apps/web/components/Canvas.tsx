@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useKeyPressEvent, useWindowSize } from "react-use";
-import { Stage, Layer, Rect, Line } from "react-konva";
+import { Stage, Layer, Rect } from "react-konva";
 
 function generatePostIts() {
   return [...Array(10)].map((_, i) => ({
@@ -15,18 +15,14 @@ function generatePostIts() {
 
 const INITIAL_STATE = generatePostIts();
 const SCALE_BY = 1.01;
-type Tools = "PEN" | "ERASER";
 
 interface Props {}
 
 function Canvas({}: Props) {
   const { width, height } = useWindowSize();
   const [postIts, setPostIts] = useState(INITIAL_STATE);
-  const [tool, setTool] = useState<Tools>("ERASER");
-  const [lines, setLines] = useState([]);
   const [isStageDraggable, setIsStageDraggable] = useState(false);
   const [cursor, setCursor] = useState<string>("auto");
-  const isDrawing = useRef(false);
   const stageRef = useRef(null);
   useKeyPressEvent(
     " ",
@@ -62,35 +58,6 @@ function Canvas({}: Props) {
     }
   }
 
-  function handleMouseDown(e) {
-    console.log(e);
-    isDrawing.current = true;
-    const pos = stageRef.current.getRelativePointerPosition();
-    // console.log(e.target.getStage());
-    // console.log(pos);
-    setLines([...lines, { tool, points: [pos.x, pos.y] }]);
-    // console.log(e.target.stage.x());
-  }
-  console.log(lines);
-  function handleMouseMove(e) {
-    // no drawing - skipping
-    if (!isDrawing.current) {
-      return;
-    }
-    const point = stageRef.current.getRelativePointerPosition();
-    let lastLine = lines[lines.length - 1];
-    // add point
-    lastLine.points = lastLine.points.concat([point.x, point.y]);
-
-    // replace last
-    lines.splice(lines.length - 1, 1, lastLine);
-    setLines(lines.concat());
-  }
-
-  function handleMouseUp() {
-    isDrawing.current = false;
-  }
-
   const handleDragPostIt = (e) => {
     const id = e.target.id();
     setPostIts(
@@ -121,9 +88,6 @@ function Canvas({}: Props) {
         draggable={isStageDraggable}
         width={width ?? 300}
         height={height ?? 300}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
         onWheel={handleStageWheel}
       >
         <Layer>
@@ -147,32 +111,8 @@ function Canvas({}: Props) {
               onDragEnd={handleDragEnd}
             />
           ))}
-          {lines.map((line, i) => (
-            <Line
-              key={i}
-              points={line.points}
-              stroke="#df4b26"
-              strokeWidth={5}
-              tension={0.5}
-              lineCap="round"
-              globalCompositeOperation={
-                line.tool === "ERASER" ? "destination-out" : "source-over"
-              }
-            />
-          ))}
         </Layer>
       </Stage>
-      <select
-        style={{ position: "fixed", bottom: "100px", left: "100px" }}
-        value={tool}
-        onChange={(e) => {
-          const targetTool = e.currentTarget.value as Tools;
-          setTool(targetTool);
-        }}
-      >
-        <option value="PEN">Pen</option>
-        <option value="ERASER">Eraser</option>
-      </select>
     </div>
   );
 }
