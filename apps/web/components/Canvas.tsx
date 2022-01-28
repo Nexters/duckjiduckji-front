@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { useKeyPressEvent, useWindowSize } from "react-use";
-import { Stage, Layer, Rect } from "react-konva";
+import { Stage, Layer } from "react-konva";
+import PostIt from "./editor/Postit";
 
 function generatePostIts() {
   return [...Array(10)].map((_, i) => ({
@@ -36,6 +37,28 @@ function Canvas({}: Props) {
     }
   );
 
+  console.log(postIts);
+
+  const handleDragStart = useCallback((e) => {
+    const id = e.target.id();
+
+    setPostIts((oldPostIts) =>
+      oldPostIts.map((postIt) => ({
+        ...postIt,
+        isDragging: postIt.id === id,
+      }))
+    );
+  }, []);
+
+  const handleDragEnd = useCallback((e) => {
+    setPostIts((oldPostIts) =>
+      oldPostIts.map((postIt) => ({
+        ...postIt,
+        isDragging: false,
+      }))
+    );
+  }, []);
+
   function handleStageWheel(e) {
     e.evt.preventDefault();
     const stage = stageRef.current;
@@ -58,29 +81,6 @@ function Canvas({}: Props) {
     }
   }
 
-  const handleDragPostIt = (e) => {
-    const id = e.target.id();
-    setPostIts(
-      postIts.map((postIt) => {
-        return {
-          ...postIt,
-          isDragging: postIt.id === id,
-        };
-      })
-    );
-  };
-
-  const handleDragEnd = (e) => {
-    setPostIts(
-      postIts.map((postIt) => {
-        return {
-          ...postIt,
-          isDragging: false,
-        };
-      })
-    );
-  };
-
   return (
     <div style={{ cursor }}>
       <Stage
@@ -92,23 +92,13 @@ function Canvas({}: Props) {
       >
         <Layer>
           {postIts.map((postIt) => (
-            <Rect
+            <PostIt
               key={postIt.id}
-              id={postIt.id}
-              x={postIt.x}
-              y={postIt.y}
-              width={postIt.width}
-              height={postIt.height}
-              fill="#feff9c"
-              opacity={1}
-              draggable
-              shadowColor="black"
-              shadowBlur={10}
-              shadowOpacity={0.6}
-              shadowOffsetX={postIt.isDragging ? 10 : 5}
-              shadowOffsetY={postIt.isDragging ? 10 : 5}
-              onDragStart={handleDragPostIt}
-              onDragEnd={handleDragEnd}
+              {...{
+                postIt,
+                onDragStart: handleDragStart,
+                onDragEnd: handleDragEnd,
+              }}
             />
           ))}
         </Layer>
