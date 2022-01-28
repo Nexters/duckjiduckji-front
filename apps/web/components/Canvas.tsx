@@ -13,7 +13,7 @@ const POLAROID_HEIGHT = 528;
 function generatePostIts() {
   const POSTIT_WIDTH = 200;
   const POSTIT_HEIHT = 200;
-  console.log(POSTIT_HEIHT);
+
   return [...Array(5)].map((_, i) => ({
     id: i.toString(),
     x: Math.random() * window.innerWidth,
@@ -37,6 +37,7 @@ function Canvas({}: Props) {
       width: POLAROID_WIDTH,
       height: POLAROID_HEIGHT,
       isDragging: false,
+      text: "",
     },
   ]);
   const [isStageDraggable, setIsStageDraggable] = useState(false);
@@ -53,9 +54,12 @@ function Canvas({}: Props) {
       setCursor("auto");
     }
   );
+  const inputRef = useRef(null);
+  const [inputStyle, setInputStyle] = useState<any>({
+    background: "red",
+  });
 
-  console.log(stageRef.current);
-  console.log(postIts);
+  const [target, setTarget] = useState<any>({});
 
   const handleDragStart = useCallback((e) => {
     const id = e.target.id();
@@ -77,6 +81,27 @@ function Canvas({}: Props) {
       }))
     );
   }, []);
+
+  const handleTextAreaDoubleClick = (polaroid) => {
+    inputRef.current.value = "";
+    inputRef.current.focus();
+    setTarget(polaroid);
+    setInputStyle({
+      opacity: 1,
+      position: "fixed",
+      contain: "strict",
+      left: polaroid.x + 33 + 14,
+      top: polaroid.y + 33 + 360 + 20 + 13,
+      fontSize: 13,
+      outlineStyle: "none",
+      border: "none",
+      width: 216,
+      height: 70,
+      resize: "none",
+      fontFamily: "Pretendard",
+      color: "#595664",
+    });
+  };
 
   function handleStageWheel(e) {
     e.evt.preventDefault();
@@ -127,6 +152,7 @@ function Canvas({}: Props) {
               key={polaroid.id}
               {...{
                 polaroid,
+                onTextAreaDoubleClick: handleTextAreaDoubleClick,
                 onDragStart: handleDragStart,
                 onDragEnd: handleDragEnd,
               }}
@@ -134,6 +160,19 @@ function Canvas({}: Props) {
           ))}
         </Layer>
       </Stage>
+      <textarea
+        style={inputStyle}
+        ref={inputRef}
+        onChange={(e) => {
+          const updatedPolaroids = polaroids.map((polaroid) => {
+            if (polaroid.id === target.id)
+              return { ...polaroid, text: e.target.value };
+            return polaroid;
+          });
+          setPolaroids(updatedPolaroids);
+        }}
+        onBlur={() => setInputStyle({ opacity: 0 })}
+      />
     </div>
   );
 }
