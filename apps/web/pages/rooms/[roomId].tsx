@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { ActionBar } from "web/components/layout/ActionBar";
 import { MenuBar } from "web/components/layout/MenuBar";

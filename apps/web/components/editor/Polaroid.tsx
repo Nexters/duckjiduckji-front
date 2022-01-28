@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -71,7 +70,7 @@ const Text = styled.section`
 export const Polaroid = () => {
   return (
     <Wrapper>
-      <Photo type={"image"} />
+      <Photo />
       <Text>
         <input placeholder="내용을 입력해주세요!" />
       </Text>
