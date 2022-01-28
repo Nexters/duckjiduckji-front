@@ -2,26 +2,43 @@ import { useRef, useState, useCallback } from "react";
 import { useKeyPressEvent, useWindowSize } from "react-use";
 import { Stage, Layer } from "react-konva";
 import PostIt from "./editor/Postit";
-
-function generatePostIts() {
-  return [...Array(10)].map((_, i) => ({
-    id: i.toString(),
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    width: 100,
-    height: 100,
-    isDragging: false,
-  }));
-}
+import Polaroid from "./editor/Polaroid";
 
 const INITIAL_STATE = generatePostIts();
 const SCALE_BY = 1.01;
+
+const POLAROID_WIDTH = 306;
+const POLAROID_HEIGHT = 528;
+
+function generatePostIts() {
+  const POSTIT_WIDTH = 200;
+  const POSTIT_HEIHT = 200;
+  console.log(POSTIT_HEIHT);
+  return [...Array(5)].map((_, i) => ({
+    id: i.toString(),
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    width: POSTIT_WIDTH,
+    height: POSTIT_HEIHT,
+    isDragging: false,
+  }));
+}
 
 interface Props {}
 
 function Canvas({}: Props) {
   const { width, height } = useWindowSize();
   const [postIts, setPostIts] = useState(INITIAL_STATE);
+  const [polaroids, setPolaroids] = useState([
+    {
+      id: "1",
+      x: width / 2 - POLAROID_WIDTH / 2,
+      y: height / 2 - POLAROID_HEIGHT / 2,
+      width: POLAROID_WIDTH,
+      height: POLAROID_HEIGHT,
+      isDragging: false,
+    },
+  ]);
   const [isStageDraggable, setIsStageDraggable] = useState(false);
   const [cursor, setCursor] = useState<string>("auto");
   const stageRef = useRef(null);
@@ -37,9 +54,11 @@ function Canvas({}: Props) {
     }
   );
 
+  console.log(stageRef.current);
+  console.log(postIts);
+
   const handleDragStart = useCallback((e) => {
     const id = e.target.id();
-
     setPostIts((oldPostIts) =>
       oldPostIts.map((postIt) => ({
         ...postIt,
@@ -49,6 +68,7 @@ function Canvas({}: Props) {
   }, []);
 
   // TODO: 드래그가 끝나는 시점에 옮겨진 좌표를 실제로 업데이트 해야 함.
+  // TODO: PostIt 과 Polaroid 타입을 구분해서 이벤트 처리 해야 함
   const handleDragEnd = useCallback((e) => {
     setPostIts((oldPostIts) =>
       oldPostIts.map((postIt) => ({
@@ -97,6 +117,16 @@ function Canvas({}: Props) {
               key={postIt.id}
               {...{
                 postIt,
+                onDragStart: handleDragStart,
+                onDragEnd: handleDragEnd,
+              }}
+            />
+          ))}
+          {polaroids.map((polaroid) => (
+            <Polaroid
+              key={polaroid.id}
+              {...{
+                polaroid,
                 onDragStart: handleDragStart,
                 onDragEnd: handleDragEnd,
               }}
