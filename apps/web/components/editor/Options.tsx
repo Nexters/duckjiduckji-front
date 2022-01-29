@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100vw;
-  height: 250px;
+  height: 150px;
   left: 0px;
   bottom: 0px;
+  background: white;
+  z-index: 10000;
 
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;

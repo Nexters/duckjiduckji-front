@@ -18,7 +18,8 @@
     "react-use": "^17.3.2",
     "styled-components": "^5.3.3",
     "styled-reset": "^4.3.4",
-    "ui": "*"
+    "ui": "*",
+    "use-image": "^1.0.8"
   },
   "devDependencies": {
     "@types/react": "17.0.37",

@@ -3,22 +3,20 @@ import styled from "styled-components";
 import { Polaroid } from "../editor/PolaroidHTML";
 import { Options } from "../editor/Options";
 
-const Wrapper = styled.div`
-  z-index: 150;
+// const Wrapper = styled.div`
+//   z-index: 150;
 
-  display: flex;
-  flex-direction: column;
+//   display: flex;
+//   flex-direction: column;
 
-  justify-content: center;
-  align-items: center;
+//   justify-content: center;
+//   align-items: center;
 
-  position: absolute;
+//   position: absolute;
 
-  width: 100vw;
-  height: 100vh;
-
-  background-color: #3131315c;
-`;
+//   width: 100vw;
+//   height: 100vh;
+// `;
 
 type Props = {
   setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,12 +27,7 @@ export const EditModal = ({ setEditOpen }: Props) => {
     setEditOpen(false);
   };
 
-  return (
-    <Wrapper>
-      <Polaroid />
-      <Options close={closeModal} />
-    </Wrapper>
-  );
+  return <Options close={closeModal} />;
 };
 
 export default EditModal;

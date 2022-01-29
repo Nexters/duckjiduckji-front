@@ -1,6 +1,6 @@
-import { Rect, Group, Text, Line } from "react-konva";
-import { Html } from "react-konva-utils";
-
+import { useState } from "react";
+import { Rect, Group, Text, Line, Image } from "react-konva";
+import useImage from "use-image";
 const POLAROID_WIDTH = 306;
 const POLAROID_HEIGHT = 528;
 
@@ -12,6 +12,7 @@ type Polaroid = {
   height: number;
   isDragging: boolean;
   text: string;
+  imgUrl: string;
 };
 
 type Props = {
@@ -27,6 +28,8 @@ function Polaroid({
   onDragStart,
   onTextAreaDoubleClick,
 }: Props) {
+  const [image] = useImage(polaroid.imgUrl);
+  const [isImageShown, setIsImageShown] = useState(false);
   return (
     <Group draggable onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <Rect
@@ -44,7 +47,7 @@ function Polaroid({
         shadowOffsetX={polaroid.isDragging ? 10 : 5}
         shadowOffsetY={polaroid.isDragging ? 10 : 5}
       />
-      <Group>
+      <Group onClick={() => setIsImageShown(true)}>
         <Rect
           x={polaroid.x + 33}
           y={polaroid.y + 33}
@@ -52,34 +55,47 @@ function Polaroid({
           height={360}
           fill="white"
         />
-        <Line
-          points={[
-            polaroid.x + POLAROID_WIDTH / 2 - 8,
-            polaroid.y + 201,
-            polaroid.x + POLAROID_WIDTH / 2 + 8,
-            polaroid.y + 201,
-          ]}
-          stroke="#716E7A"
-          strokeWidth={2}
-        />
-        <Line
-          points={[
-            polaroid.x + POLAROID_WIDTH / 2,
-            polaroid.y + 201 - 8,
-            polaroid.x + POLAROID_WIDTH / 2,
-            polaroid.y + 201 + 8,
-          ]}
-          stroke="#716E7A"
-          strokeWidth={2}
-        />
-        <Text
-          text="사진을 넣어주세요!"
-          x={polaroid.x + 97}
-          y={polaroid.y + 224}
-          fontSize={15}
-          fontFamily="Pretendard"
-          fill="#B8B7BC"
-        />
+
+        {isImageShown ? (
+          <Image
+            image={image}
+            x={polaroid.x + 33}
+            y={polaroid.y + 33}
+            width={240}
+            height={360}
+          />
+        ) : (
+          <>
+            <Line
+              points={[
+                polaroid.x + POLAROID_WIDTH / 2 - 8,
+                polaroid.y + 201,
+                polaroid.x + POLAROID_WIDTH / 2 + 8,
+                polaroid.y + 201,
+              ]}
+              stroke="#716E7A"
+              strokeWidth={2}
+            />
+            <Line
+              points={[
+                polaroid.x + POLAROID_WIDTH / 2,
+                polaroid.y + 201 - 8,
+                polaroid.x + POLAROID_WIDTH / 2,
+                polaroid.y + 201 + 8,
+              ]}
+              stroke="#716E7A"
+              strokeWidth={2}
+            />
+            <Text
+              text="사진을 넣어주세요!"
+              x={polaroid.x + 97}
+              y={polaroid.y + 224}
+              fontSize={15}
+              fontFamily="Pretendard"
+              fill="#B8B7BC"
+            />
+          </>
+        )}
       </Group>
       <Group
         id={polaroid.id}

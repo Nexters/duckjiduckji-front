@@ -20,7 +20,7 @@ function WhiteBoard({}: Props) {
       {isEditOpen && <EditModal setEditOpen={setEditOpen} />}
       <ActionBar />
       <MenuBar setEditOpen={setEditOpen} />
-      <MainCanvas />
+      <MainCanvas isShown={isEditOpen} />
     </>
   );
 }

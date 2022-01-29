@@ -24,9 +24,11 @@ function generatePostIts() {
   }));
 }
 
-interface Props {}
+interface Props {
+  isShown: boolean;
+}
 
-function Canvas({}: Props) {
+function Canvas({ isShown }: Props) {
   const { width, height } = useWindowSize();
   const [postIts, setPostIts] = useState(INITIAL_STATE);
   const [polaroids, setPolaroids] = useState([
@@ -38,6 +40,8 @@ function Canvas({}: Props) {
       height: POLAROID_HEIGHT,
       isDragging: false,
       text: "",
+      imgUrl:
+        "https://user-images.githubusercontent.com/27193396/151647337-5802e7c9-0004-4d4a-b134-322fc23d824e.png",
     },
   ]);
   const [isStageDraggable, setIsStageDraggable] = useState(false);
@@ -58,6 +62,7 @@ function Canvas({}: Props) {
   const [inputStyle, setInputStyle] = useState<any>({
     background: "red",
   });
+  const fileInputRef = useRef(null);
 
   const [target, setTarget] = useState<any>({});
 
@@ -147,17 +152,18 @@ function Canvas({}: Props) {
               }}
             />
           ))}
-          {polaroids.map((polaroid) => (
-            <Polaroid
-              key={polaroid.id}
-              {...{
-                polaroid,
-                onTextAreaDoubleClick: handleTextAreaDoubleClick,
-                onDragStart: handleDragStart,
-                onDragEnd: handleDragEnd,
-              }}
-            />
-          ))}
+          {isShown &&
+            polaroids.map((polaroid) => (
+              <Polaroid
+                key={polaroid.id}
+                {...{
+                  polaroid,
+                  onTextAreaDoubleClick: handleTextAreaDoubleClick,
+                  onDragStart: handleDragStart,
+                  onDragEnd: handleDragEnd,
+                }}
+              />
+            ))}
         </Layer>
       </Stage>
       <textarea
