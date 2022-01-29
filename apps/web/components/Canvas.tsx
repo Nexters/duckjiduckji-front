@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback } from "react";
 import { useKeyPressEvent, useWindowSize } from "react-use";
 import { Stage, Layer } from "react-konva";
-import PostIt from "./editor/Postit";
+import PostIt from "./editor/PostIt";
 import Polaroid from "./editor/Polaroid";
 
 const INITIAL_STATE = generatePostIts();
