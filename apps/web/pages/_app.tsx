@@ -2,13 +2,7 @@ import type { AppProps } from "next/app";
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
+import { RecoilRoot } from "recoil";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
