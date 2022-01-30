@@ -1,14 +1,14 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Rect } from 'react-konva';
-import { IPostIt } from 'web/atoms/types';
+import { IPostIt } from 'web/shared/types';
 
-type Props = {
+interface Props {
   postIt: IPostIt;
   onDragStart: (postIt: IPostIt, e: KonvaEventObject<DragEvent>) => void;
   onDragEnd: (postIt: IPostIt, e: KonvaEventObject<DragEvent>) => void;
-};
+}
 
-function PostIt({ postIt, onDragEnd, onDragStart }: Props) {
+export function PostIt({ postIt, onDragEnd, onDragStart }: Props) {
   return (
     <Rect
       id={postIt.id}
@@ -29,5 +29,3 @@ function PostIt({ postIt, onDragEnd, onDragStart }: Props) {
     />
   );
 }
-
-export default PostIt;

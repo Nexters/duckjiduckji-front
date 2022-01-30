@@ -7,7 +7,7 @@ import { ActionBar } from 'web/components/layout/ActionBar';
 import { MenuBar } from 'web/components/layout/MenuBar';
 import { EditModal } from 'web/components/layout/EditModal';
 
-const MainCanvas = dynamic(() => import('web/components/MainCanvas'), {
+const MainCanvas = dynamic(() => import('web/components/canvas/MainCanvas'), {
   ssr: false,
   loading: () => <p>LOADING...</p>,
 });
@@ -18,8 +18,6 @@ function WhiteBoard({}: Props) {
   const [isEditOpen, setEditOpen] = useState<boolean>(false);
   const [canvas, setCanvas] = useRecoilState(canvasState);
   const polaroid = useRecoilValue(polaroidState);
-
-  console.log(canvas, polaroid);
 
   return (
     <>

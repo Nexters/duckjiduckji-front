@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Rect, Group, Text, Line, Image } from 'react-konva';
 import useImage from 'use-image';
-import { IPolaroid } from 'web/atoms/types';
-import { POLAROID_WIDTH } from 'web/atoms/consts';
+import { IPolaroid } from 'web/shared/types';
+import { POLAROID_WIDTH } from 'web/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
   onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<MouseEvent>) => void;
 };
 
-function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick }: Props) {
+export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick }: Props) {
   const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
   return (
@@ -101,5 +101,3 @@ function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick }: P
     </Group>
   );
 }
-
-export default Polaroid;
