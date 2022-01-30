@@ -1,48 +1,22 @@
 import { useRef, useState, useCallback } from 'react';
 import { useKeyPressEvent, useWindowSize } from 'react-use';
 import { Stage, Layer } from 'react-konva';
-import PostIt from './editor/PostIt';
-import Polaroid from './editor/Polaroid';
+import PostIt from 'web/components/editor/PostIt';
+import Polaroid from 'web/components/editor/Polaroid';
+import { useRecoilState } from 'recoil';
+import { canvasState } from 'web/atoms';
+import { IPolaroid, IPostIt } from 'web/atoms/types';
+import { KonvaEventObject } from 'konva/lib/Node';
 
-const INITIAL_STATE = generatePostIts();
 const SCALE_BY = 1.01;
-
-const POLAROID_WIDTH = 306;
-const POLAROID_HEIGHT = 528;
-
-function generatePostIts() {
-  const POSTIT_WIDTH = 200;
-  const POSTIT_HEIHT = 200;
-
-  return [...Array(5)].map((_, i) => ({
-    id: i.toString(),
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    width: POSTIT_WIDTH,
-    height: POSTIT_HEIHT,
-    isDragging: false,
-  }));
-}
 
 interface Props {
   isShown: boolean;
 }
 
 function MainCanvas({ isShown }: Props) {
+  const [canvas, setCanvas] = useRecoilState(canvasState);
   const { width, height } = useWindowSize();
-  const [postIts, setPostIts] = useState(INITIAL_STATE);
-  const [polaroids, setPolaroids] = useState([
-    {
-      id: '1',
-      x: width / 2 - POLAROID_WIDTH / 2,
-      y: height / 2 - POLAROID_HEIGHT / 2,
-      width: POLAROID_WIDTH,
-      height: POLAROID_HEIGHT,
-      isDragging: false,
-      text: '',
-      imgUrl: 'https://user-images.githubusercontent.com/27193396/151647337-5802e7c9-0004-4d4a-b134-322fc23d824e.png',
-    },
-  ]);
   const [isStageDraggable, setIsStageDraggable] = useState(false);
   const [cursor, setCursor] = useState<string>('auto');
   const stageRef = useRef(null);
@@ -61,32 +35,33 @@ function MainCanvas({ isShown }: Props) {
   const [inputStyle, setInputStyle] = useState<any>({
     background: 'red',
   });
-  const fileInputRef = useRef(null);
 
   const [target, setTarget] = useState<any>({});
 
-  const handleDragStart = useCallback(e => {
+  const handleDragStart = useCallback((target: IPolaroid | IPostIt, e: KonvaEventObject<DragEvent>) => {
     const id = e.target.id();
-    setPostIts(oldPostIts =>
-      oldPostIts.map(postIt => ({
-        ...postIt,
-        isDragging: postIt.id === id,
-      })),
-    );
+    // setCanvas(oldCanvas => ({...oldCanvas, })
+    //   oldPostIts.map(postIt => ({
+    //     ...postIt,
+    //     isDragging: postIt.id === id,
+    //   })),
+    // );
   }, []);
 
   // TODO: 드래그가 끝나는 시점에 옮겨진 좌표를 실제로 업데이트 해야 함.
   // TODO: PostIt 과 Polaroid 타입을 구분해서 이벤트 처리 해야 함
   const handleDragEnd = useCallback(e => {
-    setPostIts(oldPostIts =>
-      oldPostIts.map(postIt => ({
-        ...postIt,
-        isDragging: false,
-      })),
-    );
+    console.log(e);
+    // setPostIts(oldPostIts =>
+    //   oldPostIts.map(postIt => ({
+    //     ...postIt,
+    //     isDragging: false,
+    //   })),
+    // );
   }, []);
 
-  const handleTextAreaDoubleClick = polaroid => {
+  const handleTextAreaDoubleClick = (polaroid: IPolaroid, e: KonvaEventObject<MouseEvent>) => {
+    console.log(polaroid, e);
     inputRef.current.value = '';
     inputRef.current.focus();
     setTarget(polaroid);
@@ -139,7 +114,7 @@ function MainCanvas({ isShown }: Props) {
         height={height ?? 300}
         onWheel={handleStageWheel}>
         <Layer>
-          {postIts.map(postIt => (
+          {canvas.postIts.map(postIt => (
             <PostIt
               key={postIt.id}
               {...{
@@ -150,7 +125,7 @@ function MainCanvas({ isShown }: Props) {
             />
           ))}
           {isShown &&
-            polaroids.map(polaroid => (
+            canvas.polaroids.map(polaroid => (
               <Polaroid
                 key={polaroid.id}
                 {...{
@@ -167,11 +142,11 @@ function MainCanvas({ isShown }: Props) {
         style={inputStyle}
         ref={inputRef}
         onChange={e => {
-          const updatedPolaroids = polaroids.map(polaroid => {
+          const updatedPolaroids = canvas.polaroids.map(polaroid => {
             if (polaroid.id === target.id) return { ...polaroid, text: e.target.value };
             return polaroid;
           });
-          setPolaroids(updatedPolaroids);
+          setCanvas(oldCanvas => ({ ...oldCanvas, polaroids: updatedPolaroids }));
         }}
         onBlur={() => setInputStyle({ opacity: 0 })}
       />

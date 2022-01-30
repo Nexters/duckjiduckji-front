@@ -1,18 +1,11 @@
-import { Rect } from "react-konva";
-
-type PostIt = {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  isDragging: boolean;
-};
+import { KonvaEventObject } from 'konva/lib/Node';
+import { Rect } from 'react-konva';
+import { IPostIt } from 'web/atoms/types';
 
 type Props = {
-  postIt: PostIt;
-  onDragStart: (e) => void;
-  onDragEnd: (e) => void;
+  postIt: IPostIt;
+  onDragStart: (postIt: IPostIt, e: KonvaEventObject<DragEvent>) => void;
+  onDragEnd: (postIt: IPostIt, e: KonvaEventObject<DragEvent>) => void;
 };
 
 function PostIt({ postIt, onDragEnd, onDragStart }: Props) {
@@ -31,8 +24,8 @@ function PostIt({ postIt, onDragEnd, onDragStart }: Props) {
       shadowOpacity={0.6}
       shadowOffsetX={postIt.isDragging ? 10 : 5}
       shadowOffsetY={postIt.isDragging ? 10 : 5}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
+      onDragStart={e => onDragStart(postIt, e)}
+      onDragEnd={e => onDragEnd(postIt, e)}
     />
   );
 }

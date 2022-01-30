@@ -1,37 +1,22 @@
-import { useState } from "react";
-import { Rect, Group, Text, Line, Image } from "react-konva";
-import useImage from "use-image";
-const POLAROID_WIDTH = 306;
-const POLAROID_HEIGHT = 528;
-
-type Polaroid = {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  isDragging: boolean;
-  text: string;
-  imgUrl: string;
-};
+import { useState } from 'react';
+import { Rect, Group, Text, Line, Image } from 'react-konva';
+import useImage from 'use-image';
+import { IPolaroid } from 'web/atoms/types';
+import { POLAROID_WIDTH } from 'web/atoms/consts';
+import { KonvaEventObject } from 'konva/lib/Node';
 
 type Props = {
-  polaroid: Polaroid;
-  onDragStart: (e) => void;
-  onDragEnd: (e) => void;
-  onTextAreaDoubleClick: (polaroid: Polaroid) => void;
+  polaroid: IPolaroid;
+  onDragStart: (polaroid: IPolaroid, e: KonvaEventObject<DragEvent>) => void;
+  onDragEnd: (polaroid: IPolaroid, e: KonvaEventObject<DragEvent>) => void;
+  onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<MouseEvent>) => void;
 };
 
-function Polaroid({
-  polaroid,
-  onDragEnd,
-  onDragStart,
-  onTextAreaDoubleClick,
-}: Props) {
+function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick }: Props) {
   const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
   return (
-    <Group draggable onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    <Group draggable onDragStart={e => onDragStart(polaroid, e)} onDragEnd={e => onDragEnd(polaroid, e)}>
       <Rect
         id={polaroid.id}
         x={polaroid.x}
@@ -48,22 +33,10 @@ function Polaroid({
         shadowOffsetY={polaroid.isDragging ? 10 : 5}
       />
       <Group onClick={() => setIsImageShown(true)}>
-        <Rect
-          x={polaroid.x + 33}
-          y={polaroid.y + 33}
-          width={240}
-          height={360}
-          fill="white"
-        />
+        <Rect x={polaroid.x + 33} y={polaroid.y + 33} width={240} height={360} fill="white" />
 
         {isImageShown ? (
-          <Image
-            image={image}
-            x={polaroid.x + 33}
-            y={polaroid.y + 33}
-            width={240}
-            height={360}
-          />
+          <Image image={image} x={polaroid.x + 33} y={polaroid.y + 33} width={240} height={360} />
         ) : (
           <>
             <Line
@@ -97,10 +70,7 @@ function Polaroid({
           </>
         )}
       </Group>
-      <Group
-        id={polaroid.id}
-        onDblClick={() => onTextAreaDoubleClick(polaroid)}
-      >
+      <Group id={polaroid.id} onDblClick={e => onTextAreaDoubleClick(polaroid, e)}>
         <Rect
           x={polaroid.x + 33}
           y={polaroid.y + 33 + 360 + 20}
@@ -110,12 +80,12 @@ function Polaroid({
           fill="white"
         />
         <Text
-          text={polaroid.text || "내용을 입력해주세요!"}
+          text={polaroid.text || '내용을 입력해주세요!'}
           x={polaroid.x + 33 + 14}
           y={polaroid.y + 33 + 360 + 20 + 14}
           fontFamily="Pretendard"
           fontSize={13}
-          fill={polaroid.text ? "#595664" : "#B8B7BC"}
+          fill={polaroid.text ? '#595664' : '#B8B7BC'}
         />
         {/* <Html
           transform={true}
