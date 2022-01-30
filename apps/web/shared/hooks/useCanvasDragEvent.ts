@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { IPolaroid, IPostIt } from 'web/shared/types';
 
-export function useCanvasDragEvents() {
+export function useCanvasDragEvent() {
   const handleDragStart = useCallback((target: IPolaroid | IPostIt, e: KonvaEventObject<DragEvent>) => {
     const id = e.target.id();
     // setCanvas(oldCanvas => ({...oldCanvas, })

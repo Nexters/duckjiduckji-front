@@ -1,0 +1,14 @@
+// prettier-ignore
+{
+  "Make a react custom hook": {
+    "scope": "typescript",
+    "prefix": "ch",
+    "body": [
+      "export function ${1:${TM_FILENAME_BASE}}() {",
+      "\t$0",
+      "}",
+      ""
+    ],
+    "description": "Make a react functional component"
+  }
+}

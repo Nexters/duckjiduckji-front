@@ -1,13 +1,13 @@
 import { IPolaroid } from 'web/shared/types';
 import { Polaroid } from 'web/components/canvas/shapes/Polaroid';
-import { useCanvasDragEvents } from 'web/shared/hooks/useCanvasDragEvents';
+import { useCanvasDragEvent } from 'web/shared/hooks';
 
 interface Props {
   polaroids: IPolaroid[];
 }
 
 export function Polaroids({ polaroids }: Props) {
-  const { handleDragStart, handleDragEnd } = useCanvasDragEvents();
+  const { handleDragStart, handleDragEnd } = useCanvasDragEvent();
 
   return (
     <>

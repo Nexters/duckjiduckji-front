@@ -87,16 +87,6 @@ export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleCli
           fontSize={13}
           fill={polaroid.text ? '#595664' : '#B8B7BC'}
         />
-        {/* <Html
-          transform={true}
-          transformFunc={(attrs) => ({
-            ...attrs,
-            x: polaroid.x + 33 + 14,
-            y: polaroid.y + 33 + 360 + 20 + 13,
-          })}
-        >
-          <input placeholder="내용을 입력해주세요!" />
-        </Html> */}
       </Group>
     </Group>
   );

@@ -1,13 +1,13 @@
 import { IPostIt } from 'web/shared/types';
 import { PostIt } from 'web/components/canvas/shapes';
-import { useCanvasDragEvents } from 'web/shared/hooks/useCanvasDragEvents';
+import { useCanvasDragEvent } from 'web/shared/hooks';
 
 interface Props {
   postIts: IPostIt[];
 }
 
 export function PostIts({ postIts }: Props) {
-  const { handleDragStart, handleDragEnd } = useCanvasDragEvents();
+  const { handleDragStart, handleDragEnd } = useCanvasDragEvent();
 
   return (
     <>
