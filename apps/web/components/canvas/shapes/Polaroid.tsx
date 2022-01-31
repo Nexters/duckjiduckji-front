@@ -4,6 +4,7 @@ import useImage from 'use-image';
 import { IPolaroid } from 'web/shared/types';
 import { POLAROID_WIDTH } from 'web/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
+import { useCanvasDblClickEvent } from '../../../shared/hooks';
 
 type Props = {
   polaroid: IPolaroid;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick }: Props) {
+  const { handleDblClick } = useCanvasDblClickEvent();
   const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
   return (
@@ -70,7 +72,7 @@ export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleCli
           </>
         )}
       </Group>
-      <Group id={polaroid.id} onDblClick={e => onTextAreaDoubleClick(polaroid, e)}>
+      <Group id={polaroid.id} onDblClick={e => handleDblClick(polaroid, e)}>
         <Rect
           x={polaroid.x + 33}
           y={polaroid.y + 33 + 360 + 20}

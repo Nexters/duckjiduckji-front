@@ -17,6 +17,7 @@
     "react-konva-utils": "^0.2.0",
     "react-use": "^17.3.2",
     "recoil": "^0.5.2",
+    "recoil-nexus": "^0.3.15",
     "styled-components": "^5.3.3",
     "styled-reset": "^4.3.4",
     "ui": "*",

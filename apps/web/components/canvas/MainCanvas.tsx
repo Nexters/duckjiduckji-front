@@ -3,7 +3,7 @@ import { useKeyPressEvent, useWindowSize } from 'react-use';
 import { Stage, Layer } from 'react-konva';
 import { Polaroids, PostIts } from 'web/components/canvas/shapes';
 import { useRecoilState } from 'recoil';
-import { shapesState } from 'web/atoms';
+import { shapesState, userActionState } from 'web/atoms';
 
 const SCALE_BY = 1.01;
 
@@ -13,6 +13,7 @@ interface Props {
 
 function MainCanvas({ isShown }: Props) {
   const [canvas, setCanvas] = useRecoilState(shapesState);
+  const [userAction, setUserAction] = useRecoilState(userActionState);
   const { width, height } = useWindowSize();
   const [isStageDraggable, setIsStageDraggable] = useState(false);
   const [cursor, setCursor] = useState<string>('auto');
@@ -32,6 +33,8 @@ function MainCanvas({ isShown }: Props) {
   const [inputStyle, setInputStyle] = useState<any>({
     background: 'red',
   });
+
+  console.log(userAction);
 
   function handleStageWheel(e) {
     e.evt.preventDefault();
