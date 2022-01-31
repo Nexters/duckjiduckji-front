@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Rect, Group, Text, Line, Image } from 'react-konva';
 import useImage from 'use-image';
-import { IPolaroid } from 'web/shared/types';
-import { POLAROID_WIDTH } from 'web/shared/consts';
+import { IPolaroid } from 'web/src/shared/types';
+import { POLAROID_WIDTH } from 'web/src/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { useCanvasDblClickEvent } from 'web/shared/hooks';
+import { useRecoilValue } from 'recoil';
+import { userActionState } from 'web/src/atoms';
 
 type Props = {
   polaroid: IPolaroid;
@@ -14,11 +15,10 @@ type Props = {
 };
 
 export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick }: Props) {
-  const { handleDblClick } = useCanvasDblClickEvent();
   const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
   return (
-    <Group draggable onDragStart={e => onDragStart(polaroid, e)} onDragEnd={e => onDragEnd(polaroid, e)}>
+    <Group draggable={true} onDragStart={e => onDragStart(polaroid, e)} onDragEnd={e => onDragEnd(polaroid, e)}>
       <Rect
         id={polaroid.id}
         x={polaroid.x}
@@ -72,7 +72,7 @@ export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleCli
           </>
         )}
       </Group>
-      <Group id={polaroid.id} onDblClick={e => handleDblClick(polaroid, e)}>
+      <Group id={polaroid.id} onDblClick={e => onTextAreaDoubleClick(polaroid, e)}>
         <Rect
           x={polaroid.x + 33}
           y={polaroid.y + 33 + 360 + 20}

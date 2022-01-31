@@ -1,6 +1,8 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Rect } from 'react-konva';
-import { IPostIt } from 'web/shared/types';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { IPostIt } from 'web/src/shared/types';
+import { userActionState } from 'web/src/atoms';
 
 interface Props {
   postIt: IPostIt;
@@ -18,7 +20,7 @@ export function PostIt({ postIt, onDragEnd, onDragStart }: Props) {
       height={postIt.height}
       fill="#feff9c"
       opacity={1}
-      draggable
+      draggable={true}
       shadowColor="black"
       shadowBlur={10}
       shadowOpacity={0.6}

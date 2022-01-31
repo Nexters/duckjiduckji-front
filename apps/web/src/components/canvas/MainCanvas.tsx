@@ -2,9 +2,9 @@ import { useRef, useState } from 'react';
 import { useKeyPressEvent, useWindowSize } from 'react-use';
 import { Stage, Layer } from 'react-konva';
 import Konva from 'konva';
-import { Polaroids, PostIts } from 'web/components/canvas/shapes';
+import { Polaroids, PostIts } from 'web/src/components/canvas/shapes';
 import { useRecoilState } from 'recoil';
-import { shapesState, userActionState } from 'web/atoms';
+import { shapesState, userActionState } from 'web/src/atoms';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -26,7 +26,7 @@ var lastDist = 0;
 interface Props {}
 
 function MainCanvas({}: Props) {
-  const [canvas, setCanvas] = useRecoilState(shapesState);
+  const [shapes, setShapes] = useRecoilState(shapesState);
   const [userAction, setUserAction] = useRecoilState(userActionState);
   const { width, height } = useWindowSize();
   const [isStageDraggable, setIsStageDraggable] = useState(false);
@@ -48,7 +48,7 @@ function MainCanvas({}: Props) {
     background: 'red',
   });
 
-  console.log(userAction);
+  console.log(userAction, shapes);
 
   function handleStageWheel(e) {
     e.evt.preventDefault();
@@ -71,6 +71,10 @@ function MainCanvas({}: Props) {
       stageRef.current.position(newPos);
       stageRef.current.batchDraw();
     }
+  }
+
+  function handleDblTap(e) {
+    alert(JSON.stringify(stageRef.current.getPointerPosition()));
   }
 
   const spanRef = useRef(null);
@@ -100,13 +104,15 @@ function MainCanvas({}: Props) {
       </span> */}
       <Stage
         ref={stageRef}
-        draggable={isStageDraggable}
+        draggable={true}
         width={width ?? 300}
         height={height ?? 300}
         onWheel={handleStageWheel}
+        onDblTap={handleDblTap}
         onTouchEnd={e => {
           lastDist = 0;
           lastCenter = null;
+          setUserAction('browse');
         }}
         onTouchMove={e => {
           e.evt.preventDefault();
@@ -119,6 +125,8 @@ function MainCanvas({}: Props) {
             if (stageRef.current.isDragging()) {
               stageRef.current.stopDrag();
             }
+
+            setUserAction('pinch');
 
             var p1 = {
               x: touch1.clientX,
@@ -168,8 +176,8 @@ function MainCanvas({}: Props) {
           }
         }}>
         <Layer>
-          <PostIts postIts={canvas.postIts} />
-          <Polaroids polaroids={canvas.polaroids} />
+          <PostIts postIts={shapes.postIts} />
+          <Polaroids polaroids={shapes.polaroids} />
         </Layer>
       </Stage>
     </div>
