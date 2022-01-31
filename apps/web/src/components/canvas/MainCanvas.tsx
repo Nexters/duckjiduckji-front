@@ -48,7 +48,7 @@ function MainCanvas({}: Props) {
     background: 'red',
   });
 
-  console.log(userAction, shapes);
+  const isShapesDraggable = userAction === 'pinch' ? false : true;
 
   function handleStageWheel(e) {
     e.evt.preventDefault();
@@ -176,8 +176,8 @@ function MainCanvas({}: Props) {
           }
         }}>
         <Layer>
-          <PostIts postIts={shapes.postIts} />
-          <Polaroids polaroids={shapes.polaroids} />
+          <PostIts postIts={shapes.postIts} isDraggable={isShapesDraggable} />
+          <Polaroids polaroids={shapes.polaroids} isDraggable={isShapesDraggable} />
         </Layer>
       </Stage>
     </div>

@@ -4,21 +4,20 @@ import useImage from 'use-image';
 import { IPolaroid } from 'web/src/shared/types';
 import { POLAROID_WIDTH } from 'web/src/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { useRecoilValue } from 'recoil';
-import { userActionState } from 'web/src/atoms';
 
 type Props = {
   polaroid: IPolaroid;
   onDragStart: (polaroid: IPolaroid, e: KonvaEventObject<DragEvent>) => void;
   onDragEnd: (polaroid: IPolaroid, e: KonvaEventObject<DragEvent>) => void;
   onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<MouseEvent>) => void;
+  isDraggable: boolean;
 };
 
-export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick }: Props) {
+export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick, isDraggable }: Props) {
   const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
   return (
-    <Group draggable={true} onDragStart={e => onDragStart(polaroid, e)} onDragEnd={e => onDragEnd(polaroid, e)}>
+    <Group draggable={isDraggable} onDragStart={e => onDragStart(polaroid, e)} onDragEnd={e => onDragEnd(polaroid, e)}>
       <Rect
         id={polaroid.id}
         x={polaroid.x}

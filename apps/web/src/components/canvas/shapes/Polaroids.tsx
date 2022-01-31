@@ -1,15 +1,12 @@
 import { IPolaroid } from 'web/src/shared/types';
 import { Polaroid } from 'web/src/components/canvas/shapes/Polaroid';
-import { useRecoilState } from 'recoil';
-import { userActionState } from '../../../atoms';
 
 interface Props {
   polaroids: IPolaroid[];
+  isDraggable: boolean;
 }
 
-export function Polaroids({ polaroids }: Props) {
-  const [action, setAction] = useRecoilState(userActionState);
-  console.log(action);
+export function Polaroids({ polaroids, isDraggable }: Props) {
   return (
     <>
       {polaroids.map(polaroid => (
@@ -17,6 +14,7 @@ export function Polaroids({ polaroids }: Props) {
           key={polaroid.id}
           {...{
             polaroid,
+            isDraggable,
             onTextAreaDoubleClick: () => {},
             onDragStart: () => {},
             onDragEnd: () => {},

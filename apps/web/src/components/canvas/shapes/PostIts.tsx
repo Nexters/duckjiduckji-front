@@ -3,9 +3,10 @@ import { PostIt } from 'web/src/components/canvas/shapes';
 
 interface Props {
   postIts: IPostIt[];
+  isDraggable: boolean;
 }
 
-export function PostIts({ postIts }: Props) {
+export function PostIts({ postIts, isDraggable }: Props) {
   return (
     <>
       {postIts.map(postIt => (
@@ -13,6 +14,7 @@ export function PostIts({ postIts }: Props) {
           key={postIt.id}
           {...{
             postIt,
+            isDraggable,
             onDragStart: () => {},
             onDragEnd: () => {},
           }}
