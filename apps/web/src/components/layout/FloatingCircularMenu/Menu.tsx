@@ -63,6 +63,11 @@ const Circle = styled(motion.div)`
       transform: scale(1.15);
     }
   }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
 `;
 
 function MenuItem({ Icon, onClick, label, index, totalItems }) {

@@ -31,6 +31,12 @@ const ButtonBase = styled.button<{ isOpen: boolean }>`
     transition: 0.25s ease-in-out;
     transform: rotate(${p => (p.isOpen ? 45 : 0)}deg);
   }
+
+  &:focus {
+    outline: 0 !important;
+    box-shadow: none;
+    -webkit-tab-highlight-color: rgba(0, 0, 0, 0);
+  }
 `;
 
 interface Props {

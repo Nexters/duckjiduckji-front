@@ -12,20 +12,23 @@ import { Code } from '@styled-icons/boxicons-regular/Code';
 
 import Button from './Button';
 import Menu from './Menu';
+import { useWindowSize } from 'react-use';
+import { BUTTON_SIZE } from './consts';
 
 interface Props {}
 
 export function FloatingCircularMenu({}: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const { width } = useWindowSize();
 
-  const { triggerProps, layerProps, renderLayer, arrowProps } = useLayer({
+  const { triggerProps, layerProps, renderLayer } = useLayer({
     isOpen,
     ResizeObserver,
     placement: 'center',
   });
 
   return (
-    <div style={{ position: 'fixed', bottom: 100, right: 100 }}>
+    <div style={{ position: 'fixed', bottom: 60, left: width / 2 - BUTTON_SIZE / 2 }}>
       <Button {...triggerProps} onClick={e => setIsOpen(!isOpen)} isOpen={isOpen} />
       {renderLayer(
         <AnimatePresence>

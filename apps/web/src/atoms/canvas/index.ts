@@ -21,8 +21,8 @@ export const shapesState = atom({
       {
         type: 'polaroid',
         id: '1',
-        x: 300,
-        y: 300,
+        x: 100,
+        y: 100,
         width: POLAROID_WIDTH,
         height: POLAROID_HEIGHT,
         isDragging: false,

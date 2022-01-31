@@ -1,4 +1,4 @@
-import { default as HomeComponent } from "web/components/Home";
+import { default as HomeComponent } from 'web/src/components/Home';
 
 function Home() {
   return <HomeComponent />;

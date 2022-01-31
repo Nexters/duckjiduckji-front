@@ -8,6 +8,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     overflow: hidden;
   }
+  * { -webkit-tab-highlight-color : rgba(0,0,0,0); }
+  *:focus { -webkit-tab-highlight-color : rgba(0,0,0,0); }
 `;
 
 function App({ Component, pageProps }: AppProps) {

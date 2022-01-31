@@ -20,8 +20,8 @@ function getCenter(p1, p2) {
   };
 }
 
-var lastCenter = null;
-var lastDist = 0;
+let lastCenter = null;
+let lastDist = 0;
 
 interface Props {}
 
@@ -53,24 +53,23 @@ function MainCanvas({}: Props) {
   function handleStageWheel(e) {
     e.evt.preventDefault();
     const stage = stageRef.current;
-    if (stage) {
-      const oldScale = stageRef.current.scaleX();
-      const { x: pointerX, y: pointerY } = stageRef.current.getPointerPosition();
-      const mousePointTo = {
-        x: (pointerX - stageRef.current.x()) / oldScale,
-        y: (pointerY - stageRef.current.y()) / oldScale,
-      };
+    if (!stage) return;
+    const oldScale = stageRef.current.scaleX();
+    const { x: pointerX, y: pointerY } = stageRef.current.getPointerPosition();
+    const mousePointTo = {
+      x: (pointerX - stageRef.current.x()) / oldScale,
+      y: (pointerY - stageRef.current.y()) / oldScale,
+    };
 
-      // TODO: SCALE_BY 라는 상수대신 휠의 속도를 고려한 deltaY 를 활용해야 할 듯
-      const newScale = e.evt.deltaY < 0 ? oldScale * SCALE_BY : oldScale / SCALE_BY;
-      stageRef.current.scale({ x: newScale, y: newScale });
-      const newPos = {
-        x: pointerX - mousePointTo.x * newScale,
-        y: pointerY - mousePointTo.y * newScale,
-      };
-      stageRef.current.position(newPos);
-      stageRef.current.batchDraw();
-    }
+    // TODO: SCALE_BY 라는 상수대신 휠의 속도를 고려한 deltaY 를 활용해야 할 듯
+    const newScale = e.evt.deltaY < 0 ? oldScale * SCALE_BY : oldScale / SCALE_BY;
+    stageRef.current.scale({ x: newScale, y: newScale });
+    const newPos = {
+      x: pointerX - mousePointTo.x * newScale,
+      y: pointerY - mousePointTo.y * newScale,
+    };
+    stageRef.current.position(newPos);
+    stageRef.current.batchDraw();
   }
 
   function handleDblTap(e) {
@@ -79,6 +78,7 @@ function MainCanvas({}: Props) {
 
   const spanRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
+  console.log(stageRef.current?.scaleX());
   return (
     <div style={{ cursor }}>
       {/* <input
@@ -116,8 +116,8 @@ function MainCanvas({}: Props) {
         }}
         onTouchMove={e => {
           e.evt.preventDefault();
-          var touch1 = e.evt.touches[0];
-          var touch2 = e.evt.touches[1];
+          const touch1 = e.evt.touches[0];
+          const touch2 = e.evt.touches[1];
 
           if (touch1 && touch2) {
             // if the stage was under Konva's drag&drop
@@ -128,11 +128,11 @@ function MainCanvas({}: Props) {
 
             setUserAction('pinch');
 
-            var p1 = {
+            const p1 = {
               x: touch1.clientX,
               y: touch1.clientY,
             };
-            var p2 = {
+            const p2 = {
               x: touch2.clientX,
               y: touch2.clientY,
             };
@@ -141,30 +141,30 @@ function MainCanvas({}: Props) {
               lastCenter = getCenter(p1, p2);
               return;
             }
-            var newCenter = getCenter(p1, p2);
+            const newCenter = getCenter(p1, p2);
 
-            var dist = getDistance(p1, p2);
+            const dist = getDistance(p1, p2);
 
             if (!lastDist) {
               lastDist = dist;
             }
 
             // local coordinates of center point
-            var pointTo = {
+            const pointTo = {
               x: (newCenter.x - stageRef.current.x()) / stageRef.current.scaleX(),
               y: (newCenter.y - stageRef.current.y()) / stageRef.current.scaleX(),
             };
 
-            var scale = stageRef.current.scaleX() * (dist / lastDist);
+            const scale = stageRef.current.scaleX() * (dist / lastDist);
 
             stageRef.current.scaleX(scale);
             stageRef.current.scaleY(scale);
 
             // calculate new position of the stage
-            var dx = newCenter.x - lastCenter.x;
-            var dy = newCenter.y - lastCenter.y;
+            const dx = newCenter.x - lastCenter.x;
+            const dy = newCenter.y - lastCenter.y;
 
-            var newPos = {
+            const newPos = {
               x: newCenter.x - pointTo.x * scale + dx,
               y: newCenter.y - pointTo.y * scale + dy,
             };
