@@ -1,9 +1,8 @@
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
 import { ActionBar } from 'web/src/components/layout/ActionBar';
 import { EditModal } from 'web/src/components/layout/EditModal';
-import { userActionState } from '../../atoms';
+import { FloatingCircularMenu } from 'web/src/components/layout/FloatingCircularMenu';
 
 const MainCanvas = dynamic(() => import('web/src/components/canvas/MainCanvas'), {
   ssr: false,
@@ -20,6 +19,7 @@ function WhiteBoard({}: Props) {
       {isEditOpen && <EditModal setEditOpen={setEditOpen} />}
       <ActionBar />
       <MainCanvas />
+      <FloatingCircularMenu />
     </>
   );
 }
