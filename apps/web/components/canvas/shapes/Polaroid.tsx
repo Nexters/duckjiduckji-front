@@ -4,7 +4,7 @@ import useImage from 'use-image';
 import { IPolaroid } from 'web/shared/types';
 import { POLAROID_WIDTH } from 'web/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { useCanvasDblClickEvent } from '../../../shared/hooks';
+import { useCanvasDblClickEvent } from 'web/shared/hooks';
 
 type Props = {
   polaroid: IPolaroid;
@@ -34,7 +34,7 @@ export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleCli
         shadowOffsetX={polaroid.isDragging ? 10 : 5}
         shadowOffsetY={polaroid.isDragging ? 10 : 5}
       />
-      <Group onClick={() => setIsImageShown(true)}>
+      <Group onClick={() => setIsImageShown(true)} onTouchEnd={() => setIsImageShown(true)}>
         <Rect x={polaroid.x + 33} y={polaroid.y + 33} width={240} height={360} fill="white" />
 
         {isImageShown ? (
