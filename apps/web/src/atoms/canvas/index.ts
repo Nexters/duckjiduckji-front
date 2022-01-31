@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil';
 import { POLAROID_HEIGHT, POLAROID_WIDTH, POSTIT_HEIHT, POSTIT_WIDTH } from 'web/src/shared/consts';
+import { UserAction } from 'web/src/shared/types';
 
 // TEMP
 function generatePostIts() {
@@ -50,7 +51,7 @@ export const postItState = selector({
   },
 });
 
-export const userActionState = atom({
+export const userActionState = atom<UserAction>({
   key: 'userActionState',
   default: 'browse',
 });

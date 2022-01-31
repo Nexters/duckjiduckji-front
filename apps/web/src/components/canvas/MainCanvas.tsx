@@ -141,6 +141,7 @@ function MainCanvas({}: Props) {
         onDblTap={handleDblTap}
         onTouchEnd={handleStageTouchEnd}
         onTouchMove={handleStageTouchMove}
+        on
       >
         <Layer>
           <PostIts postIts={shapes.postIts} isDraggable={isShapesDraggable} />

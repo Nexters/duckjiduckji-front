@@ -17,3 +17,5 @@ export interface IPostIt {
   height: number;
   isDragging: boolean;
 }
+
+export type UserAction = 'browse' | 'pinch';
