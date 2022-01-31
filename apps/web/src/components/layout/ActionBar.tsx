@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
   z-index: 100;
@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  position: absolute;
+  position: fixed;
 
   height: 70px;
   width: 100%;
@@ -25,7 +25,6 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  width: 300px;
   height: 50px;
   margin: 10px;
 
@@ -51,7 +50,7 @@ const MenuButton = styled.div<{ image: string }>`
   margin: 10px;
   /* border: 1px solid #000; */
 
-  background-image: url(${(props) => props.image});
+  background-image: url(${props => props.image});
   background-repeat: no-repeat;
   background-size: contain;
 `;
@@ -62,7 +61,6 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
 
-  width: 150px;
   height: 50px;
   margin: 0;
   border: none;
@@ -96,7 +94,7 @@ export const ActionBar = () => {
   return (
     <Wrapper>
       <section>
-        <MenuButton image={"/assets/image/home_ico.svg"} />
+        <MenuButton image={'/assets/image/home_ico.svg'} />
         <Title>
           <span>2022 Nexters</span>
         </Title>
@@ -104,7 +102,7 @@ export const ActionBar = () => {
         <Button>친구 초대하기</Button>
       </section>
       <section>
-        <MenuButton image={"/assets/image/people_ico.svg"} />
+        <MenuButton image={'/assets/image/people_ico.svg'} />
       </section>
     </Wrapper>
   );
