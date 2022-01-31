@@ -1,19 +1,15 @@
 import { useRef } from 'react';
-import { useWindowSize } from 'react-use';
-import { Stage, Layer } from 'react-konva';
-import Konva from 'konva';
-import { Polaroids, PostIts } from 'web/src/components/canvas/shapes';
 import { useRecoilState } from 'recoil';
-import { shapesState, userActionState } from 'web/src/atoms';
+import { useWindowSize } from 'react-use';
+import Konva from 'konva';
+import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
+import { Polaroids, PostIts } from 'web/src/components/canvas/shapes';
+import { shapesState, userActionState } from 'web/src/atoms';
+import { Coordinates } from 'web/src/shared/types';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
-
-type Coordinates = {
-  x: number;
-  y: number;
-};
 
 function getDistance(p1: Coordinates, p2: Coordinates) {
   return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));

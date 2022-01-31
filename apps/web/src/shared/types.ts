@@ -19,3 +19,8 @@ export interface IPostIt {
 }
 
 export type UserAction = 'browse' | 'pinch';
+
+export interface Coordinates {
+  x: number;
+  y: number;
+}
