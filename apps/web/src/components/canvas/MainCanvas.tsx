@@ -1,12 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { useWindowSize } from 'react-use';
 import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Polaroids, PostIts } from 'web/src/components/canvas/shapes';
+import { Polaroid, PostIt } from 'web/src/components/canvas/shapes';
 import { shapesState, userActionState } from 'web/src/atoms';
-import { Coordinates } from 'web/src/shared/types';
+import { Coordinates, IPolaroid, IPostIt } from 'web/src/shared/types';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -32,6 +32,8 @@ function MainCanvas({}: Props) {
   const [userAction, setUserAction] = useRecoilState(userActionState);
   const { width, height } = useWindowSize();
   const stageRef = useRef(null);
+  const [selectedPolaroidIds, setSelectedPolaroidIds] = useState<string[]>([]);
+  const [selectedPostItIds, setSelectedPostItIds] = useState<string[]>([]);
 
   const isShapesDraggable = userAction === 'pinch' ? false : true;
 
@@ -126,6 +128,14 @@ function MainCanvas({}: Props) {
     setUserAction('browse');
   }
 
+  function checkDeselect(e: KonvaEventObject<MouseEvent> | KonvaEventObject<TouchEvent>) {
+    const clickedOnEmpty = e.target === e.target.getStage();
+    if (clickedOnEmpty) {
+      setSelectedPolaroidIds([]);
+      setSelectedPostItIds([]);
+    }
+  }
+
   return (
     <div>
       <Stage
@@ -137,11 +147,38 @@ function MainCanvas({}: Props) {
         onDblTap={handleDblTap}
         onTouchEnd={handleStageTouchEnd}
         onTouchMove={handleStageTouchMove}
-        on
+        onMouseDown={checkDeselect}
+        onTouchStart={checkDeselect}
       >
         <Layer>
-          <PostIts postIts={shapes.postIts} isDraggable={isShapesDraggable} />
-          <Polaroids polaroids={shapes.polaroids} isDraggable={isShapesDraggable} />
+          {/* TODO: 필요시 Generic Shapes 컴포넌트 만들기 */}
+          {shapes.postIts.map(postIt => (
+            <PostIt
+              key={postIt.id}
+              {...{
+                postIt,
+                isDraggable: isShapesDraggable,
+                onSelect: () => setSelectedPostItIds([postIt.id]),
+                isSelected: selectedPostItIds.includes(postIt.id),
+                onDragStart: () => {},
+                onDragEnd: () => {},
+              }}
+            />
+          ))}
+          {shapes.polaroids.map(polaroid => (
+            <Polaroid
+              key={polaroid.id}
+              {...{
+                polaroid,
+                isDraggable: isShapesDraggable,
+                onSelect: () => setSelectedPostItIds([polaroid.id]),
+                isSelected: selectedPolaroidIds.includes(polaroid.id),
+                onTextAreaDoubleClick: () => {},
+                onDragStart: () => {},
+                onDragEnd: () => {},
+              }}
+            />
+          ))}
         </Layer>
       </Stage>
     </div>

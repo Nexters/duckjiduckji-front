@@ -2,6 +2,7 @@ export interface IPolaroid {
   id: string;
   x: number;
   y: number;
+  rotation: number;
   width: number;
   height: number;
   isDragging: boolean;
@@ -13,6 +14,7 @@ export interface IPostIt {
   id: string;
   x: number;
   y: number;
+  rotation: number;
   width: number;
   height: number;
   isDragging: boolean;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Rect, Group, Text, Line, Image } from 'react-konva';
 import useImage from 'use-image';
 import { IPolaroid } from 'web/src/shared/types';
@@ -11,17 +11,68 @@ type Props = {
   onDragEnd: (polaroid: IPolaroid, e: KonvaEventObject<DragEvent>) => void;
   onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<MouseEvent>) => void;
   isDraggable: boolean;
+  isSelected: boolean;
+  onSelect: (polaroid: IPolaroid) => void;
 };
 
-export function Polaroid({ polaroid, onDragEnd, onDragStart, onTextAreaDoubleClick, isDraggable }: Props) {
+export function Polaroid({
+  polaroid,
+  onDragEnd,
+  onDragStart,
+  onTextAreaDoubleClick,
+  isDraggable,
+  isSelected,
+  onSelect,
+}: Props) {
   const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
+  const shapeRef = useRef(null);
+  const trRef = useRef(null);
+
+  useEffect(() => {
+    if (isSelected) {
+      trRef.current.nodes([shapeRef.current]);
+      trRef.current.getLayer().batchDraw();
+    }
+  }, [isSelected]);
+
+  function handleTransformEnd() {
+    // transformer is changing scale of the node
+    // and NOT its width or height
+    // but in the store we have only width and height
+    // to match the data better we will reset scale on transform end
+    const node = shapeRef.current;
+    const scaleX = node.scaleX();
+    const scaleY = node.scaleY();
+
+    // we will reset it back
+    node.scaleX(1);
+    node.scaleY(1);
+    onChange({
+      ...shapeProps,
+      x: node.x(),
+      y: node.y(),
+      // set minimal value
+      width: Math.max(5, node.width() * scaleX),
+      height: Math.max(node.height() * scaleY),
+    });
+  }
+
   return (
-    <Group draggable={isDraggable} onDragStart={e => onDragStart(polaroid, e)} onDragEnd={e => onDragEnd(polaroid, e)}>
+    <Group
+      ref={shapeRef}
+      onClick={() => onSelect(polaroid)}
+      onTap={() => onSelect(polaroid)}
+      onTransformEnd={handleTransformEnd}
+      draggable={isDraggable}
+      onDragStart={e => onDragStart(polaroid, e)}
+      onDragEnd={e => onDragEnd(polaroid, e)}
+    >
       <Rect
         id={polaroid.id}
         x={polaroid.x}
         y={polaroid.y}
+        rotation={polaroid.rotation}
         width={polaroid.width}
         height={polaroid.height}
         cornerRadius={10}

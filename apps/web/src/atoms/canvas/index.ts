@@ -6,9 +6,10 @@ import { UserAction } from 'web/src/shared/types';
 function generatePostIts() {
   return [...Array(5)].map((_, i) => ({
     type: 'postIt',
-    id: i.toString(),
+    id: `i${i.toString()}`,
     x: Math.random() * 1000,
     y: Math.random() * 1000,
+    rotation: 0,
     width: POSTIT_WIDTH,
     height: POSTIT_HEIHT,
     isDragging: false,
@@ -21,9 +22,10 @@ export const shapesState = atom({
     polaroids: [
       {
         type: 'polaroid',
-        id: '1',
+        id: 'p0',
         x: 100,
         y: 100,
+        rotation: 0,
         width: POLAROID_WIDTH,
         height: POLAROID_HEIGHT,
         isDragging: false,
