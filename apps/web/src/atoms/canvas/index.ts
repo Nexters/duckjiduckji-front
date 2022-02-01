@@ -4,11 +4,11 @@ import { UserAction } from 'web/src/shared/types';
 
 // TEMP
 function generatePostIts() {
-  return [...Array(5)].map((_, i) => ({
-    type: 'postIt',
+  return [...Array(1)].map((_, i) => ({
+    type: 'postIt' as const,
     id: `i${i.toString()}`,
-    x: Math.random() * 1000,
-    y: Math.random() * 1000,
+    x: 100,
+    y: 100,
     rotation: 0,
     width: POSTIT_WIDTH,
     height: POSTIT_HEIHT,
@@ -21,7 +21,7 @@ export const shapesState = atom({
   default: {
     polaroids: [
       {
-        type: 'polaroid',
+        type: 'polaroid' as const,
         id: 'p0',
         x: 100,
         y: 100,

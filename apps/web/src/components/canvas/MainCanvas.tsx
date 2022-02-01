@@ -6,7 +6,7 @@ import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt } from 'web/src/components/canvas/shapes';
 import { shapesState, userActionState } from 'web/src/atoms';
-import { Coordinates, IPolaroid, IPostIt } from 'web/src/shared/types';
+import { Coordinates } from 'web/src/shared/types';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -63,6 +63,7 @@ function MainCanvas({}: Props) {
   }
 
   function handleDblTap(e: KonvaEventObject<Event>) {
+    console.log(e);
     alert(JSON.stringify(stageRef.current.getPointerPosition()));
   }
 
@@ -145,6 +146,7 @@ function MainCanvas({}: Props) {
         height={height}
         onWheel={handleStageWheel}
         onDblTap={handleDblTap}
+        onDblClick={handleDblTap}
         onTouchEnd={handleStageTouchEnd}
         onTouchMove={handleStageTouchMove}
         onMouseDown={checkDeselect}
@@ -165,17 +167,23 @@ function MainCanvas({}: Props) {
               }}
             />
           ))}
-          {shapes.polaroids.map(polaroid => (
+          {shapes.polaroids.map((polaroid, index) => (
             <Polaroid
               key={polaroid.id}
               {...{
                 polaroid,
                 isDraggable: isShapesDraggable,
-                onSelect: () => setSelectedPostItIds([polaroid.id]),
                 isSelected: selectedPolaroidIds.includes(polaroid.id),
+                onSelect: () => setSelectedPolaroidIds([polaroid.id]),
+                onChange: polaroid => {
+                  const polaroids = shapes.polaroids.slice();
+                  polaroids[index] = polaroid;
+                  setShapes(oldShapes => ({
+                    ...oldShapes,
+                    polaroids,
+                  }));
+                },
                 onTextAreaDoubleClick: () => {},
-                onDragStart: () => {},
-                onDragEnd: () => {},
               }}
             />
           ))}

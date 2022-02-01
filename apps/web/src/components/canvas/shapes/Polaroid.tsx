@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Rect, Group, Text, Line, Image } from 'react-konva';
+import { Rect, Group, Text, Line, Image, Transformer } from 'react-konva';
 import useImage from 'use-image';
 import { IPolaroid } from 'web/src/shared/types';
 import { POLAROID_WIDTH } from 'web/src/shared/consts';
@@ -7,23 +7,14 @@ import { KonvaEventObject } from 'konva/lib/Node';
 
 type Props = {
   polaroid: IPolaroid;
-  onDragStart: (polaroid: IPolaroid, e: KonvaEventObject<DragEvent>) => void;
-  onDragEnd: (polaroid: IPolaroid, e: KonvaEventObject<DragEvent>) => void;
   onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<MouseEvent>) => void;
   isDraggable: boolean;
   isSelected: boolean;
   onSelect: (polaroid: IPolaroid) => void;
+  onChange: (polaroid: IPolaroid) => void;
 };
 
-export function Polaroid({
-  polaroid,
-  onDragEnd,
-  onDragStart,
-  onTextAreaDoubleClick,
-  isDraggable,
-  isSelected,
-  onSelect,
-}: Props) {
+export function Polaroid({ polaroid, isDraggable, isSelected, onTextAreaDoubleClick, onSelect, onChange }: Props) {
   const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
   const shapeRef = useRef(null);
@@ -45,101 +36,84 @@ export function Polaroid({
     const scaleX = node.scaleX();
     const scaleY = node.scaleY();
 
+    console.log(node.rotation());
     // we will reset it back
     node.scaleX(1);
     node.scaleY(1);
     onChange({
-      ...shapeProps,
+      ...polaroid,
       x: node.x(),
       y: node.y(),
-      // set minimal value
-      width: Math.max(5, node.width() * scaleX),
-      height: Math.max(node.height() * scaleY),
+      rotation: node.rotation(),
     });
   }
-
+  console.log(polaroid);
   return (
-    <Group
-      ref={shapeRef}
-      onClick={() => onSelect(polaroid)}
-      onTap={() => onSelect(polaroid)}
-      onTransformEnd={handleTransformEnd}
-      draggable={isDraggable}
-      onDragStart={e => onDragStart(polaroid, e)}
-      onDragEnd={e => onDragEnd(polaroid, e)}
-    >
-      <Rect
+    <>
+      <Group
         id={polaroid.id}
         x={polaroid.x}
         y={polaroid.y}
-        rotation={polaroid.rotation}
         width={polaroid.width}
         height={polaroid.height}
-        cornerRadius={10}
-        fill="#5BB0FF"
-        opacity={1}
-        shadowColor="black"
-        shadowBlur={10}
-        shadowOpacity={0.6}
-        shadowOffsetX={polaroid.isDragging ? 10 : 5}
-        shadowOffsetY={polaroid.isDragging ? 10 : 5}
-      />
-      <Group onClick={() => setIsImageShown(true)} onTouchEnd={() => setIsImageShown(true)}>
-        <Rect x={polaroid.x + 33} y={polaroid.y + 33} width={240} height={360} fill="white" />
-
-        {isImageShown ? (
-          <Image image={image} x={polaroid.x + 33} y={polaroid.y + 33} width={240} height={360} />
-        ) : (
-          <>
-            <Line
-              points={[
-                polaroid.x + POLAROID_WIDTH / 2 - 8,
-                polaroid.y + 201,
-                polaroid.x + POLAROID_WIDTH / 2 + 8,
-                polaroid.y + 201,
-              ]}
-              stroke="#716E7A"
-              strokeWidth={2}
-            />
-            <Line
-              points={[
-                polaroid.x + POLAROID_WIDTH / 2,
-                polaroid.y + 201 - 8,
-                polaroid.x + POLAROID_WIDTH / 2,
-                polaroid.y + 201 + 8,
-              ]}
-              stroke="#716E7A"
-              strokeWidth={2}
-            />
-            <Text
-              text="사진을 넣어주세요!"
-              x={polaroid.x + 97}
-              y={polaroid.y + 224}
-              fontSize={15}
-              fontFamily="Pretendard"
-              fill="#B8B7BC"
-            />
-          </>
-        )}
-      </Group>
-      <Group id={polaroid.id} onDblClick={e => onTextAreaDoubleClick(polaroid, e)}>
+        rotation={polaroid.rotation}
+        ref={shapeRef}
+        onClick={() => onSelect(polaroid)}
+        onTap={() => onSelect(polaroid)}
+        onTransformEnd={handleTransformEnd}
+        draggable={isDraggable}
+        onDragEnd={e => {
+          onChange({ ...polaroid, x: e.target.x(), y: e.target.y(), rotation: e.target.rotation() });
+        }}
+      >
         <Rect
-          x={polaroid.x + 33}
-          y={polaroid.y + 33 + 360 + 20}
-          width={240}
-          height={96}
-          cornerRadius={5}
-          fill="white"
+          width={polaroid.width}
+          height={polaroid.height}
+          cornerRadius={10}
+          fill="#5BB0FF"
+          opacity={1}
+          shadowColor="black"
+          shadowBlur={10}
+          shadowOpacity={0.6}
+          shadowOffsetX={polaroid.isDragging ? 10 : 5}
+          shadowOffsetY={polaroid.isDragging ? 10 : 5}
         />
-        <Text
-          text={polaroid.text || '내용을 입력해주세요!'}
-          x={polaroid.x + 33 + 14}
-          y={polaroid.y + 33 + 360 + 20 + 14}
-          fontFamily="Pretendard"
-          fontSize={13}
-          fill={polaroid.text ? '#595664' : '#B8B7BC'}
-        />
+        <Group onClick={() => setIsImageShown(true)} onTouchEnd={() => setIsImageShown(true)}>
+          <Rect x={33} y={33} width={240} height={360} fill="white" />
+
+          {isImageShown ? (
+            <Image image={image} x={33} y={33} width={240} height={360} />
+          ) : (
+            <>
+              <Line
+                points={[POLAROID_WIDTH / 2 - 8, 201, POLAROID_WIDTH / 2 + 8, 201]}
+                stroke="#716E7A"
+                strokeWidth={2}
+              />
+              <Line
+                points={[POLAROID_WIDTH / 2, 201 - 8, POLAROID_WIDTH / 2, 201 + 8]}
+                stroke="#716E7A"
+                strokeWidth={2}
+              />
+              <Text text="사진을 넣어주세요!" x={97} y={224} fontSize={15} fontFamily="Pretendard" fill="#B8B7BC" />
+            </>
+          )}
+        </Group>
+        <Group id={polaroid.id} onDblClick={e => onTextAreaDoubleClick(polaroid, e)}>
+          <Rect x={33} y={33 + 360 + 20} width={240} height={96} cornerRadius={5} fill="white" />
+          <Text
+            text={polaroid.text || '내용을 입력해주세요!'}
+            x={33 + 14}
+            y={33 + 360 + 20 + 14}
+            fontFamily="Pretendard"
+            fontSize={13}
+            fill={polaroid.text ? '#595664' : '#B8B7BC'}
+          />
+        </Group>
       </Group>
-    </Group>
+      {isSelected && (
+        <Transformer ref={trRef} resizeEnabled={false} centeredScaling={true} rotationSnaps={[0, 90, 180, 270]} />
+      )}
+    </>
   );
 }

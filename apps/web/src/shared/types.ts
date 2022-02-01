@@ -1,4 +1,5 @@
 export interface IPolaroid {
+  type: 'polaroid';
   id: string;
   x: number;
   y: number;
@@ -11,6 +12,7 @@ export interface IPolaroid {
 }
 
 export interface IPostIt {
+  type: 'postIt';
   id: string;
   x: number;
   y: number;

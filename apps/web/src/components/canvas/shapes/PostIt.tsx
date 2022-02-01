@@ -15,6 +15,7 @@ export function PostIt({ postIt, onDragEnd, onDragStart, isDraggable }: Props) {
       id={postIt.id}
       x={postIt.x}
       y={postIt.y}
+      rotation={postIt.rotation}
       width={postIt.width}
       height={postIt.height}
       fill="#feff9c"
