@@ -154,16 +154,25 @@ function MainCanvas({}: Props) {
       >
         <Layer>
           {/* TODO: 필요시 Generic Shapes 컴포넌트 만들기 */}
-          {shapes.postIts.map(postIt => (
+          {shapes.postIts.map((postIt, index) => (
             <PostIt
               key={postIt.id}
               {...{
                 postIt,
                 isDraggable: isShapesDraggable,
-                onSelect: () => setSelectedPostItIds([postIt.id]),
                 isSelected: selectedPostItIds.includes(postIt.id),
-                onDragStart: () => {},
-                onDragEnd: () => {},
+                onSelect: () => {
+                  setSelectedPolaroidIds([]);
+                  setSelectedPostItIds([postIt.id]);
+                },
+                onChange: postIt => {
+                  const postIts = shapes.postIts.slice();
+                  postIts[index] = postIt;
+                  setShapes(oldShapes => ({
+                    ...oldShapes,
+                    postIt,
+                  }));
+                },
               }}
             />
           ))}
@@ -174,7 +183,10 @@ function MainCanvas({}: Props) {
                 polaroid,
                 isDraggable: isShapesDraggable,
                 isSelected: selectedPolaroidIds.includes(polaroid.id),
-                onSelect: () => setSelectedPolaroidIds([polaroid.id]),
+                onSelect: () => {
+                  setSelectedPostItIds([]);
+                  setSelectedPolaroidIds([polaroid.id]);
+                },
                 onChange: polaroid => {
                   const polaroids = shapes.polaroids.slice();
                   polaroids[index] = polaroid;
