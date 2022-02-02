@@ -18,6 +18,12 @@ export const socketDataState = selector<SocketResponseBody>({
   key: "socketDataState",
   get: ({ get }) => get(socketState).data,
   set: ({ get, set }, nextState) => {
+    /**
+     * @TODO: Push shapesState
+     * if (nextState.msgType === "polaroid") {
+     *   set(polaroidState, nextState);
+     * }
+     */
     set(socketState, { ...get(socketState), data: { ...nextState } });
   },
 });
