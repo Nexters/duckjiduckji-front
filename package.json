@@ -8,10 +8,11 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --parallel --scope=\"web\"",
+    "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "socket": "yarn workspace mock-socket-server"
+    "socket": "yarn workspace mock-socket-server",
+    "web": "yarn workspace web"
   },
   "devDependencies": {
     "prettier": "^2.5.1",
