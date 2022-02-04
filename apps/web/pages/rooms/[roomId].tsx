@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import SocketProvider from 'web/components/SocketProvider';
 
 const WhiteBoard = dynamic(() => import('web/components/WhiteBoard'), {
   ssr: false,
@@ -8,7 +9,11 @@ const WhiteBoard = dynamic(() => import('web/components/WhiteBoard'), {
 interface Props {}
 
 function Room({}: Props) {
-  return <WhiteBoard />;
+  return (
+    <SocketProvider>
+      <WhiteBoard />
+    </SocketProvider>
+  );
 }
 
 export default Room;
