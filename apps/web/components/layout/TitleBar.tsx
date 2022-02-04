@@ -75,7 +75,11 @@ const Button = styled.button`
   background-position: center;
 `;
 
-export const TitleBar = () => {
+type Props = {
+  isLogin: boolean;
+};
+
+export const TitleBar = ({ isLogin }: Props) => {
   const onClick = () => {
     console.log("hello");
   };
@@ -85,11 +89,13 @@ export const TitleBar = () => {
       <section>
         <SmallLogo />
       </section>
-      <section>
-        <NickName>Jane Kim</NickName>
-        <IconWrapper profileImage={"/assets/char/01.png"} />
-        <Button onClick={onClick} />
-      </section>
+      {isLogin && (
+        <section>
+          <NickName>Jane Kim</NickName>
+          <IconWrapper profileImage={"/assets/char/01.png"} />
+          <Button onClick={onClick} />
+        </section>
+      )}
     </Wrapper>
   );
 };
