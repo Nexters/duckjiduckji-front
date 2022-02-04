@@ -1,7 +1,11 @@
+import { TitleBar } from "../components/layout/TitleBar";
+import { Landing } from "../components/landing/Landing";
+
 function Home() {
   return (
     <>
-      <div>LANDING PAGE</div>
+      <TitleBar isLogin={false} />
+      <Landing />
     </>
   );
 }
