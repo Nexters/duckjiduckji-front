@@ -1,7 +1,7 @@
-import { default as HomeComponent } from "web/components/Home";
+import { LoginPage as InnerComponent } from "web/components/LoginPage";
 
-function Home() {
-  return <HomeComponent />;
+function LoginPage() {
+  return <InnerComponent />;
 }
 
-export default Home;
+export default LoginPage;
