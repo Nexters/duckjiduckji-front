@@ -4,9 +4,9 @@ import { useWindowSize } from 'react-use';
 import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Polaroid, PostIt } from 'web/src/components/canvas/shapes';
-import { shapesState, userActionState } from 'web/src/recoil';
-import { Coordinates } from 'web/src/shared/types';
+import { Polaroid, PostIt } from 'web/components/canvas/shapes';
+import { shapesState, userActionState } from 'web/recoil';
+import { Coordinates } from 'web/shared/types';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;

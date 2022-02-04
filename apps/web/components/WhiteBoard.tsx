@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { ActionBar } from 'web/src/components/layout/ActionBar';
-import { EditModal } from 'web/src/components/layout/EditModal';
-import { FloatingCircularMenu } from 'web/src/components/layout/FloatingCircularMenu';
-import MainCanvas from 'web/src/components/canvas/MainCanvas';
+import { ActionBar } from 'web/components/layout/ActionBar';
+import { EditModal } from 'web/components/layout/EditModal';
+import { FloatingCircularMenu } from 'web/components/layout/FloatingCircularMenu';
+import MainCanvas from 'web/components/canvas/MainCanvas';
 interface Props {}
 
 function WhiteBoard({}: Props) {

@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import { POLAROID_HEIGHT, POLAROID_WIDTH, POSTIT_HEIHT, POSTIT_WIDTH } from 'web/src/shared/consts';
-import { UserAction } from 'web/src/shared/types';
+import { POLAROID_HEIGHT, POLAROID_WIDTH, POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
+import { UserAction } from 'web/shared/types';
 
 // TEMP
 function generatePostIts() {

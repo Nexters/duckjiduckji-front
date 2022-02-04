@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Rect, Group, Text, Line, Image, Transformer } from 'react-konva';
 import useImage from 'use-image';
-import { IPolaroid } from 'web/src/shared/types';
-import { POLAROID_WIDTH } from 'web/src/shared/consts';
+import { IPolaroid } from 'web/shared/types';
+import { POLAROID_WIDTH } from 'web/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
 
 type Props = {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Rect, Transformer } from 'react-konva';
-import { IPostIt } from 'web/src/shared/types';
+import { IPostIt } from 'web/shared/types';
 
 interface Props {
   postIt: IPostIt;
