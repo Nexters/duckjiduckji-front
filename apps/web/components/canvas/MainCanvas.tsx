@@ -22,8 +22,10 @@ function getCenter(p1: Coordinates, p2: Coordinates) {
   };
 }
 
-let lastCenter = null;
-let lastDist = 0;
+const stageAttrs = {
+  lastCenter: null,
+  lastDist: 0,
+};
 
 interface Props {}
 
@@ -62,11 +64,6 @@ function MainCanvas({}: Props) {
     stageRef.current.batchDraw();
   }
 
-  function handleDblTap(e: KonvaEventObject<Event>) {
-    console.log(e);
-    alert(JSON.stringify(stageRef.current.getPointerPosition()));
-  }
-
   function handleStageTouchMove(e: KonvaEventObject<TouchEvent>) {
     e.evt.preventDefault();
     const touch1 = e.evt.touches[0];
@@ -90,14 +87,14 @@ function MainCanvas({}: Props) {
       y: touch2.clientY,
     };
 
-    if (!lastCenter) {
-      lastCenter = getCenter(p1, p2);
+    if (!stageAttrs.lastCenter) {
+      stageAttrs.lastCenter = getCenter(p1, p2);
       return;
     }
     const newCenter = getCenter(p1, p2);
     const dist = getDistance(p1, p2);
-    if (!lastDist) {
-      lastDist = dist;
+    if (!stageAttrs.lastDist) {
+      stageAttrs.lastDist = dist;
     }
     // local coordinates of center point
     const pointTo = {
@@ -105,13 +102,13 @@ function MainCanvas({}: Props) {
       y: (newCenter.y - stageRef.current.y()) / stageRef.current.scaleX(),
     };
 
-    const scale = stageRef.current.scaleX() * (dist / lastDist);
+    const scale = stageRef.current.scaleX() * (dist / stageAttrs.lastDist);
     stageRef.current.scaleX(scale);
     stageRef.current.scaleY(scale);
 
     // calculate new position of the stage
-    const dx = newCenter.x - lastCenter.x;
-    const dy = newCenter.y - lastCenter.y;
+    const dx = newCenter.x - stageAttrs.lastCenter.x;
+    const dy = newCenter.y - stageAttrs.lastCenter.y;
 
     const newPos = {
       x: newCenter.x - pointTo.x * scale + dx,
@@ -119,13 +116,13 @@ function MainCanvas({}: Props) {
     };
 
     stageRef.current.position(newPos);
-    lastDist = dist;
-    lastCenter = newCenter;
+    stageAttrs.lastDist = dist;
+    stageAttrs.lastCenter = newCenter;
   }
 
   function handleStageTouchEnd() {
-    lastDist = 0;
-    lastCenter = null;
+    stageAttrs.lastDist = 0;
+    stageAttrs.lastCenter = null;
     setUserAction('browse');
   }
 
@@ -145,8 +142,6 @@ function MainCanvas({}: Props) {
         width={width}
         height={height}
         onWheel={handleStageWheel}
-        onDblTap={handleDblTap}
-        onDblClick={handleDblTap}
         onTouchEnd={handleStageTouchEnd}
         onTouchMove={handleStageTouchMove}
         onMouseDown={checkDeselect}

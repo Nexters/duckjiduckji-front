@@ -21,10 +21,9 @@ export function Polaroid({ polaroid, isDraggable, isSelected, onTextAreaDoubleCl
   const trRef = useRef(null);
 
   useEffect(() => {
-    if (isSelected) {
-      trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
-    }
+    if (!isSelected) return;
+    trRef.current.nodes([shapeRef.current]);
+    trRef.current.getLayer().batchDraw();
   }, [isSelected]);
 
   function handleTransformEnd() {
