@@ -67,7 +67,7 @@ const KakaoLoginButton = styled.button`
   color: #191919;
 `;
 
-const CharacterImage = styled.image`
+const CharacterImage = styled.div`
   height: 166px;
   width: 300px;
 
