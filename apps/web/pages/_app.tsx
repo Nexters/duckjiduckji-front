@@ -1,14 +1,7 @@
-import type { AppProps } from "next/app";
-import { createGlobalStyle } from "styled-components";
-import reset from "styled-reset";
-
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
+import type { AppProps } from 'next/app';
+import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
+import { RecoilRoot } from 'recoil';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -22,6 +15,9 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
     font-style: normal;
   }
+
+  * { -webkit-tab-highlight-color : rgba(0,0,0,0); }
+  *:focus { -webkit-tab-highlight-color : rgba(0,0,0,0); }
 `;
 
 function App({ Component, pageProps }: AppProps) {
