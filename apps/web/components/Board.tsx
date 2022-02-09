@@ -1,13 +1,13 @@
 import { TitleBar } from "../components/layout/TitleBar";
-import { Landing } from "../components/landing/Landing";
+import { List } from "./board/List";
 
-function Home() {
+function BoardPage() {
   return (
     <>
       <TitleBar isLogin={false} />
-      <Landing />
+      <List />
     </>
   );
 }
 
-export default Home;
+export default BoardPage;
