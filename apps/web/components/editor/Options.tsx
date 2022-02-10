@@ -1,9 +1,12 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+
+import { changeColor } from '../../atoms/create';
 
 const Wrapper = styled.div`
   position: fixed;
   width: 100vw;
-  height: 150px;
+  height: 200px;
   left: 0px;
   bottom: 0px;
   background: white;
@@ -48,12 +51,15 @@ const ColorUnorderedList = styled.ul`
 `;
 
 const ColorList = styled.li<{ color: string }>`
-  margin: 15px 20px;
-  width: 34px;
-  height: 34px;
-  border-radius: 17px;
+  margin: 4px;
+  width: 50px;
+  height: 50px;
 
-  background: ${(props) => props.color || `#d1d1d1`};
+  border: 1px solid #f3f3f4;
+  box-sizing: border-box;
+  border-radius: 2px;
+
+  background: ${props => props.color || `#d1d1d1`};
 `;
 
 const Button = styled.button`
@@ -86,21 +92,29 @@ const Button = styled.button`
   }
 `;
 
+const colors: string[] = [
+  '#FFFFFF',
+  '#000000',
+  '#6A67FF',
+  '#5BB0FF',
+  '#00DE74',
+  '#FFF61C',
+  '#FFBB55 ',
+  '#FF8E6A',
+  '#FF627E',
+  '#CD34E2',
+];
+
 type Props = {
   close: () => void;
 };
 
 export const Options = ({ close }: Props) => {
-  const colors = [
-    "Blue ",
-    "Green",
-    "Red",
-    "Orange",
-    "Violet",
-    "Indigo",
-    "Yellow ",
-    "Black",
-  ];
+  const [color, setColor] = useRecoilState(changeColor);
+
+  const changeColorHandler = (color: string) => {
+    setColor({ color });
+  };
 
   const createHandler = () => {
     close();
@@ -111,8 +125,16 @@ export const Options = ({ close }: Props) => {
       <Section>
         <h3>Color</h3>
         <ColorUnorderedList>
-          {colors.map((color) => {
-            return <ColorList key={color} color={color} />;
+          {colors.map(color => {
+            return (
+              <ColorList
+                onClick={() => {
+                  changeColorHandler(color);
+                }}
+                key={color}
+                color={color}
+              />
+            );
           })}
         </ColorUnorderedList>
       </Section>
