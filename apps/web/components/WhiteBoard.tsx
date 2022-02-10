@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { MenuBar } from 'web/components/layout/MenuBar';
 import { ActionBar } from 'web/components/layout/ActionBar';
 import { EditModal } from 'web/components/layout/EditModal';
 import { FloatingCircularMenu } from 'web/components/layout/FloatingCircularMenu';
@@ -10,10 +11,11 @@ function WhiteBoard({}: Props) {
 
   return (
     <div style={{ position: 'relative' }}>
+      <MenuBar setEditOpen={setEditOpen} />
       {isEditOpen && <EditModal setEditOpen={setEditOpen} />}
       <ActionBar />
       <MainCanvas />
-      <FloatingCircularMenu />
+      {/* <FloatingCircularMenu /> */}
     </div>
   );
 }
