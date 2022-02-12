@@ -12,9 +12,18 @@ type Props = {
   isSelected: boolean;
   onSelect: (polaroid: IPolaroid) => void;
   onChange: (polaroid: IPolaroid) => void;
+  color?: string;
 };
 
-export function Polaroid({ polaroid, isDraggable, isSelected, onTextAreaDoubleClick, onSelect, onChange }: Props) {
+export function Polaroid({
+  polaroid,
+  isDraggable,
+  isSelected,
+  onTextAreaDoubleClick,
+  onSelect,
+  onChange,
+  color,
+}: Props) {
   const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
   const shapeRef = useRef(null);
@@ -59,7 +68,7 @@ export function Polaroid({ polaroid, isDraggable, isSelected, onTextAreaDoubleCl
           width={polaroid.width}
           height={polaroid.height}
           cornerRadius={10}
-          fill="#5BB0FF"
+          fill={color || '#5BB0FF'}
           opacity={1}
           shadowColor="black"
           shadowBlur={10}
