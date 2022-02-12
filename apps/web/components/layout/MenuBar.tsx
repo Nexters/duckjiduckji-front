@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
   z-index: 100;
@@ -39,7 +39,7 @@ const Button = styled.button<{ image: string }>`
   border-radius: 5px;
 
   background-color: transparent;
-  background-image: url(${(props) => props.image});
+  background-image: url(${props => props.image});
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -62,17 +62,17 @@ export const MenuBar = ({ setEditOpen }: Props) => {
 
   return (
     <Wrapper>
-      <Button image={"/assets/image/cursor_ico.svg"} />
-      <Button image={"/assets/image/hand_ico.svg"} />
+      {/* <Button image={'/assets/image/cursor_ico.svg'} /> */}
+      {/* <Button image={'/assets/image/hand_ico.svg'} /> */}
       <Button
         onClick={() => {
           openEditModal();
         }}
-        image={"/assets/image/postit_ico.svg"}
+        image={'/assets/image/postit_ico.svg'}
       />
-      <Button image={"/assets/image/sticker_ico.svg"} />
-      <Button image={"/assets/image/rotate_ico.svg"} />
-      <Button image={"/assets/image/remove_ico.svg"} />
+      <Button image={'/assets/image/sticker_ico.svg'} />
+      {/* <Button image={'/assets/image/rotate_ico.svg'} /> */}
+      <Button image={'/assets/image/remove_ico.svg'} />
     </Wrapper>
   );
 };

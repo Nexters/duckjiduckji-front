@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useWindowSize } from 'react-use';
 import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
@@ -7,6 +7,8 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt } from 'web/components/canvas/shapes';
 import { shapesState, userActionState } from 'web/recoil';
 import { Coordinates } from 'web/shared/types';
+
+import { changeColor } from '../../atoms/create';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -30,6 +32,7 @@ const stageAttrs = {
 interface Props {}
 
 function MainCanvas({}: Props) {
+  const color = useRecoilValue(changeColor);
   const [shapes, setShapes] = useRecoilState(shapesState);
   const [userAction, setUserAction] = useRecoilState(userActionState);
   const { width, height } = useWindowSize();
@@ -191,6 +194,7 @@ function MainCanvas({}: Props) {
                   }));
                 },
                 onTextAreaDoubleClick: () => {},
+                color,
               }}
             />
           ))}
