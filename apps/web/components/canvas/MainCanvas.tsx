@@ -5,10 +5,8 @@ import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt } from 'web/components/canvas/shapes';
-import { shapesState, userActionState } from 'web/recoil';
-import { Coordinates } from 'web/shared/types';
-
-import { changeColor } from '../../atoms/create';
+import { shapesState, changeColor, userActionState } from 'web/atoms';
+import { Coordinates, IPolaroid } from 'web/shared/types';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -39,6 +37,10 @@ function MainCanvas({}: Props) {
   const stageRef = useRef(null);
   const [selectedPolaroidIds, setSelectedPolaroidIds] = useState<string[]>([]);
   const [selectedPostItIds, setSelectedPostItIds] = useState<string[]>([]);
+  const [typingText, setTypingText] = useState('');
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const spanRef = useRef<HTMLSpanElement>(null);
 
   const isShapesDraggable = userAction === 'pinch' ? false : true;
 
@@ -138,7 +140,7 @@ function MainCanvas({}: Props) {
   }
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <Stage
         ref={stageRef}
         draggable={true}
@@ -193,13 +195,38 @@ function MainCanvas({}: Props) {
                     polaroids,
                   }));
                 },
-                onTextAreaDoubleClick: () => {},
+                onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<PointerEvent>) => {
+                  console.log(polaroid, e);
+                  inputRef.current.focus();
+                },
                 color,
               }}
             />
           ))}
         </Layer>
       </Stage>
+      <input
+        ref={inputRef}
+        style={{
+          position: 'fixed',
+          backgroundColor: 'rgba(255,255,255,0)',
+          // color: 'rgba(0,0,0,0)',
+          width: '100%',
+          border: 0,
+          outline: 'none',
+          bottom: 200,
+          left: 200,
+        }}
+        type="text"
+        onChange={e => {
+          e.preventDefault();
+          setTypingText(e.target.value);
+          console.log(spanRef.current.offsetWidth);
+        }}
+      />
+      <span ref={spanRef} style={{ position: 'fixed', bottom: 100 }}>
+        {typingText}
+      </span>
     </div>
   );
 }
