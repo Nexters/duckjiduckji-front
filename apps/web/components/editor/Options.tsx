@@ -113,7 +113,7 @@ export const Options = ({ close }: Props) => {
   const [color, setColor] = useRecoilState(changeColor);
 
   const changeColorHandler = (color: string) => {
-    setColor({ color });
+    setColor(color);
   };
 
   const createHandler = () => {

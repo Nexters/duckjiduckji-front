@@ -15,18 +15,32 @@ export const createData = atom<CreateData>({
   },
 });
 
-export const changeColor = selector<{ color: string }>({
+export const changeColor = selector<string>({
   key: 'create-change_color',
-  get: ({ get }) => get(createData),
+  get: ({ get }) => get(createData).color,
   set: ({ get, set }, color) => {
-    set(createData, color);
+    const data = get(createData);
+    set(createData, { ...data, color });
   },
 });
 
-export const changeText = selector<{ text: string }>({
+export const changeText = selector<string>({
   key: 'create-change_text',
+  get: ({ get }) => get(createData).text,
+  set: ({ get, set }, text) => {
+    const data = get(createData);
+    set(createData, { ...data, text });
+  },
+});
+
+export const initData = selector<{ text: string }>({
+  key: 'create-init_data',
   get: ({ get }) => get(createData),
-  set: ({ set }, text) => {
-    set(createData, text);
+  set: ({ set }) => {
+    set(createData, {
+      type: null,
+      color: null,
+      text: null,
+    });
   },
 });
