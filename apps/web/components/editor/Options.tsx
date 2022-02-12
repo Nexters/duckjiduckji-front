@@ -4,19 +4,15 @@ import { useRecoilState } from 'recoil';
 import { changeColor } from '../../atoms/create';
 
 const Wrapper = styled.div`
-  position: fixed;
-  width: 100vw;
-  height: 200px;
+  width: 888px;
+  height: 160px;
   left: 0px;
-  bottom: 0px;
-  background: white;
-  z-index: 10000;
 
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
 
   background: #ffffff;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 
   display: flex;
   flex-direction: row;
@@ -28,19 +24,6 @@ const Section = styled.section`
   display: flex;
   flex-direction: column;
   align-items: space-between;
-
-  h3 {
-    font-family: SpoqaHanSans;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 32px;
-    /* identical to box height, or 133% */
-
-    letter-spacing: 0.015em;
-
-    color: #616161;
-  }
 `;
 
 const ColorUnorderedList = styled.ul`
@@ -70,7 +53,7 @@ const Button = styled.button`
   border: none;
   padding: 16px 36px;
 
-  width: 151px;
+  width: 100px;
   height: 48px;
 
   background: #424242;
@@ -80,8 +63,8 @@ const Button = styled.button`
   font-family: SpoqaHanSans;
   font-style: normal;
   font-weight: bold;
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 15px;
+  line-height: 15px;
 
   text-align: center;
   letter-spacing: 0.015em;
@@ -90,6 +73,25 @@ const Button = styled.button`
   &:hover {
     background: #5f5f5f;
   }
+`;
+
+const DesignUnorderedList = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const PolaroidButton = styled.div<{ color: string }>`
+  width: 65px;
+  height: 112px;
+  margin: 8px;
+
+  background-color: ${props => props.color};
+`;
+
+const DivideLine = styled.div`
+  height: 112px;
+  width: 0;
+  border-right: 1px solid #e7e7e9;
 `;
 
 const colors: string[] = [
@@ -123,7 +125,15 @@ export const Options = ({ close }: Props) => {
   return (
     <Wrapper>
       <Section>
-        <h3>Color</h3>
+        <DesignUnorderedList>
+          <PolaroidButton color={'#6A67FF'} />
+          <PolaroidButton color={'#6A67FF'} />
+          <PolaroidButton color={'#6A67FF'} />
+          <PolaroidButton color={'#6A67FF'} />
+        </DesignUnorderedList>
+      </Section>
+      <DivideLine />
+      <Section>
         <ColorUnorderedList>
           {colors.map(color => {
             return (
