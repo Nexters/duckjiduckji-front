@@ -1,6 +1,34 @@
-import styled from "styled-components";
+import { MouseEventHandler, useState } from 'react';
+import styled from 'styled-components';
 
-import { Items } from "./Items";
+import { Items } from './Items';
+import { CreateBoardModal } from './CreateBoardModal';
+
+export function List() {
+  const [isOpen, setOpen] = useState<boolean>(false);
+
+  const toggleHandler: MouseEventHandler<HTMLButtonElement> = () => {
+    setOpen(!isOpen);
+  };
+
+  return (
+    <Wrapper>
+      {isOpen && <CreateBoardModal setOpen={setOpen} />}
+      <CreateButton onClick={toggleHandler}>+</CreateButton>
+      <Menu>
+        <section>
+          <Text>All Boards</Text>
+        </section>
+        <section>
+          <TrashButton>삭제</TrashButton>
+        </section>
+      </Menu>
+      <Items />
+    </Wrapper>
+  );
+}
+
+export default List;
 
 const Wrapper = styled.div`
   display: flex;
@@ -51,20 +79,26 @@ const TrashButton = styled.button`
   height: 40px;
 `;
 
-export function List() {
-  return (
-    <Wrapper>
-      <Menu>
-        <section>
-          <Text>All Boards</Text>
-        </section>
-        <section>
-          <TrashButton>삭제</TrashButton>
-        </section>
-      </Menu>
-      <Items />
-    </Wrapper>
-  );
-}
+const CreateButton = styled.button`
+  z-index: 100;
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  right: 48px;
+  bottom: 48px;
 
-export default List;
+  border: none;
+  border-radius: 48px;
+
+  background: #6038ff;
+  box-shadow: 0px 0px 10px rgba(218, 218, 218, 0.1);
+
+  color: #ffffff;
+  font-size: 40px;
+  line-height: 40px;
+
+  transition-duration: 0.4s;
+  &:hover {
+    background: #3e1fbb;
+  }
+`;
