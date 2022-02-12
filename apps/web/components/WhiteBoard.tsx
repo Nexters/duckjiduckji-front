@@ -11,7 +11,7 @@ function WhiteBoard({}: Props) {
 
   return (
     <div style={{ position: 'relative' }}>
-      <MenuBar setEditOpen={setEditOpen} />
+      <MenuBar isEditOpen={isEditOpen} setEditOpen={setEditOpen} />
       {isEditOpen && <EditModal setEditOpen={setEditOpen} />}
       <ActionBar />
       <MainCanvas />
