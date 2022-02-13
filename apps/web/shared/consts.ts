@@ -1,4 +1,10 @@
-export const POLAROID_WIDTH = 306;
-export const POLAROID_HEIGHT = 528;
-export const POSTIT_WIDTH = 200;
-export const POSTIT_HEIHT = 200;
+export const POLAROID_BORDER_WIDTH = 27.5;
+export const POLAROID_OFFSET_WIDTH = 255;
+export const POLAROID_OFFSET_HEIGHT = 440;
+export const POLAROID_CLIENT_WIDTH = 200;
+export const POLAROID_UPPER_CLIENT_HEIGHT = 300;
+export const POLAROID_LOWER_CLIENT_HEIGHT = 80;
+export const GAP_HEIGHT = 16.7;
+export const PADDING = 11.7;
+export const OUTER_CORNER_RADIUS = 8;
+export const INNER_CORNER_RADIUS = 4;

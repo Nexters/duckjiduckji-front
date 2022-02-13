@@ -2,7 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import { Rect, Group, Text, Line, Image, Transformer } from 'react-konva';
 import useImage from 'use-image';
 import { IPolaroid } from 'web/shared/types';
-import { POLAROID_WIDTH } from 'web/shared/consts';
+import {
+  GAP_HEIGHT,
+  INNER_CORNER_RADIUS,
+  OUTER_CORNER_RADIUS,
+  PADDING,
+  POLAROID_BORDER_WIDTH,
+  POLAROID_CLIENT_WIDTH,
+  POLAROID_LOWER_CLIENT_HEIGHT,
+  POLAROID_OFFSET_HEIGHT,
+  POLAROID_OFFSET_WIDTH,
+  POLAROID_UPPER_CLIENT_HEIGHT,
+} from 'web/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
 
 type Props = {
@@ -52,8 +63,8 @@ export function Polaroid({
         id={polaroid.id}
         x={polaroid.x}
         y={polaroid.y}
-        width={polaroid.width}
-        height={polaroid.height}
+        width={POLAROID_OFFSET_WIDTH}
+        height={POLAROID_OFFSET_HEIGHT}
         rotation={polaroid.rotation}
         ref={shapeRef}
         onClick={() => onSelect(polaroid)}
@@ -65,9 +76,9 @@ export function Polaroid({
         }}
       >
         <Rect
-          width={polaroid.width}
-          height={polaroid.height}
-          cornerRadius={10}
+          width={POLAROID_OFFSET_WIDTH}
+          height={POLAROID_OFFSET_HEIGHT}
+          cornerRadius={OUTER_CORNER_RADIUS}
           fill={color || '#5BB0FF'}
           opacity={1}
           shadowColor="black"
@@ -77,32 +88,52 @@ export function Polaroid({
           shadowOffsetY={polaroid.isDragging ? 10 : 5}
         />
         <Group onClick={() => setIsImageShown(true)} onTouchEnd={() => setIsImageShown(true)}>
-          <Rect x={33} y={33} width={240} height={360} fill="white" />
+          <Rect
+            x={POLAROID_BORDER_WIDTH}
+            y={POLAROID_BORDER_WIDTH}
+            width={POLAROID_CLIENT_WIDTH}
+            height={POLAROID_UPPER_CLIENT_HEIGHT}
+            fill="white"
+          />
 
           {isImageShown ? (
-            <Image image={image} x={33} y={33} width={240} height={360} />
+            <Image
+              image={image}
+              x={POLAROID_BORDER_WIDTH}
+              y={POLAROID_BORDER_WIDTH}
+              width={POLAROID_CLIENT_WIDTH}
+              height={POLAROID_UPPER_CLIENT_HEIGHT}
+              alt=""
+            />
           ) : (
             <>
               <Line
-                points={[POLAROID_WIDTH / 2 - 8, 201, POLAROID_WIDTH / 2 + 8, 201]}
+                points={[POLAROID_OFFSET_WIDTH / 2 - 8, 165, POLAROID_OFFSET_WIDTH / 2 + 8, 165]}
                 stroke="#716E7A"
                 strokeWidth={2}
               />
               <Line
-                points={[POLAROID_WIDTH / 2, 201 - 8, POLAROID_WIDTH / 2, 201 + 8]}
+                points={[POLAROID_OFFSET_WIDTH / 2, 165 - 8, POLAROID_OFFSET_WIDTH / 2, 165 + 8]}
                 stroke="#716E7A"
                 strokeWidth={2}
               />
-              <Text text="사진을 넣어주세요!" x={97} y={224} fontSize={15} fontFamily="Pretendard" fill="#B8B7BC" />
+              <Text text="사진을 넣어주세요!" x={78} y={186} fontSize={13} fontFamily="Pretendard" fill="#B8B7BC" />
             </>
           )}
         </Group>
         <Group id={polaroid.id} onDblClick={e => onTextAreaDoubleClick(polaroid, e)}>
-          <Rect x={33} y={33 + 360 + 20} width={240} height={96} cornerRadius={5} fill="white" />
+          <Rect
+            x={POLAROID_BORDER_WIDTH}
+            y={POLAROID_BORDER_WIDTH + POLAROID_UPPER_CLIENT_HEIGHT + GAP_HEIGHT}
+            width={POLAROID_CLIENT_WIDTH}
+            height={POLAROID_LOWER_CLIENT_HEIGHT}
+            cornerRadius={INNER_CORNER_RADIUS}
+            fill="white"
+          />
           <Text
             text={polaroid.text || '내용을 입력해주세요!'}
-            x={33 + 14}
-            y={33 + 360 + 20 + 14}
+            x={POLAROID_BORDER_WIDTH + PADDING}
+            y={POLAROID_BORDER_WIDTH + POLAROID_UPPER_CLIENT_HEIGHT + GAP_HEIGHT + PADDING}
             fontFamily="Pretendard"
             fontSize={13}
             fill={polaroid.text ? '#595664' : '#B8B7BC'}
