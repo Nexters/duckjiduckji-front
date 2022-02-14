@@ -7,6 +7,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt } from 'web/components/canvas/shapes';
 import { shapesState, changeColor, userActionState } from 'web/atoms';
 import { Coordinates, IPolaroid } from 'web/shared/types';
+import { URLImage } from './shapes/URLImage';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -203,6 +204,7 @@ function MainCanvas({}: Props) {
               }}
             />
           ))}
+          <URLImage src={'https://konvajs.org/assets/lion.png'} x={200} y={200} />
         </Layer>
       </Stage>
       <input
