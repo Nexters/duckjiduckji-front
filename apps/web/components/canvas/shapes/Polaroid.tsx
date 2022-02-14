@@ -3,10 +3,16 @@ import { Rect, Group, Text, Line, Image, Transformer } from 'react-konva';
 import useImage from 'use-image';
 import { IPolaroid } from 'web/shared/types';
 import {
+  CROSS_LINE_STROKE_SIZE,
+  CROSS_LINE_WIDTH,
+  CROSS_LINE_Y,
+  FONT_SIZE,
   GAP_HEIGHT,
   INNER_CORNER_RADIUS,
   OUTER_CORNER_RADIUS,
   PADDING,
+  PHOTO_INPUT_GUIDE_X,
+  PHOTO_INPUT_GUIDE_Y,
   POLAROID_BORDER_WIDTH,
   POLAROID_CLIENT_WIDTH,
   POLAROID_LOWER_CLIENT_HEIGHT,
@@ -108,16 +114,33 @@ export function Polaroid({
           ) : (
             <>
               <Line
-                points={[POLAROID_OFFSET_WIDTH / 2 - 8, 165, POLAROID_OFFSET_WIDTH / 2 + 8, 165]}
+                points={[
+                  POLAROID_OFFSET_WIDTH / 2 - CROSS_LINE_WIDTH / 2,
+                  CROSS_LINE_Y,
+                  POLAROID_OFFSET_WIDTH / 2 + CROSS_LINE_WIDTH / 2,
+                  CROSS_LINE_Y,
+                ]}
                 stroke="#716E7A"
-                strokeWidth={2}
+                strokeWidth={CROSS_LINE_STROKE_SIZE}
               />
               <Line
-                points={[POLAROID_OFFSET_WIDTH / 2, 165 - 8, POLAROID_OFFSET_WIDTH / 2, 165 + 8]}
+                points={[
+                  POLAROID_OFFSET_WIDTH / 2,
+                  CROSS_LINE_Y - CROSS_LINE_WIDTH / 2,
+                  POLAROID_OFFSET_WIDTH / 2,
+                  CROSS_LINE_Y + CROSS_LINE_WIDTH / 2,
+                ]}
                 stroke="#716E7A"
-                strokeWidth={2}
+                strokeWidth={CROSS_LINE_STROKE_SIZE}
               />
-              <Text text="사진을 넣어주세요!" x={78} y={186} fontSize={13} fontFamily="Pretendard" fill="#B8B7BC" />
+              <Text
+                text="사진을 넣어주세요!"
+                x={PHOTO_INPUT_GUIDE_X}
+                y={PHOTO_INPUT_GUIDE_Y}
+                fontSize={FONT_SIZE}
+                fontFamily="Pretendard"
+                fill="#B8B7BC"
+              />
             </>
           )}
         </Group>
@@ -135,7 +158,7 @@ export function Polaroid({
             x={POLAROID_BORDER_WIDTH + PADDING}
             y={POLAROID_BORDER_WIDTH + POLAROID_UPPER_CLIENT_HEIGHT + GAP_HEIGHT + PADDING}
             fontFamily="Pretendard"
-            fontSize={13}
+            fontSize={FONT_SIZE}
             fill={polaroid.text ? '#595664' : '#B8B7BC'}
           />
         </Group>
