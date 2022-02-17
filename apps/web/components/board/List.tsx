@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { Items } from "./Items";
+import { Items } from './Items';
 
 const Wrapper = styled.div`
   display: flex;

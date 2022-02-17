@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
   z-index: 100;
@@ -28,7 +28,7 @@ const SmallLogo = styled.div`
   width: 93px;
   height: 22px;
 
-  background-image: url("/assets/image/logo_small.svg");
+  background-image: url('/assets/image/logo_small.svg');
 `;
 
 const NickName = styled.div`
@@ -56,7 +56,7 @@ const IconWrapper = styled.div<{ profileImage: string }>`
 
   margin: 0 20px;
 
-  background-image: url(${(props) => props.profileImage});
+  background-image: url(${props => props.profileImage});
   background-repeat: no-repeat;
   background-size: 80%;
   background-position: bottom;
@@ -69,7 +69,7 @@ const Button = styled.button`
   width: 25px;
   height: 20px;
 
-  background-image: url("/assets/image/arrow_down.svg");
+  background-image: url('/assets/image/arrow_down.svg');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -81,7 +81,7 @@ type Props = {
 
 export const TitleBar = ({ isLogin }: Props) => {
   const onClick = () => {
-    console.log("hello");
+    console.log('hello');
   };
 
   return (
@@ -92,7 +92,7 @@ export const TitleBar = ({ isLogin }: Props) => {
       {isLogin && (
         <section>
           <NickName>Jane Kim</NickName>
-          <IconWrapper profileImage={"/assets/char/01.png"} />
+          <IconWrapper profileImage={'/assets/char/01.png'} />
           <Button onClick={onClick} />
         </section>
       )}
