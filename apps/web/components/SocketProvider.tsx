@@ -45,8 +45,7 @@ const SocketProvider = ({ children }) => {
           ...state,
           roomId,
           userId,
-          // @NOTE: https://github.com/facebookexperimental/Recoil/issues/299
-          client: JSON.parse(JSON.stringify(stompClient)),
+          client: stompClient,
         }));
       },
       e => {
