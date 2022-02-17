@@ -17,8 +17,11 @@ interface Response {
 
 export async function createBoard(title: string) {
   const data = {
+    background: {},
+    headCount: 100,
     title,
   };
+
   const response: Response = await fetch(`${API_SERVER}/rooms`, {
     method: 'POST',
     mode: 'cors',
