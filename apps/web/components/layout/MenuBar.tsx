@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useWindowSize } from 'react-use';
 
-import { shapesState, postItState, userActionState } from 'web/recoil';
+import { shapesState, postItState, userActionState } from 'web/atoms';
 import { changeStageAxis } from 'web/atoms/stageAxis';
 
 import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
@@ -49,8 +49,6 @@ export const MenuBar = ({ isEditOpen, setEditOpen }: Props) => {
       x: -x + Math.ceil(width / 2 - POSTIT_WIDTH / 2),
       y: -y + Math.ceil(height / 2 - POSTIT_HEIHT / 2),
       rotation: 0,
-      width: POSTIT_WIDTH,
-      height: POSTIT_HEIHT,
       isDragging: false,
     };
     const newPostIts = [...shapes.postIts, newPostIt];
