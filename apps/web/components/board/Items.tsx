@@ -1,9 +1,11 @@
-import { type FunctionComponent } from 'react';
+import { useState, type FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 import { Item } from './Item';
 
-import { RoomData } from 'web/shared/types';
+import { useEffect } from 'react';
+
+import { requestGetAllRooms } from 'web/fetch/getAllRooms';
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -24,17 +26,27 @@ interface RoomInformation {
   title: string;
 }
 
-const dummys: RoomInformation[] = [
-  {
-    backgroundImage: '',
-    createdAt: '2022-02-19T15:00:41.275',
-    id: '621087899b66413001f57afe',
-    title: 'dummy title',
-  },
-];
-
 export const Items: FunctionComponent<Props> = () => {
-  const list: RoomInformation[] = dummys;
+  const [list, setList] = useState<RoomInformation[]>([]);
+
+  useEffect(() => {
+    requestGetAllRooms().then(response => {
+      if (!response) return;
+
+      const { contents } = response;
+
+      const newList: RoomInformation[] = contents.map(content => {
+        return {
+          backgroundImage: content.background?.image || '',
+          createdAt: content.createdAt,
+          id: content.id,
+          title: content.title || 'undefined title',
+        };
+      });
+
+      setList(newList);
+    });
+  }, []);
 
   return (
     <Wrapper>
