@@ -1,8 +1,6 @@
 import { atom, selector } from 'recoil';
 import { IPolaroid, IPostIt, UserAction } from 'web/shared/types';
 
-import { IPostIt } from 'web/shared/types';
-
 // TEMP
 function generatePostIts(): IPostIt[] {
   return [...Array(1)].map((_, i) => ({

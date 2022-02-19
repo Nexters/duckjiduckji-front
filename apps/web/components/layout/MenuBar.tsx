@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useWindowSize } from 'react-use';
 
-import { shapesState, postItState, userActionState } from 'web/atoms';
+import { shapesState } from 'web/atoms';
 import { changeStageAxis } from 'web/atoms/stageAxis';
 
 import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';

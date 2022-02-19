@@ -5,11 +5,9 @@ import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt, URLImage } from 'web/components/canvas/shapes';
-import { shapesState, changeColor, userActionState } from 'web/atoms';
+import { shapesState, changeColor, userActionState, changeStageAxis } from 'web/atoms';
 import { Coordinates, IPolaroid, IPostIt } from 'web/shared/types';
 import styled, { CSSProperties } from 'styled-components';
-
-import { changeStageAxis } from 'web/atoms/stageAxis';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -250,7 +248,7 @@ function MainCanvas({}: Props) {
 
   const setStageAxisDragEnd = (event: KonvaEventObject<DragEvent>) => {
     const { y, x } = event.target.attrs;
-
+    console.log({ y, x });
     setStageAxis({ y, x });
   };
 
@@ -326,7 +324,6 @@ function MainCanvas({}: Props) {
               }}
             />
           ))}
-          <URLImage src={'https://konvajs.org/assets/lion.png'} x={200} y={200} />
         </Layer>
       </Stage>
       <input
