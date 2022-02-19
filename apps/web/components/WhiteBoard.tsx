@@ -7,7 +7,9 @@ import { EditModal } from 'web/components/layout/EditModal';
 import { FloatingCircularMenu } from 'web/components/layout/FloatingCircularMenu';
 import MainCanvas from 'web/components/canvas/MainCanvas';
 
-import { requestGetRoom, RoomData } from 'web/fetch/getRoom';
+import { requestGetRoom } from 'web/fetch/getRoom';
+
+import { RoomData } from 'web/shared/types';
 
 interface Props {}
 

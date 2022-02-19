@@ -19,9 +19,7 @@ export function List() {
         <section>
           <Text>All Boards</Text>
         </section>
-        <section>
-          <TrashButton>삭제</TrashButton>
-        </section>
+        <section>{/* <TrashButton /> */}</section>
       </Menu>
       <Items />
     </Wrapper>
@@ -77,6 +75,21 @@ const Text = styled.p`
 const TrashButton = styled.button`
   width: 40px;
   height: 40px;
+  border-radius: 10px;
+
+  border: none;
+  outline: none;
+
+  background-color: transparent;
+  background-image: url('/assets/image/trash_ico.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  transition-duration: 0.4s;
+
+  &:hover {
+    background-color: #b9b9b9;
+  }
 `;
 
 const CreateButton = styled.button`
