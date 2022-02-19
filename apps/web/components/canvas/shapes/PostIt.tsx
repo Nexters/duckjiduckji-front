@@ -2,6 +2,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef } from 'react';
 import { Rect, Transformer } from 'react-konva';
 import { IPostIt } from 'web/shared/types';
+import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
 
 interface Props {
   postIt: IPostIt;
@@ -41,8 +42,8 @@ export function PostIt({ postIt, isDraggable, isSelected, onSelect, onChange, on
         x={postIt.x}
         y={postIt.y}
         rotation={postIt.rotation}
-        width={postIt.width}
-        height={postIt.height}
+        width={POSTIT_WIDTH}
+        height={POSTIT_HEIHT}
         ref={shapeRef}
         onClick={e => {
           onClick(e, postIt);
