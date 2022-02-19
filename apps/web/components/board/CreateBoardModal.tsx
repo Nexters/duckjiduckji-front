@@ -2,6 +2,8 @@ import { ChangeEventHandler, useEffect } from 'react';
 import { useState, useRef, MouseEventHandler, type FunctionComponent } from 'react';
 import styled from 'styled-components';
 
+import { requestCreateBoard } from '../../fetch/createBoard';
+
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -33,10 +35,20 @@ export const CreateBoardModal: FunctionComponent<Props> = ({ setOpen }) => {
     setFail(false);
   };
 
-  const createBoard: MouseEventHandler<HTMLButtonElement> = () => {
+  const createBoard: MouseEventHandler<HTMLButtonElement> = async () => {
     const { value } = inputRef.current;
 
     if (!checkValid(value)) return;
+
+    const response = await requestCreateBoard(`${value}`);
+    if (!response) {
+      console.log('error');
+      return;
+    }
+
+    const { title } = response;
+
+    location.href = `/rooms/${title}`;
   };
 
   return (
