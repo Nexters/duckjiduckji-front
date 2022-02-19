@@ -90,13 +90,17 @@ const Divider = styled.div`
   background: #e0e0e0;
 `;
 
-export const ActionBar = () => {
+interface Props {
+  title: string;
+}
+
+export const ActionBar: React.FC<Props> = ({ title }) => {
   return (
     <Wrapper>
       <section>
         <MenuButton image={'/assets/image/home_ico.svg'} />
         <Title>
-          <span>2022 Nexters</span>
+          <span>{title}</span>
         </Title>
         <Divider />
         <Button>친구 초대하기</Button>

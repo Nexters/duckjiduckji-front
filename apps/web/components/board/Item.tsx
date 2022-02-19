@@ -1,4 +1,5 @@
-import { type FunctionComponent } from 'react';
+import { useRouter } from 'next/router';
+import { MouseEventHandler, type FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -64,15 +65,31 @@ const Information = styled.div`
   }
 `;
 
-interface Props {}
+interface Props {
+  backgroundImage: string;
+  createdAt: string;
+  id: string;
+  title: string;
+}
 
-export const Item: FunctionComponent<Props> = () => {
+function formatDate(date: Date) {
+  return `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
+}
+
+export const Item: FunctionComponent<Props> = ({ title, id, createdAt }) => {
+  const router = useRouter();
+  const date = new Date(createdAt);
+
+  const onClickHandler: MouseEventHandler<HTMLDivElement> = () => {
+    router.push(`rooms/${id}`);
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onClick={onClickHandler}>
       <Image />
       <Information>
-        <span>asdfasdfasdfasdf</span>
-        <p>2021.12.25</p>
+        <span>{title}</span>
+        <p>{formatDate(date)}</p>
       </Information>
     </Wrapper>
   );

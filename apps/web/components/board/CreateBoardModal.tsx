@@ -1,6 +1,9 @@
+import { useRouter } from 'next/router';
 import { ChangeEventHandler, useEffect } from 'react';
 import { useState, useRef, MouseEventHandler, type FunctionComponent } from 'react';
 import styled from 'styled-components';
+
+import { requestCreateRoom } from '../../fetch/createRoom';
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,6 +15,7 @@ const checkValid = (title: string) => {
 
 export const CreateBoardModal: FunctionComponent<Props> = ({ setOpen }) => {
   const inputRef = useRef<HTMLInputElement>();
+  const router = useRouter();
 
   const [isActive, setActive] = useState<boolean>(false);
   const [isFail, setFail] = useState<boolean>(false);
@@ -33,10 +37,20 @@ export const CreateBoardModal: FunctionComponent<Props> = ({ setOpen }) => {
     setFail(false);
   };
 
-  const createBoard: MouseEventHandler<HTMLButtonElement> = () => {
+  const createBoard: MouseEventHandler<HTMLButtonElement> = async () => {
     const { value } = inputRef.current;
 
     if (!checkValid(value)) return;
+
+    const response = await requestCreateRoom(`${value}`);
+    if (!response) {
+      alert('error');
+      return;
+    }
+
+    const { id } = response;
+
+    router.push(`/rooms/${id}`);
   };
 
   return (
