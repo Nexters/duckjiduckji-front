@@ -12,9 +12,14 @@ const Wrapper = styled.div`
   align-items: center;
 
   background: #0f0b1b;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-attachment: fixed;
+  background-position: center bottom;
 `;
 
 const MainText = styled.span`
+  position: relative;
   width: 888px;
   height: 160px;
   margin: 32px;
@@ -71,6 +76,13 @@ const LinkButton = styled.button`
   color: #ffffff;
 `;
 
+const ImpactText = styled.span<{ backgroundImage: string }>`
+  background-image: url(${props => props.backgroundImage});
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding: 15px;
+`;
+
 export function Landing() {
   const router = useRouter();
 
@@ -81,9 +93,10 @@ export function Landing() {
   return (
     <Wrapper>
       <MainText>
-        덕지덕지 붙여봐요!
+        <ImpactText backgroundImage="assets/image/green_panel.png">덕지덕지</ImpactText> 붙여봐요!
         <br />
-        우리만의 추억을 담는 콜렉트북
+        우리만의 추억을 담는 <ImpactText backgroundImage="assets/image/yellow_panel.png">콜렉트북</ImpactText>
+        <Arrow />
       </MainText>
       <SubText>
         스쳐 지나가는 우리의 일상들, 친구들과 함께 추억하고 싶지 않으셨나요?
@@ -91,8 +104,49 @@ export function Landing() {
         타임캡슐 공간을 만들어 사진과 글을 실시간으로 꾸미고 공유해보세요!
       </SubText>
       <LinkButton onClick={moveRoomsPage}>덕지덕지 시작하기</LinkButton>
+      <BackgroundUpper />
+      <BackgroundDown />
     </Wrapper>
   );
 }
+
+const BackgroundUpper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+
+  background-image: url('assets/image/background_up.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-attachment: fixed;
+  background-position: center top;
+`;
+
+const BackgroundDown = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  bottom: 0;
+
+  background-image: url('assets/image/background_down.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-attachment: fixed;
+  background-position: center bottom;
+`;
+
+const Arrow = styled.div`
+  position: absolute;
+  width: 30px;
+  height: 30px;
+
+  right: 40px;
+  bottom: -10px;
+
+  background-image: url('assets/image/background_arrow.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+`;
 
 export default Landing;
