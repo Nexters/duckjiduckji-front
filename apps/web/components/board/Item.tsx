@@ -81,7 +81,7 @@ export const Item: FunctionComponent<Props> = ({ title, id, createdAt }) => {
   const date = new Date(createdAt);
 
   const onClickHandler: MouseEventHandler<HTMLDivElement> = () => {
-    router.push(`rooms/${id}`);
+    router.push(`room/${id}`);
   };
 
   return (
