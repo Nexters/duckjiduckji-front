@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { LoginCard } from "./LoginCard";
+import { LoginCard } from './LoginCard';
 
 const Wrapper = styled.div`
   display: flex;

@@ -6,7 +6,8 @@ import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt } from 'web/components/canvas/shapes';
 import { shapesState, userActionState } from 'web/recoil';
-import { Coordinates } from 'web/shared/types';
+import { Coordinates, IPolaroid, IPostIt } from 'web/shared/types';
+import styled, { CSSProperties } from 'styled-components';
 
 import { changeColor } from '../../atoms/create';
 
@@ -30,6 +31,16 @@ const stageAttrs = {
 };
 
 interface Props {}
+interface MenuPosition {
+  top: Pick<CSSProperties, 'top'>;
+  left: Pick<CSSProperties, 'left'>;
+}
+
+const ROOT_LAYER_ID = 13;
+const getRootParentShape = target => {
+  if (!target.parent || target.parent._id === ROOT_LAYER_ID) return target;
+  return getRootParentShape(target.parent);
+};
 
 function MainCanvas({}: Props) {
   const color = useRecoilValue(changeColor);
@@ -39,6 +50,12 @@ function MainCanvas({}: Props) {
   const stageRef = useRef(null);
   const [selectedPolaroidIds, setSelectedPolaroidIds] = useState<string[]>([]);
   const [selectedPostItIds, setSelectedPostItIds] = useState<string[]>([]);
+  const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
+  const [menuTarget, setMenuTarget] = useState<{ target?: any; data?: IPostIt | IPolaroid }>();
+  const [menuPosition, setMenuPosition] = useState<MenuPosition>({
+    top: '0px' as Pick<CSSProperties, 'top'>,
+    left: '0px' as Pick<CSSProperties, 'left'>,
+  });
 
   const isShapesDraggable = userAction === 'pinch' ? false : true;
 
@@ -137,6 +154,67 @@ function MainCanvas({}: Props) {
     }
   }
 
+  const handleStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    e.evt.preventDefault();
+    if (e.evt.which === 3) return;
+
+    setMenuOpen(false);
+  };
+
+  const handleContextMenu = (e: KonvaEventObject<PointerEvent>) => {
+    e.evt.preventDefault();
+    if (!e.target.parent) {
+      // if we are on empty place of the stage we will do nothing
+      setMenuOpen(false);
+      return;
+    }
+
+    const containerRect = stageRef.current.container().getBoundingClientRect();
+    const top = (containerRect.top + stageRef.current.getPointerPosition().y + 4 + 'px') as Pick<CSSProperties, 'top'>;
+    const left = (containerRect.left + stageRef.current.getPointerPosition().x + 4 + 'px') as Pick<
+      CSSProperties,
+      'left'
+    >;
+
+    setMenuTarget({ target: e.target });
+    setMenuOpen(true);
+    setMenuPosition({ top, left });
+  };
+
+  const handleMenuDeleteClick = () => {
+    if (!menuTarget || !menuTarget.target) return;
+    const target = getRootParentShape(menuTarget.target);
+    target.destroy();
+    setMenuOpen(false);
+    setShapes(prev => {
+      if (menuTarget.data.type === 'polaroid') {
+        const refinedPolaroids = prev.polaroids.filter(item => item.id !== menuTarget.data.id);
+        return { ...prev, polaroids: refinedPolaroids };
+      } else {
+        const refinedPostIts = prev.postIts.filter(item => item.id !== menuTarget.data.id);
+        return { ...prev, postIts: refinedPostIts };
+      }
+    });
+  };
+
+  const handlePostItClick = (e: KonvaEventObject<MouseEvent>, data: IPostIt) => {
+    e.evt.preventDefault();
+
+    // 우클릭시 menu 창에 현재 postIt 데이터 넘기기위해 존재
+    if (e.evt.which === 3) {
+      setMenuTarget(prev => ({ ...prev, data }));
+    }
+  };
+
+  const handlePolaroidClick = (e: KonvaEventObject<MouseEvent>, data: IPolaroid) => {
+    e.evt.preventDefault();
+
+    // 우클릭시 menu 창에 현재 postIt 데이터 넘기기위해 존재
+    if (e.evt.which === 3) {
+      setMenuTarget(prev => ({ ...prev, data }));
+    }
+  };
+
   return (
     <div>
       <Stage
@@ -149,6 +227,8 @@ function MainCanvas({}: Props) {
         onTouchMove={handleStageTouchMove}
         onMouseDown={checkDeselect}
         onTouchStart={checkDeselect}
+        onContextMenu={handleContextMenu}
+        onClick={handleStageClick}
       >
         <Layer>
           {/* TODO: 필요시 Generic Shapes 컴포넌트 만들기 */}
@@ -163,6 +243,7 @@ function MainCanvas({}: Props) {
                   setSelectedPolaroidIds([]);
                   setSelectedPostItIds([postIt.id]);
                 },
+                onClick: handlePostItClick,
                 onChange: postIt => {
                   const postIts = shapes.postIts.slice();
                   postIts[index] = postIt;
@@ -185,6 +266,7 @@ function MainCanvas({}: Props) {
                   setSelectedPostItIds([]);
                   setSelectedPolaroidIds([polaroid.id]);
                 },
+                onClick: handlePolaroidClick,
                 onChange: polaroid => {
                   const polaroids = shapes.polaroids.slice();
                   polaroids[index] = polaroid;
@@ -200,8 +282,41 @@ function MainCanvas({}: Props) {
           ))}
         </Layer>
       </Stage>
+      <MenuNode top={menuPosition.top} left={menuPosition.left} isMenuOpen={isMenuOpen}>
+        <div>
+          <button>Pulse</button>
+          <button onClick={handleMenuDeleteClick}>Delete</button>
+        </div>
+      </MenuNode>
     </div>
   );
 }
+
+const MenuNode = styled.div<{
+  isMenuOpen: boolean;
+  top: Pick<CSSProperties, 'top'>;
+  left: Pick<CSSProperties, 'left'>;
+}>`
+  display: ${props => (props.isMenuOpen ? 'initial' : 'none')};
+  position: absolute;
+  width: 60px;
+  background-color: white;
+  box-shadow: 0 0 5px grey;
+  border-radius: 3px;
+  top: ${({ top }) => top};
+  left: ${({ left }) => left};
+
+  button {
+    width: 100%;
+    background-color: white;
+    border: none;
+    margin: 0;
+    padding: 10px;
+  }
+
+  button:hover {
+    background-color: lightgray;
+  }
+`;
 
 export default MainCanvas;
