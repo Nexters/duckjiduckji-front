@@ -15,7 +15,7 @@ interface Response {
   success: boolean;
 }
 
-export async function requestCreateBoard(title: string) {
+export async function requestCreateRoom(title: string) {
   const data = {
     background: {},
     headCount: 100,

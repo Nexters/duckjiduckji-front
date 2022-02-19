@@ -2,7 +2,7 @@ import { ChangeEventHandler, useEffect } from 'react';
 import { useState, useRef, MouseEventHandler, type FunctionComponent } from 'react';
 import styled from 'styled-components';
 
-import { requestCreateBoard } from '../../fetch/createBoard';
+import { requestCreateRoom } from '../../fetch/createRoom';
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +40,7 @@ export const CreateBoardModal: FunctionComponent<Props> = ({ setOpen }) => {
 
     if (!checkValid(value)) return;
 
-    const response = await requestCreateBoard(`${value}`);
+    const response = await requestCreateRoom(`${value}`);
     if (!response) {
       console.log('error');
       return;
