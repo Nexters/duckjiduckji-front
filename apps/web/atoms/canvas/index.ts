@@ -25,7 +25,7 @@ export const shapesState = atom<{ polaroids: IPolaroid[]; postIts: IPostIt[] }>(
         rotation: 0,
         isDragging: false,
         text: '',
-        imgUrl: 'https://user-images.githubusercontent.com/27193396/151647337-5802e7c9-0004-4d4a-b134-322fc23d824e.png',
+        imgUrl: '',
       },
     ],
     postIts: generatePostIts(),

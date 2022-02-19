@@ -15,7 +15,6 @@ export const URLImage = ({ src, x, y, width, height }: Props) => {
   const loadImage = () => {
     const img = new window.Image();
     img.src = src;
-    img.crossOrigin = 'Anonymous';
     imageRef.current = img;
     imageRef.current.addEventListener('load', handleLoad);
   };
@@ -37,7 +36,7 @@ export const URLImage = ({ src, x, y, width, height }: Props) => {
     loadImage();
   }, [src]);
 
-  const aspectRatioHeight = width * ((image?.height ?? 1) / (image?.width ?? 1));
+  const aspectRatioHeight = Math.min(width * ((image?.height ?? 1) / (image?.width ?? 1)), height);
 
-  return <Image alt="" x={x} y={y} width={width} height={aspectRatioHeight} image={image} draggable={true} />;
+  return <Image alt="" x={x} y={y} width={width} height={aspectRatioHeight} image={image} />;
 };
