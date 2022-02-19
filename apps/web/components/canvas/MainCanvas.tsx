@@ -6,10 +6,10 @@ import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt } from 'web/components/canvas/shapes';
 import { shapesState, userActionState } from 'web/recoil';
-import { changeStageAxis } from 'web/atoms/stageAxis';
 import { IPolaroid, IPostIt, Coordinates } from 'web/shared/types';
 import styled, { CSSProperties } from 'styled-components';
 
+import { changeStageAxis } from 'web/atoms/stageAxis';
 import { changeColor } from '../../atoms/create';
 
 const SCALE_BY = 1.01;
@@ -217,6 +217,12 @@ function MainCanvas({}: Props) {
     }
   };
 
+  const setStageAxisDragEnd = (event: KonvaEventObject<DragEvent>) => {
+    const { y, x } = event.target.attrs;
+
+    setStageAxis({ y, x });
+  };
+
   return (
     <div>
       <Stage
@@ -224,6 +230,7 @@ function MainCanvas({}: Props) {
         draggable={true}
         width={width}
         height={height}
+        onDragEnd={setStageAxisDragEnd}
         onWheel={handleStageWheel}
         onTouchEnd={handleStageTouchEnd}
         onTouchMove={handleStageTouchMove}
