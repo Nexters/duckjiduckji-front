@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { useWindowSize } from 'react-use';
 
 import { shapesState, postItState, userActionState } from 'web/recoil';
+import { changeStageAxis } from 'web/atoms/stageAxis';
 
 import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
 import { IPostIt } from 'web/shared/types';
@@ -15,6 +16,9 @@ type Props = {
 
 export const MenuBar = ({ isEditOpen, setEditOpen }: Props) => {
   const [shapes, setShapes] = useRecoilState(shapesState);
+  const axis = useRecoilValue(changeStageAxis);
+
+  const { width, height } = useWindowSize();
 
   const openEditModal = () => {
     setEditOpen(true);
@@ -36,20 +40,20 @@ export const MenuBar = ({ isEditOpen, setEditOpen }: Props) => {
     const { postIts } = shapes;
 
     const lastIdx = postIts.length - 1;
+    const { y, x } = axis || { y: 0, x: 0 };
+    // console.log(axis);
 
     const newPostIt: IPostIt = {
       type: 'postIt',
       id: `i${lastIdx + 1}`,
-      x: 500,
-      y: 400,
+      x: -x + Math.ceil(width / 2 - POSTIT_WIDTH / 2),
+      y: -y + Math.ceil(height / 2 - POSTIT_HEIHT / 2),
       rotation: 0,
       width: POSTIT_WIDTH,
       height: POSTIT_HEIHT,
       isDragging: false,
     };
-    const newPostIts = [...shapes.postIts];
-
-    newPostIts.push(newPostIt);
+    const newPostIts = [...shapes.postIts, newPostIt];
 
     setShapes({ ...shapes, postIts: newPostIts });
   };
