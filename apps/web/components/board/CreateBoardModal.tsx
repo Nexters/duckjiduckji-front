@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { ChangeEventHandler, useEffect } from 'react';
 import { useState, useRef, MouseEventHandler, type FunctionComponent } from 'react';
 import styled from 'styled-components';
@@ -14,6 +15,7 @@ const checkValid = (title: string) => {
 
 export const CreateBoardModal: FunctionComponent<Props> = ({ setOpen }) => {
   const inputRef = useRef<HTMLInputElement>();
+  const router = useRouter();
 
   const [isActive, setActive] = useState<boolean>(false);
   const [isFail, setFail] = useState<boolean>(false);
@@ -42,13 +44,13 @@ export const CreateBoardModal: FunctionComponent<Props> = ({ setOpen }) => {
 
     const response = await requestCreateRoom(`${value}`);
     if (!response) {
-      console.log('error');
+      alert('error');
       return;
     }
 
-    const { title } = response;
+    const { id } = response;
 
-    location.href = `/rooms/${title}`;
+    router.push(`/rooms/${id}`);
   };
 
   return (
