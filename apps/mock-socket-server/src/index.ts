@@ -1,5 +1,5 @@
 import http from "http";
-import { PUBLISH_PATH, SUBSCRIBE_PATH } from "socket-model";
+import { MESSAGE_TYPE, PUBLISH_PATH, SUBSCRIBE_PATH } from "socket-model";
 import { yellowFormat, logger } from "./winston";
 // @NOTE: Stomp-broker-js doesn't support ESM.
 const StompServer = require("stomp-broker-js");
@@ -28,11 +28,14 @@ stompServer.subscribe(PUBLISH_PATH.TEST_ROOM, (msg, headers) => {
   let isNeedPublish = false;
   const resBody = { msgType, userId, data: {} };
 
-  if (msgType === "JOIN") {
+  if (msgType === MESSAGE_TYPE.JOIN) {
     isNeedPublish = true;
     // @TODO: Add socket data format.
     // https://www.notion.so/Socket-Data-adbb5e75c534430eb7faba899e2d9efe
     resBody.data = { msg: `Hello from server! ${userId}` };
+  } else if (msgType === MESSAGE_TYPE.LEAVE) {
+    // 실제로 소켓이 끊어지는건 아님(테스트용)
+    logger.info(`LEAVED>> ${userId}`);
   }
 
   if (!isNeedPublish) return;

@@ -1,9 +1,7 @@
-import { useState, type FunctionComponent } from 'react';
+import { useEffect, useState, type FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 import { Item } from './Item';
-
-import { useEffect } from 'react';
 
 import { requestGetAllRooms } from 'web/fetch/getAllRooms';
 

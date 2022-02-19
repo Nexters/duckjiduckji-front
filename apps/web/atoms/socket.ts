@@ -1,8 +1,8 @@
-import { atom, selector } from "recoil";
-import { SocketData, SocketResponseBody } from "socket-model";
+import { atom, selector } from 'recoil';
+import { SocketData, SocketResponseBody } from 'socket-model';
 
 export const socketState = atom<SocketData>({
-  key: "socketState",
+  key: 'socketState',
   default: {
     client: undefined,
     roomId: undefined,
@@ -15,7 +15,7 @@ export const socketState = atom<SocketData>({
 });
 
 export const socketDataState = selector<SocketResponseBody>({
-  key: "socketDataState",
+  key: 'socketDataState',
   get: ({ get }) => get(socketState).data,
   set: ({ get, set }, nextState) => {
     /**

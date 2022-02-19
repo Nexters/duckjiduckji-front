@@ -10,6 +10,7 @@ type Props = {
   onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<MouseEvent>) => void;
   isDraggable: boolean;
   isSelected: boolean;
+  onClick: (e: KonvaEventObject<MouseEvent>, id: IPolaroid) => void;
   onSelect: (polaroid: IPolaroid) => void;
   onChange: (polaroid: IPolaroid) => void;
   color?: string;
@@ -22,6 +23,7 @@ export function Polaroid({
   onTextAreaDoubleClick,
   onSelect,
   onChange,
+  onClick,
   color,
 }: Props) {
   const [image] = useImage(polaroid.imgUrl);
@@ -56,7 +58,10 @@ export function Polaroid({
         height={polaroid.height}
         rotation={polaroid.rotation}
         ref={shapeRef}
-        onClick={() => onSelect(polaroid)}
+        onClick={e => {
+          onClick(e, polaroid);
+          onSelect(polaroid);
+        }}
         onTap={() => onSelect(polaroid)}
         onTransformEnd={handleTransformEnd}
         draggable={isDraggable}
