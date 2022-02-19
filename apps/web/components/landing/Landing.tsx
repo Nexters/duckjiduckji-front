@@ -1,4 +1,6 @@
-import styled from "styled-components";
+import { useRouter } from 'next/router';
+import { MouseEventHandler } from 'react';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -70,6 +72,12 @@ const LinkButton = styled.button`
 `;
 
 export function Landing() {
+  const router = useRouter();
+
+  const moveRoomsPage: MouseEventHandler<HTMLButtonElement> = () => {
+    router.push('/board');
+  };
+
   return (
     <Wrapper>
       <MainText>
@@ -82,7 +90,7 @@ export function Landing() {
         <br />
         타임캡슐 공간을 만들어 사진과 글을 실시간으로 꾸미고 공유해보세요!
       </SubText>
-      <LinkButton>덕지덕지 시작하기</LinkButton>
+      <LinkButton onClick={moveRoomsPage}>덕지덕지 시작하기</LinkButton>
     </Wrapper>
   );
 }
