@@ -4,10 +4,9 @@ import { useWindowSize } from 'react-use';
 import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Polaroid, PostIt } from 'web/components/canvas/shapes';
+import { Polaroid, PostIt, URLImage } from 'web/components/canvas/shapes';
 import { shapesState, changeColor, userActionState } from 'web/atoms';
 import { Coordinates, IPolaroid } from 'web/shared/types';
-import { URLImage } from './shapes/URLImage';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -39,9 +38,9 @@ function MainCanvas({}: Props) {
   const [selectedPolaroidIds, setSelectedPolaroidIds] = useState<string[]>([]);
   const [selectedPostItIds, setSelectedPostItIds] = useState<string[]>([]);
   const [typingText, setTypingText] = useState('');
-
   const inputRef = useRef<HTMLInputElement>(null);
   const spanRef = useRef<HTMLSpanElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isShapesDraggable = userAction === 'pinch' ? false : true;
 
@@ -140,6 +139,35 @@ function MainCanvas({}: Props) {
     }
   }
 
+  function handleFileUpload(files) {
+    if (!files.length) return;
+    const reader = new FileReader();
+    reader.addEventListener(
+      'load',
+      function () {
+        // convert image file to base64 string
+        const currentTargetId = selectedPolaroidIds[0];
+        setShapes(shapes => ({
+          ...shapes,
+          polaroids: shapes.polaroids.map(polaroid => {
+            if (polaroid.id === currentTargetId) {
+              return {
+                ...polaroid,
+                imgUrl: reader.result,
+              };
+            }
+            return polaroid;
+          }),
+        }));
+      },
+      false,
+    );
+    const file = files[0];
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+
   return (
     <div style={{ position: 'relative' }}>
       <Stage
@@ -200,6 +228,9 @@ function MainCanvas({}: Props) {
                   console.log(polaroid, e);
                   inputRef.current.focus();
                 },
+                onImageUploadClick: polaroid => {
+                  fileInputRef.current.click();
+                },
                 color,
               }}
             />
@@ -207,6 +238,13 @@ function MainCanvas({}: Props) {
           <URLImage src={'https://konvajs.org/assets/lion.png'} x={200} y={200} />
         </Layer>
       </Stage>
+      <input
+        ref={fileInputRef}
+        onChange={({ target }) => handleFileUpload(target.files)}
+        type="file"
+        accept="image/*"
+        style={{ opacity: 0, position: 'fixed' }}
+      />
       <input
         ref={inputRef}
         style={{

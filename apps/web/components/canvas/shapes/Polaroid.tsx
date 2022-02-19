@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Rect, Group, Text, Line, Image, Transformer } from 'react-konva';
-import useImage from 'use-image';
+import { Rect, Group, Text, Line, Transformer } from 'react-konva';
 import { IPolaroid } from 'web/shared/types';
 import {
   CROSS_LINE_STROKE_SIZE,
@@ -21,6 +20,7 @@ import {
   POLAROID_UPPER_CLIENT_HEIGHT,
 } from 'web/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
+import { URLImage } from '.';
 
 type Props = {
   polaroid: IPolaroid;
@@ -29,6 +29,7 @@ type Props = {
   isSelected: boolean;
   onSelect: (polaroid: IPolaroid) => void;
   onChange: (polaroid: IPolaroid) => void;
+  onImageUploadClick: (polaroid: IPolaroid) => void;
   color?: string;
 };
 
@@ -39,9 +40,9 @@ export function Polaroid({
   onTextAreaDoubleClick,
   onSelect,
   onChange,
+  onImageUploadClick,
   color,
 }: Props) {
-  const [image] = useImage(polaroid.imgUrl);
   const [isImageShown, setIsImageShown] = useState(false);
   const shapeRef = useRef(null);
   const trRef = useRef(null);
@@ -93,7 +94,7 @@ export function Polaroid({
           shadowOffsetX={polaroid.isDragging ? 10 : 5}
           shadowOffsetY={polaroid.isDragging ? 10 : 5}
         />
-        <Group onClick={() => setIsImageShown(true)} onTouchEnd={() => setIsImageShown(true)}>
+        <Group onClick={() => onImageUploadClick(polaroid)} onTouchEnd={() => setIsImageShown(true)}>
           <Rect
             x={POLAROID_BORDER_WIDTH}
             y={POLAROID_BORDER_WIDTH}
@@ -102,14 +103,13 @@ export function Polaroid({
             fill="white"
           />
 
-          {isImageShown ? (
-            <Image
-              image={image}
+          {polaroid.imgUrl ? (
+            <URLImage
+              src={polaroid.imgUrl}
               x={POLAROID_BORDER_WIDTH}
               y={POLAROID_BORDER_WIDTH}
               width={POLAROID_CLIENT_WIDTH}
               height={POLAROID_UPPER_CLIENT_HEIGHT}
-              alt=""
             />
           ) : (
             <>

@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { Image } from 'react-konva';
 
-export const URLImage = ({ src, x, y }) => {
+interface Props {
+  src: string;
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+}
+
+export const URLImage = ({ src, x, y, width, height }: Props) => {
   const imageRef = useRef(null);
   const [image, setImage] = useState(null);
-
   const loadImage = () => {
     const img = new window.Image();
     img.src = src;
@@ -30,5 +37,7 @@ export const URLImage = ({ src, x, y }) => {
     loadImage();
   }, [src]);
 
-  return <Image alt="" x={x} y={y} image={image} />;
+  const aspectRatioHeight = width * ((image?.height ?? 1) / (image?.width ?? 1));
+
+  return <Image alt="" x={x} y={y} width={width} height={aspectRatioHeight} image={image} draggable={true} />;
 };
