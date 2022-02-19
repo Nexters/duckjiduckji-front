@@ -10,9 +10,10 @@ interface Props {
   onClick: (e: KonvaEventObject<MouseEvent>, id: IPostIt) => void;
   onSelect: (polaroid: IPostIt) => void;
   onChange: (polaroid: IPostIt) => void;
+  color?: string;
 }
 
-export function PostIt({ postIt, isDraggable, isSelected, onSelect, onChange, onClick }: Props) {
+export function PostIt({ postIt, isDraggable, isSelected, onSelect, onClick, onChange, color }: Props) {
   const shapeRef = useRef(null);
   const trRef = useRef(null);
 
@@ -53,7 +54,7 @@ export function PostIt({ postIt, isDraggable, isSelected, onSelect, onChange, on
         onDragEnd={e => {
           onChange({ ...postIt, x: e.target.x(), y: e.target.y() });
         }}
-        fill="#feff9c"
+        fill={color || '#feff9c'}
         draggable={isDraggable}
         shadowColor="black"
         shadowBlur={10}

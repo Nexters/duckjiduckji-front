@@ -6,7 +6,8 @@ import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt } from 'web/components/canvas/shapes';
 import { shapesState, userActionState } from 'web/recoil';
-import { Coordinates, IPolaroid, IPostIt } from 'web/shared/types';
+import { changeStageAxis } from 'web/atoms/stageAxis';
+import { IPolaroid, IPostIt, Coordinates } from 'web/shared/types';
 import styled, { CSSProperties } from 'styled-components';
 
 import { changeColor } from '../../atoms/create';
@@ -43,6 +44,7 @@ const getRootParentShape = target => {
 };
 
 function MainCanvas({}: Props) {
+  const [stageAxis, setStageAxis] = useRecoilState(changeStageAxis);
   const color = useRecoilValue(changeColor);
   const [shapes, setShapes] = useRecoilState(shapesState);
   const [userAction, setUserAction] = useRecoilState(userActionState);

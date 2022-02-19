@@ -2,8 +2,10 @@ import { atom, selector } from 'recoil';
 import { POLAROID_HEIGHT, POLAROID_WIDTH, POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
 import { UserAction } from 'web/shared/types';
 
+import { IPostIt } from 'web/shared/types';
+
 // TEMP
-function generatePostIts() {
+function generatePostIts(): IPostIt[] {
   return [...Array(1)].map((_, i) => ({
     type: 'postIt' as const,
     id: `i${i.toString()}`,
@@ -50,6 +52,9 @@ export const postItState = selector({
   get: ({ get }) => {
     const canvas = get(shapesState);
     return canvas.postIts;
+  },
+  set: ({ set }, newState) => {
+    set(shapesState, newState);
   },
 });
 
