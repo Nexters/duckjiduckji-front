@@ -41,11 +41,8 @@ export function Polaroid({
   onTextAreaDoubleClick,
   onSelect,
   onChange,
-<<<<<<< HEAD
   onImageUploadClick,
-=======
   onClick,
->>>>>>> main
   color,
 }: Props) {
   const [isImageShown, setIsImageShown] = useState(false);

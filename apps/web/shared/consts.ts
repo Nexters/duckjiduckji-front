@@ -14,3 +14,5 @@ export const CROSS_LINE_STROKE_SIZE = 2;
 export const CROSS_LINE_Y = 165;
 export const PHOTO_INPUT_GUIDE_Y = 186;
 export const PHOTO_INPUT_GUIDE_X = 78;
+export const POSTIT_WIDTH = 200;
+export const POSTIT_HEIHT = 200;
