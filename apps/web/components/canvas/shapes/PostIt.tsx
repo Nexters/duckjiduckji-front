@@ -1,3 +1,4 @@
+import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useRef } from 'react';
 import { Rect, Transformer } from 'react-konva';
 import { IPostIt } from 'web/shared/types';
@@ -6,11 +7,12 @@ interface Props {
   postIt: IPostIt;
   isDraggable: boolean;
   isSelected: boolean;
+  onClick: (e: KonvaEventObject<MouseEvent>, id: IPostIt) => void;
   onSelect: (polaroid: IPostIt) => void;
   onChange: (polaroid: IPostIt) => void;
 }
 
-export function PostIt({ postIt, isDraggable, isSelected, onSelect, onChange }: Props) {
+export function PostIt({ postIt, isDraggable, isSelected, onSelect, onChange, onClick }: Props) {
   const shapeRef = useRef(null);
   const trRef = useRef(null);
 
@@ -42,7 +44,10 @@ export function PostIt({ postIt, isDraggable, isSelected, onSelect, onChange }: 
         width={postIt.width}
         height={postIt.height}
         ref={shapeRef}
-        onClick={() => onSelect(postIt)}
+        onClick={e => {
+          onClick(e, postIt);
+          onSelect(postIt);
+        }}
         onTap={() => onSelect(postIt)}
         onTransformEnd={handleTransformEnd}
         onDragEnd={e => {

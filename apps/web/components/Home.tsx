@@ -1,5 +1,5 @@
-import { TitleBar } from "../components/layout/TitleBar";
-import { Landing } from "../components/landing/Landing";
+import { TitleBar } from '../components/layout/TitleBar';
+import { Landing } from '../components/landing/Landing';
 
 function Home() {
   return (

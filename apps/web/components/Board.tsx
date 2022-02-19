@@ -1,5 +1,5 @@
-import { TitleBar } from "../components/layout/TitleBar";
-import { List } from "./board/List";
+import { TitleBar } from '../components/layout/TitleBar';
+import { List } from './board/List';
 
 function BoardPage() {
   return (

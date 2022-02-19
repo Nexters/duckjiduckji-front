@@ -93,7 +93,8 @@ function MenuItem({ Icon, onClick, label, index, totalItems }) {
           stiffness: 600,
           damping: 50,
           mass: 1,
-        }}>
+        }}
+      >
         {createElement(Icon, { size: 20 })}
       </Circle>
       {isOpen &&

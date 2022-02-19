@@ -4,18 +4,19 @@ import { Polaroid } from '../editor/PolaroidHTML';
 import { Options } from '../editor/Options';
 
 const Wrapper = styled.div`
-  z-index: 150;
+  z-index: 100;
 
   display: flex;
-  flex-direction: column;
 
   justify-content: center;
   align-items: center;
 
   position: absolute;
+  bottom: 190px;
 
-  width: 100vw;
-  height: 100vh;
+  width: 888px;
+  left: calc((100vw - 888px) / 2);
+  height: 170px;
 `;
 
 type Props = {

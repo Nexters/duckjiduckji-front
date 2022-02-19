@@ -24,3 +24,14 @@ export interface Coordinates {
   x: number;
   y: number;
 }
+
+export interface RoomData {
+  background: { image: string };
+  contentsEdtAt: number;
+  createdAt: string;
+  edtAt: string;
+  headCount: number;
+  id: string;
+  owner: string;
+  title: string;
+}
