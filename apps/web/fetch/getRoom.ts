@@ -1,15 +1,6 @@
 import { API_SERVER } from '../constants/server';
 
-export interface RoomData {
-  background: { image: string };
-  contentsEdtAt: number;
-  createdAt: string;
-  edtAt: string;
-  headCount: number;
-  id: string;
-  owner: string;
-  title: string;
-}
+import { RoomData } from 'web/shared/types';
 
 interface Response {
   data: {
