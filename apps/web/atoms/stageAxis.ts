@@ -14,9 +14,9 @@ export const setInitAxis = atom<StageAxisData>({
 });
 
 export const changeStageAxis = selector<StageAxisData>({
-  key: 'changeStageAxis',
+  key: 'stageAxis-changeStageAxis',
   get: ({ get }) => get(setInitAxis),
   set: ({ set }, axis: StageAxisData) => {
-    set(changeStageAxis, axis);
+    set(setInitAxis, axis);
   },
 });
