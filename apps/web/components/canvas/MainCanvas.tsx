@@ -248,7 +248,7 @@ function MainCanvas({}: Props) {
 
   const setStageAxisDragEnd = (event: KonvaEventObject<DragEvent>) => {
     const { y, x } = event.target.attrs;
-    console.log({ y, x });
+
     setStageAxis({ y, x });
   };
 
