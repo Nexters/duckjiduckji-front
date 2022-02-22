@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import { Polaroid } from '../editor/PolaroidHTML';
 import { Options } from '../editor/Options';
+import { PostItOptions } from '../editor/PostItOptions';
 
 const Wrapper = styled.div`
   z-index: 100;
@@ -21,16 +22,18 @@ const Wrapper = styled.div`
 
 type Props = {
   setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  type: 'postit' | 'polaroid';
 };
 
-export const EditModal = ({ setEditOpen }: Props) => {
+export const EditModal = ({ setEditOpen, type }: Props) => {
   const closeModal = () => {
     setEditOpen(false);
   };
 
   return (
     <Wrapper>
-      <Options close={closeModal} />
+      {type === 'polaroid' && <Options close={closeModal} />}
+      {type === 'postit' && <PostItOptions close={closeModal} />}
     </Wrapper>
   );
 };

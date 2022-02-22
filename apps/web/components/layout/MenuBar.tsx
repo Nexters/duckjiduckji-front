@@ -11,10 +11,11 @@ import { IPostIt } from 'web/shared/types';
 
 type Props = {
   isEditOpen: boolean;
+  setType: React.Dispatch<React.SetStateAction<'polaroid' | 'postit'>>;
   setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const MenuBar = ({ isEditOpen, setEditOpen }: Props) => {
+export const MenuBar = ({ isEditOpen, setEditOpen, setType }: Props) => {
   const [shapes, setShapes] = useRecoilState(shapesState);
   const axis = useRecoilValue(changeStageAxis);
 
@@ -28,10 +29,22 @@ export const MenuBar = ({ isEditOpen, setEditOpen }: Props) => {
     setEditOpen(false);
   };
 
-  const onClickHandler: MouseEventHandler<HTMLButtonElement> = () => {
+  const polaroidButtonHandler: MouseEventHandler<HTMLButtonElement> = () => {
     if (isEditOpen) {
+      setType(undefined);
       closeEditModal();
     } else {
+      setType('polaroid');
+      openEditModal();
+    }
+  };
+
+  const postitButtonHandler: MouseEventHandler<HTMLButtonElement> = () => {
+    if (isEditOpen) {
+      setType(undefined);
+      closeEditModal();
+    } else {
+      setType('postit');
       openEditModal();
     }
   };
@@ -58,9 +71,9 @@ export const MenuBar = ({ isEditOpen, setEditOpen }: Props) => {
 
   return (
     <Wrapper>
-      <ObjectButton onClick={onClickHandler} image={'/assets/image/polaroid_ico.png'} />
+      <ObjectButton onClick={polaroidButtonHandler} image={'/assets/image/polaroid_ico.png'} />
       <ObjectButton image={'/assets/image/sticker_ico.png'} />
-      <Button onClick={createPostIt} image={'/assets/image/postit_ico.svg'} />
+      <Button onClick={postitButtonHandler} image={'/assets/image/postit_ico.svg'} />
       <Button image={'/assets/image/remove_ico.svg'} />
     </Wrapper>
   );
