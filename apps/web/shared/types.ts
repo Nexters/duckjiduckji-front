@@ -16,6 +16,8 @@ export interface IPostIt {
   y: number;
   rotation: number;
   isDragging: boolean;
+  color?: string;
+  text?: string;
 }
 
 export type UserAction = 'browse' | 'pinch';
