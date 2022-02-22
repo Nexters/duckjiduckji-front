@@ -13,14 +13,13 @@ interface Props {
   onSelect: (polaroid: IPostIt) => void;
   onChange: (polaroid: IPostIt) => void;
   color?: string;
+  text?: string;
 }
 
-export function PostIt({ postIt, isDraggable, isSelected, onSelect, onClick, onChange, color }: Props) {
+export function PostIt({ postIt, isDraggable, isSelected, onSelect, onClick, onChange, color, text }: Props) {
   const shapeRef = useRef(null);
   const trRef = useRef(null);
   const textAreaRef = useRef(null);
-
-  const [text, setText] = useState<string>();
 
   useEffect(() => {
     if (isSelected) {
@@ -70,23 +69,9 @@ export function PostIt({ postIt, isDraggable, isSelected, onSelect, onClick, onC
         shadowOffsetX={postIt.isDragging ? 10 : 5}
         shadowOffsetY={postIt.isDragging ? 10 : 5}
       />
-      {isSelected && (
-        <Html groupProps={{ x: POSTIT_PADDING, y: POSTIT_PADDING }} divProps={{ style: { opacity: 1 } }}>
-          <textarea
-            ref={textAreaRef}
-            style={textAreaStyle}
-            onBlur={() => {
-              console.log('blured');
-              setText(textAreaRef.current.value);
-            }}
-            onKeyPress={e => {
-              // console.log(textAreaRef.current.value);
-            }}
-          />
-        </Html>
-      )}
       {!isSelected && (
         <Text
+          value={text}
           x={POSTIT_PADDING}
           y={POSTIT_PADDING}
           fontSize={16}

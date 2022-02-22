@@ -26,11 +26,12 @@ function WhiteBoard({}: Props) {
   }, []);
 
   const [isEditOpen, setEditOpen] = useState<boolean>(false);
+  const [type, setType] = useState<'postit' | 'polaroid'>();
 
   return (
     <div style={{ position: 'relative' }}>
-      <MenuBar isEditOpen={isEditOpen} setEditOpen={setEditOpen} />
-      {isEditOpen && <EditModal setEditOpen={setEditOpen} />}
+      <MenuBar isEditOpen={isEditOpen} setEditOpen={setEditOpen} setType={setType} />
+      {isEditOpen && <EditModal setEditOpen={setEditOpen} type={type} />}
       <ActionBar title={(roomData && roomData?.title) || ''} />
       <MainCanvas />
       {/* <FloatingCircularMenu /> */}
