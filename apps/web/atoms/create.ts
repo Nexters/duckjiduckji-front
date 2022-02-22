@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
 
-interface CreateData {
+export interface CreateData {
   type: string | null;
   color: string | null;
   text: string | null;
@@ -33,7 +33,7 @@ export const changeText = selector<string>({
   },
 });
 
-export const initData = selector<{ text: string }>({
+export const initData = selector({
   key: 'create-init_data',
   get: ({ get }) => get(createData),
   set: ({ set }) => {
@@ -42,5 +42,13 @@ export const initData = selector<{ text: string }>({
       color: null,
       text: null,
     });
+  },
+});
+
+export const changePostIt = selector<CreateData>({
+  key: 'create-post it',
+  get: ({ get }) => get(createData),
+  set: ({ get, set }, postItData) => {
+    set(createData, postItData);
   },
 });
