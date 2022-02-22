@@ -22,8 +22,6 @@ export function PostIt({ postIt, isDraggable, isSelected, onSelect, onClick, onC
 
   const [text, setText] = useState<string>();
 
-  const textTypedHandler = () => {};
-
   useEffect(() => {
     if (isSelected) {
       trRef.current.nodes([shapeRef.current]);
