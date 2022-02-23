@@ -1,5 +1,8 @@
 import { atom, selector } from 'recoil';
-import { IPolaroid, IPostIt, UserAction } from 'web/shared/types';
+import { POLAROID_HEIGHT, POLAROID_WIDTH, POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
+import { UserAction } from 'web/shared/types';
+
+import { IPostIt } from 'web/shared/types';
 
 // TEMP
 function generatePostIts(): IPostIt[] {
@@ -13,7 +16,7 @@ function generatePostIts(): IPostIt[] {
   }));
 }
 
-export const shapesState = atom<{ polaroids: IPolaroid[]; postIts: IPostIt[] }>({
+export const shapesState = atom({
   key: 'shapesState',
   default: {
     polaroids: [
@@ -23,9 +26,11 @@ export const shapesState = atom<{ polaroids: IPolaroid[]; postIts: IPostIt[] }>(
         x: 100,
         y: 100,
         rotation: 0,
+        width: POLAROID_WIDTH,
+        height: POLAROID_HEIGHT,
         isDragging: false,
         text: '',
-        imgUrl: '',
+        imgUrl: 'https://user-images.githubusercontent.com/27193396/151647337-5802e7c9-0004-4d4a-b134-322fc23d824e.png',
       },
     ],
     postIts: generatePostIts(),

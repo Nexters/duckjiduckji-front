@@ -4,10 +4,12 @@ import { useWindowSize } from 'react-use';
 import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Polaroid, PostIt, URLImage } from 'web/components/canvas/shapes';
-import { shapesState, changeColor, userActionState } from 'web/atoms';
+import { Polaroid, PostIt, URLImage, PostItCreation } from 'web/components/canvas/shapes';
+import { shapesState, changeColor, userActionState, changeStageAxis, changePostIt } from 'web/atoms';
 import { Coordinates, IPolaroid, IPostIt } from 'web/shared/types';
 import styled, { CSSProperties } from 'styled-components';
+
+import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -41,6 +43,8 @@ const getRootParentShape = target => {
 };
 
 function MainCanvas({}: Props) {
+  const [postItCreation, setPostItCreation] = useRecoilState(changePostIt);
+  const [stageAxis, setStageAxis] = useRecoilState(changeStageAxis);
   const color = useRecoilValue(changeColor);
   const [shapes, setShapes] = useRecoilState(shapesState);
   const [userAction, setUserAction] = useRecoilState(userActionState);
@@ -245,6 +249,14 @@ function MainCanvas({}: Props) {
     }
   };
 
+  const setStageAxisDragEnd = (event: KonvaEventObject<DragEvent>) => {
+    if (event.target !== stageRef.current) return;
+
+    const { y, x } = event.target.attrs;
+
+    setStageAxis({ y, x });
+  };
+
   return (
     <div style={{ position: 'relative' }}>
       <Stage
@@ -252,6 +264,7 @@ function MainCanvas({}: Props) {
         draggable={true}
         width={width}
         height={height}
+        onDragEnd={setStageAxisDragEnd}
         onWheel={handleStageWheel}
         onTouchEnd={handleStageTouchEnd}
         onTouchMove={handleStageTouchMove}
@@ -265,6 +278,8 @@ function MainCanvas({}: Props) {
           {shapes.postIts.map((postIt, index) => (
             <PostIt
               key={postIt.id}
+              color={postIt.color}
+              text={postIt.text}
               {...{
                 postIt,
                 isDraggable: isShapesDraggable,
@@ -316,7 +331,14 @@ function MainCanvas({}: Props) {
               }}
             />
           ))}
-          <URLImage src={'https://konvajs.org/assets/lion.png'} x={200} y={200} />
+          {postItCreation.type === 'postit' && (
+            <PostItCreation
+              color={postItCreation.color}
+              setPostItCreation={setPostItCreation}
+              x={-stageAxis.x + Math.ceil(width / 2 - POSTIT_WIDTH / 2)}
+              y={-stageAxis.y + Math.ceil(height / 2 - POSTIT_HEIHT / 2)}
+            />
+          )}
         </Layer>
       </Stage>
       <input
