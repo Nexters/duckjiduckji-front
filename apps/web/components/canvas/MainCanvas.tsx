@@ -36,10 +36,9 @@ interface MenuPosition {
   left: Pick<CSSProperties, 'left'>;
 }
 
-const ROOT_LAYER_ID = 13;
-const getRootParentShape = target => {
+const getRootParentShape = (target, ROOT_LAYER_ID: number) => {
   if (!target.parent || target.parent._id === ROOT_LAYER_ID) return target;
-  return getRootParentShape(target.parent);
+  return getRootParentShape(target.parent, ROOT_LAYER_ID);
 };
 
 function MainCanvas({}: Props) {
@@ -50,6 +49,7 @@ function MainCanvas({}: Props) {
   const [userAction, setUserAction] = useRecoilState(userActionState);
   const { width, height } = useWindowSize();
   const stageRef = useRef(null);
+  const layerRef = useRef(null);
   const [selectedPolaroidIds, setSelectedPolaroidIds] = useState<string[]>([]);
   const [selectedPostItIds, setSelectedPostItIds] = useState<string[]>([]);
   const [typingText, setTypingText] = useState('');
@@ -216,8 +216,8 @@ function MainCanvas({}: Props) {
   };
 
   const handleMenuDeleteClick = () => {
-    if (!menuTarget || !menuTarget.target) return;
-    const target = getRootParentShape(menuTarget.target);
+    if (!menuTarget || !menuTarget.target || !layerRef.current) return;
+    const target = getRootParentShape(menuTarget.target, layerRef.current._id);
     target.destroy();
     setMenuOpen(false);
     setShapes(prev => {
@@ -273,7 +273,7 @@ function MainCanvas({}: Props) {
         onContextMenu={handleContextMenu}
         onClick={handleStageClick}
       >
-        <Layer>
+        <Layer ref={layerRef}>
           {/* TODO: 필요시 Generic Shapes 컴포넌트 만들기 */}
           {shapes.postIts.map((postIt, index) => (
             <PostIt
@@ -364,7 +364,6 @@ function MainCanvas({}: Props) {
         onChange={e => {
           e.preventDefault();
           setTypingText(e.target.value);
-          console.log(spanRef.current.offsetWidth);
         }}
       />
       <span ref={spanRef} style={{ position: 'fixed', bottom: 100 }}>

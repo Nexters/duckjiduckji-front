@@ -3,12 +3,14 @@ import { useWindowSize } from 'react-use';
 import styled from 'styled-components';
 
 import { changePostIt } from '../../atoms/create';
-import { shapesState, initData } from 'web/atoms';
+import { shapesState, initData, socketApiSelector } from 'web/atoms';
 import { changeStageAxis } from 'web/atoms/stageAxis';
 
 import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
 import { IPostIt } from 'web/shared/types';
 import { useEffect } from 'react';
+import { CreatePoster, MESSAGE_TYPE, CONTENT_TYPE } from 'socket-model';
+import { useRouter } from 'next/router';
 
 const colors: string[] = [
   '#FFFFFF',
@@ -30,7 +32,9 @@ type Props = {
 export const PostItOptions = ({ close }: Props) => {
   const [shapes, setShapes] = useRecoilState(shapesState);
   const [_, setInit] = useRecoilState(initData);
+  const socketApi = useRecoilValue(socketApiSelector);
   const axis = useRecoilValue(changeStageAxis);
+  const router = useRouter();
 
   const { width, height } = useWindowSize();
   const [postItData, setPostItData] = useRecoilState(changePostIt);
@@ -57,6 +61,10 @@ export const PostItOptions = ({ close }: Props) => {
   };
 
   const createPostIt = () => {
+    if (!socketApi.sendRoom) {
+      throw new Error(`SOCKET NOT CONNECTED`);
+    }
+
     const { postIts } = shapes;
 
     const lastIdx = postIts.length - 1;
@@ -72,7 +80,27 @@ export const PostItOptions = ({ close }: Props) => {
       color: postItData.color,
       text: postItData.text,
     };
-    console.log(newPostIt);
+
+    // TODO: user 데이터 추가
+    const message: CreatePoster = {
+      msgType: MESSAGE_TYPE.CREATE,
+      userId: 'user123',
+      roomId: `${router.query.roomId}`,
+      contentId: newPostIt.id,
+      contentType: CONTENT_TYPE.postIt,
+      data: {
+        content: newPostIt.text,
+        color: newPostIt.color,
+        width: POSTIT_WIDTH,
+        height: POSTIT_HEIHT,
+        rotation: newPostIt.rotation,
+        point: {
+          x: newPostIt.x,
+          y: newPostIt.y,
+        },
+      },
+    };
+    socketApi.sendRoom(message);
 
     const newPostIts = [...shapes.postIts, newPostIt];
     setInit(undefined);

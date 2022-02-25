@@ -1,7 +1,6 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
 import { Rect, Group, Text, Transformer } from 'react-konva';
-import { Html } from 'react-konva-utils';
 import { IPostIt } from 'web/shared/types';
 import { POSTIT_HEIHT, POSTIT_WIDTH, POSTIT_PADDING } from 'web/shared/consts';
 
@@ -19,11 +18,11 @@ interface Props {
 export function PostIt({ postIt, isDraggable, isSelected, onSelect, onClick, onChange, color, text }: Props) {
   const shapeRef = useRef(null);
   const trRef = useRef(null);
-  const textAreaRef = useRef(null);
+  const textRef = useRef(null);
 
   useEffect(() => {
     if (isSelected) {
-      trRef.current.nodes([shapeRef.current]);
+      trRef.current.nodes([shapeRef.current, textRef.current]);
       trRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
@@ -69,17 +68,15 @@ export function PostIt({ postIt, isDraggable, isSelected, onSelect, onClick, onC
         shadowOffsetX={postIt.isDragging ? 10 : 5}
         shadowOffsetY={postIt.isDragging ? 10 : 5}
       />
-      {!isSelected && (
-        <Text
-          value={text}
-          x={POSTIT_PADDING}
-          y={POSTIT_PADDING}
-          fontSize={16}
-          text={text}
-          lineHeight={1.2}
-          width={POSTIT_WIDTH - 2 * POSTIT_PADDING}
-        />
-      )}
+      <Text
+        ref={textRef}
+        x={POSTIT_PADDING}
+        y={POSTIT_PADDING}
+        fontSize={16}
+        text={text}
+        lineHeight={1.2}
+        width={POSTIT_WIDTH - 2 * POSTIT_PADDING}
+      />
       {isSelected && (
         <Transformer ref={trRef} resizeEnabled={false} centeredScaling={true} rotationSnaps={[0, 90, 180, 270]} />
       )}

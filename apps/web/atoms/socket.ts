@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { SocketData, SocketResponseBody } from 'socket-model';
+import { SocketData, SocketResponseBody, SocketApi, PUBLISH_PATH } from 'socket-model';
 
 export const socketState = atom<SocketData>({
   key: 'socketState',
@@ -25,5 +25,26 @@ export const socketDataState = selector<SocketResponseBody>({
      * }
      */
     set(socketState, { ...get(socketState), data: { ...nextState } });
+  },
+});
+
+export const socketApiState = atom<SocketApi>({
+  key: 'socketApiState',
+  default: {
+    sendRoom: undefined,
+  },
+});
+
+export const socketApiSelector = selector<SocketApi>({
+  key: 'socketApiSelector',
+  get: ({ get }) => {
+    const { client, roomId } = get(socketState);
+    if (!client || !roomId) {
+      throw new Error(`SOCKET NOT CONNECTED`);
+    }
+    const sendRoom: SocketApi['sendRoom'] = data => {
+      client.send(`${PUBLISH_PATH.ROOM}/${roomId}`, {}, JSON.stringify(data));
+    };
+    return { sendRoom };
   },
 });
