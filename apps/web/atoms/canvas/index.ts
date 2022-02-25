@@ -1,18 +1,6 @@
 import { atom, selector } from 'recoil';
 import { IPolaroid, IPostIt, UserAction } from 'web/shared/types';
 
-// TEMP
-function generatePostIts(): IPostIt[] {
-  return [...Array(1)].map((_, i) => ({
-    type: 'postIt' as const,
-    id: `i${i.toString()}`,
-    x: 100,
-    y: 100,
-    rotation: 0,
-    isDragging: false,
-  }));
-}
-
 export const shapesState = atom<{ polaroids: IPolaroid[]; postIts: IPostIt[] }>({
   key: 'shapesState',
   default: {
@@ -28,7 +16,7 @@ export const shapesState = atom<{ polaroids: IPolaroid[]; postIts: IPostIt[] }>(
         imgUrl: '',
       },
     ],
-    postIts: generatePostIts(),
+    postIts: [],
   },
 });
 
@@ -54,4 +42,9 @@ export const postItState = selector({
 export const userActionState = atom<UserAction>({
   key: 'userActionState',
   default: 'browse',
+});
+
+export const backgroundState = atom<string>({
+  key: 'backgroundState',
+  default: '',
 });

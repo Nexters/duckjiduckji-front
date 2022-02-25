@@ -4,12 +4,16 @@ import { useWindowSize } from 'react-use';
 import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Polaroid, PostIt, URLImage, PostItCreation } from 'web/components/canvas/shapes';
+import { Polaroid, PostIt, PostItCreation } from 'web/components/canvas/shapes';
 import { shapesState, changeColor, userActionState, changeStageAxis, changePostIt } from 'web/atoms';
 import { Coordinates, IPolaroid, IPostIt } from 'web/shared/types';
 import styled, { CSSProperties } from 'styled-components';
 
 import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
+import { Background } from './Background';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import { uploadFile } from 'web/shared/utils';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -62,6 +66,9 @@ function MainCanvas({}: Props) {
     top: '0px' as Pick<CSSProperties, 'top'>,
     left: '0px' as Pick<CSSProperties, 'left'>,
   });
+  const {
+    query: { roomId },
+  } = useRouter();
 
   const isShapesDraggable = userAction === 'pinch' ? false : true;
 
@@ -160,33 +167,24 @@ function MainCanvas({}: Props) {
     }
   }
 
-  function handleFileUpload(files) {
+  async function handleFileUpload(files) {
     if (!files.length) return;
-    const reader = new FileReader();
-    reader.addEventListener(
-      'load',
-      function () {
-        // convert image file to base64 string
-        const currentTargetId = selectedPolaroidIds[0];
-        setShapes(shapes => ({
-          ...shapes,
-          polaroids: shapes.polaroids.map(polaroid => {
-            if (polaroid.id === currentTargetId) {
-              return {
-                ...polaroid,
-                imgUrl: reader.result as string,
-              };
-            }
-            return polaroid;
-          }),
-        }));
-      },
-      false,
-    );
     const file = files[0];
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    const currentTargetId = selectedPolaroidIds[0];
+    const uploadResult = await uploadFile(file, String(roomId));
+    if (!uploadResult) toast.error('이미지 업로드에 실패했습니다.');
+    setShapes(shapes => ({
+      ...shapes,
+      polaroids: shapes.polaroids.map(polaroid => {
+        if (polaroid.id === currentTargetId) {
+          return {
+            ...polaroid,
+            imgUrl: uploadResult.body.img_url,
+          };
+        }
+        return polaroid;
+      }),
+    }));
   }
   const handleStageClick = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault();
@@ -273,6 +271,9 @@ function MainCanvas({}: Props) {
         onContextMenu={handleContextMenu}
         onClick={handleStageClick}
       >
+        <Layer>
+          <Background width={width} height={height} />
+        </Layer>
         <Layer ref={layerRef}>
           {/* TODO: 필요시 Generic Shapes 컴포넌트 만들기 */}
           {shapes.postIts.map((postIt, index) => (

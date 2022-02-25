@@ -2,6 +2,8 @@ import type { AppProps } from 'next/app';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import { RecoilRoot } from 'recoil';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -24,6 +26,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <GlobalStyle />
+      <ToastContainer />
       <Component {...pageProps} />
     </RecoilRoot>
   );
