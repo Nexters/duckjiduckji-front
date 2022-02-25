@@ -7,6 +7,46 @@ export interface SocketResponseBody {
   data?: any;
 }
 
+export enum CONTENT_TYPE {
+  polaroid = "POLAROID",
+  postIt = "POSTIT",
+}
+
+export interface PosterImage {
+  link: string;
+  order: number;
+}
+
+export interface ShapePosition {
+  x: number;
+  y: number;
+}
+
+export interface PosterData {
+  width: number;
+  height: number;
+  point: ShapePosition;
+  images?: PosterImage[];
+  content?: string;
+  color?: string;
+  opacity?: number;
+  font?: string;
+  rotation?: number;
+}
+
+export interface CreatePoster {
+  msgType: MESSAGE_TYPE;
+  roomId: string;
+  contentId: string | null;
+  userId: string;
+  contentType: CONTENT_TYPE;
+  data: PosterData;
+}
+
+export interface SocketApi {
+  sendRoom?: (data?: CreatePoster) => void;
+}
+
 export interface SocketData {
   // @TODO: roomId and userId need to move to userState.
   roomId?: string;

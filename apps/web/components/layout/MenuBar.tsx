@@ -74,7 +74,6 @@ export const MenuBar = ({ isEditOpen, setEditOpen, setType }: Props) => {
       <ObjectButton onClick={polaroidButtonHandler} image={'/assets/image/polaroid_ico.png'} />
       <ObjectButton image={'/assets/image/sticker_ico.png'} />
       <Button onClick={postitButtonHandler} image={'/assets/image/postit_ico.svg'} />
-      <Button image={'/assets/image/remove_ico.svg'} />
     </Wrapper>
   );
 };
