@@ -96,6 +96,7 @@ function MainCanvas({}: Props) {
     stageRef.current.position(newPos);
     stageRef.current.batchDraw();
   }
+  console.log(stageRef.current?.x());
 
   function handleStageTouchMove(e: KonvaEventObject<TouchEvent>) {
     e.evt.preventDefault();
@@ -272,7 +273,7 @@ function MainCanvas({}: Props) {
         onClick={handleStageClick}
       >
         <Layer>
-          <Background width={width} height={height} />
+          <Background x={-stageRef.current?.x()} y={-stageRef.current?.y()} width={width} height={height} />
         </Layer>
         <Layer ref={layerRef}>
           {/* TODO: 필요시 Generic Shapes 컴포넌트 만들기 */}

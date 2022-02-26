@@ -47,7 +47,7 @@ export const URLImage = ({ src, x, y, width, height }: Props) => {
 
   useEffect(() => {
     calculateDisplaySize();
-  }, [width, height]);
+  }, [width, height, src, x, y]);
 
   // const aspectRatioHeight = Math.min(width * ((image?.height ?? 1) / (image?.width ?? 1)), height);
 
