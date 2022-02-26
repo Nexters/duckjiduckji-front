@@ -88,6 +88,7 @@ function MainCanvas({}: Props) {
       e.evt.deltaY < 0
         ? oldScale * (SCALE_BY + Math.abs(e.evt.deltaY) / 5000)
         : oldScale / (SCALE_BY + Math.abs(e.evt.deltaY) / 5000);
+    if (newScale < 1) return;
     stageRef.current.scale({ x: newScale, y: newScale });
     const newPos = {
       x: pointerX - mousePointTo.x * newScale,
