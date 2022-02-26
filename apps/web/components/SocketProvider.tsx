@@ -18,8 +18,8 @@ const SocketProvider = ({ children }) => {
     if (!roomId) return;
 
     // @TODO: Get USER_ID from store.
-    const userId = 'userId123';
-    // const socketURL = process.env.NODE_ENV === 'production' ? SERVER_PATH.PRODUCTION : SERVER_PATH.MOCK;
+    const userId = `${Math.floor(Math.random() * 10000)}`;
+    window.localStorage.setItem('userId', userId);
     const socketURL = SERVER_PATH.PRODUCTION;
 
     const sock = new sockjs(socketURL);
@@ -36,6 +36,7 @@ const SocketProvider = ({ children }) => {
       stompClient.subscribe(`${SUBSCRIBE_PATH.ROOM}/${roomId}`, res => {
         // @TODO: Need to parse handler.
         const resBody = JSON.parse(res.body) as SocketResponseBody;
+        console.log('\nGET SOCKET DATA\n', resBody);
         setSocketData(resBody);
       });
     };
