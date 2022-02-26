@@ -109,7 +109,7 @@ const LinkButton = styled.button`
 
   text-align: center;
   letter-spacing: 0.015em;
-
+  cursor: pointer;
   color: #ffffff;
 `;
 

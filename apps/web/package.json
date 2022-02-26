@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "axios": "^0.26.0",
     "framer-motion": "^6.2.3",
     "intercept-stdout": "^0.1.2",
     "konva": "^8.3.2",
@@ -19,6 +20,7 @@
     "react-konva": "^17.0.2-5",
     "react-konva-utils": "^0.2.0",
     "react-laag": "^2.0.3",
+    "react-toastify": "^8.2.0",
     "react-use": "^17.3.2",
     "recoil": "^0.6.1",
     "resize-observer-polyfill": "^1.5.1",
@@ -31,7 +33,9 @@
     "use-image": "^1.0.8"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/react": "17.0.37",
+    "@types/react-toastify": "^4.1.0",
     "@types/sockjs-client": "^1.5.1",
     "@types/stompjs": "^2.3.5",
     "@types/styled-components": "^5.1.21",
