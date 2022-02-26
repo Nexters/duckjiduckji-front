@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   height: 70px;
   width: 100%;
 
-  background-color: #f8f8f8;
+  background-color: white;
   section {
     margin: 0 10px;
     display: flex;
