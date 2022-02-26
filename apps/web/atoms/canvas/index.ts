@@ -47,5 +47,5 @@ export const userActionState = atom<UserAction>({
 
 export const backgroundState = atom<string>({
   key: 'backgroundState',
-  default: '/assets/image/backgrounds/background1.png',
+  default: '/assets/image/backgrounds/background2.png',
 });
