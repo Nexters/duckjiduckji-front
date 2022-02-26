@@ -26,10 +26,11 @@ function WhiteBoard({}: Props) {
   }, []);
 
   const [isEditOpen, setEditOpen] = useState<boolean>(false);
-  const [type, setType] = useState<'postit' | 'polaroid'>();
+  const [type, setType] = useState<'postit' | 'polaroid' | 'sticker'>();
 
   return (
     <div style={{ position: 'relative' }}>
+      <div></div>
       <MenuBar isEditOpen={isEditOpen} setEditOpen={setEditOpen} setType={setType} />
       {isEditOpen && <EditModal setEditOpen={setEditOpen} type={type} />}
       <ActionBar title={(roomData && roomData?.title) || ''} />

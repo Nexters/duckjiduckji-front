@@ -24,6 +24,7 @@ export const socketDataState = selector<SocketResponseBody>({
      *   set(polaroidState, nextState);
      * }
      */
+    console.log('getSocketData', nextState);
     set(socketState, { ...get(socketState), data: { ...nextState } });
   },
 });

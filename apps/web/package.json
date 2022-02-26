@@ -30,7 +30,7 @@
     "styled-icons": "^10.45.0",
     "styled-reset": "^4.3.4",
     "ui": "*",
-    "use-image": "^1.0.8"
+    "use-image": "^1.0.10"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

@@ -15,7 +15,6 @@ const Wrapper = styled.div`
   width: 100%;
 
   background-color: #f8f8f8;
-
   section {
     margin: 0 10px;
     display: flex;
@@ -98,18 +97,34 @@ export const ActionBar: React.FC<Props> = ({ title }) => {
   return (
     <Wrapper>
       <section>
-        <MenuButton image={'/assets/image/home_ico.svg'} />
+        <MenuButton image={'/assets/image/Home.png'} />
+        <Divider />
         <Title>
           <span>{title}</span>
         </Title>
-        <Divider />
-        <Button>친구 초대하기</Button>
       </section>
       <section>
-        <MenuButton image={'/assets/image/people_ico.svg'} />
+        <ImageButtons width={170} height={48} image={'/assets/image/zoomicon.png'} />
+        <ImageButtons width={170} height={48} image={'/assets/image/profile.png'} />
+        <ImageButtons width={151} height={48} image={'/assets/image/Share.png'} />
       </section>
     </Wrapper>
   );
 };
 
 export default ActionBar;
+
+const ImageButtons = styled.div<{
+  width: number;
+  height: number;
+  image: string;
+}>`
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
+  margin: 10px;
+  /* border: 1px solid #000; */
+
+  background-image: url(${props => props.image});
+  background-repeat: no-repeat;
+  background-size: contain;
+`;

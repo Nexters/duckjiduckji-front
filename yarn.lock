@@ -4424,7 +4424,12 @@ url-parse@^1.4.3, url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
-use-image@^1.0.7, use-image@^1.0.8:
+use-image@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/use-image/-/use-image-1.0.10.tgz#75c338ca228244b9ba54f9ae1a24cfffdd6b2fb8"
+  integrity sha512-Q+YvP9s5OpYNwrbLFyi9L8LX4o+c59rF12tP2ggwf8RC2Jf+xChhuDVjYO3oZfWgSfdM42ilPIOldjOl+pmb+g==
+
+use-image@^1.0.7:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/use-image/-/use-image-1.0.8.tgz#a8fa4ae359afbb0fc30c7cab0a7f4d537281a9d4"
   integrity sha512-mTQBg+e+tLXvhxq2MozH2ZdUPglG7ozLUlSB036soydO1wg1ZV5msZ4X3aw7gX4ozW0P9yHYZAiZB+qbIdQJZQ==

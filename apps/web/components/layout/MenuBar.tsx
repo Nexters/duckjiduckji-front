@@ -1,23 +1,31 @@
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useRef } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useWindowSize } from 'react-use';
 
-import { shapesState } from 'web/atoms';
+import { shapesState, backgroundState } from 'web/atoms';
 import { changeStageAxis } from 'web/atoms/stageAxis';
 
 import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
 import { IPostIt } from 'web/shared/types';
+import { uploadFile } from '../../shared/utils';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 type Props = {
   isEditOpen: boolean;
-  setType: React.Dispatch<React.SetStateAction<'polaroid' | 'postit'>>;
+  setType: React.Dispatch<React.SetStateAction<'polaroid' | 'postit' | 'sticker'>>;
   setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const MenuBar = ({ isEditOpen, setEditOpen, setType }: Props) => {
   const [shapes, setShapes] = useRecoilState(shapesState);
+  const [_, setBackgroundSrc] = useRecoilState(backgroundState);
   const axis = useRecoilValue(changeStageAxis);
+  const {
+    query: { roomId },
+  } = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { width, height } = useWindowSize();
 
@@ -49,6 +57,16 @@ export const MenuBar = ({ isEditOpen, setEditOpen, setType }: Props) => {
     }
   };
 
+  const stickerButtonHandler: MouseEventHandler<HTMLButtonElement> = () => {
+    if (isEditOpen) {
+      setType(undefined);
+      closeEditModal();
+    } else {
+      setType('sticker');
+      openEditModal();
+    }
+  };
+
   const createPostIt = () => {
     const { postIts } = shapes;
 
@@ -69,12 +87,33 @@ export const MenuBar = ({ isEditOpen, setEditOpen, setType }: Props) => {
     setShapes({ ...shapes, postIts: newPostIts });
   };
 
+  async function handleFileUpload(files) {
+    if (!files.length) return;
+    const file = files[0];
+    const uploadResult = await uploadFile(file, String(roomId));
+    if (!uploadResult) toast.error('이미지 업로드에 실패했습니다.');
+    setBackgroundSrc(uploadResult.body.img_url);
+  }
+
   return (
-    <Wrapper>
-      <ObjectButton onClick={polaroidButtonHandler} image={'/assets/image/polaroid_ico.png'} />
-      <ObjectButton image={'/assets/image/sticker_ico.png'} />
-      <Button onClick={postitButtonHandler} image={'/assets/image/postit_ico.svg'} />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <ObjectButton onClick={() => fileInputRef.current.click()} image={'/assets/image/background.png'} />
+        <ObjectButton onClick={polaroidButtonHandler} image={'/assets/image/polaroidcreate.png'} />
+        <ObjectButton onClick={stickerButtonHandler} image={'/assets/image/stickercreate.png'} />
+        <Button onClick={postitButtonHandler} image={'/assets/image/postit_ico.svg'} />
+      </Wrapper>
+      <input
+        ref={fileInputRef}
+        onChange={({ target }) => {
+          handleFileUpload(target.files);
+          target.value = null;
+        }}
+        type="file"
+        accept="image/*"
+        style={{ opacity: 0, position: 'fixed' }}
+      />
+    </>
   );
 };
 
@@ -84,7 +123,7 @@ const Wrapper = styled.div`
   z-index: 100;
 
   display: flex;
-
+  border-radius: 25px 25px 0px 0px;
   justify-content: center;
   align-items: center;
 
@@ -127,7 +166,7 @@ const ObjectButton = styled.button<{ image: string }>`
   height: 140px;
   padding: 0;
   border: none;
-
+  cursor: pointer;
   background: #ffffff;
 
   background-image: url(${props => props.image});

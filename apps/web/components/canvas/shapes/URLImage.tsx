@@ -19,19 +19,17 @@ export const URLImage = ({ src, x = 0, y = 0, width, height, isFitWidth = false 
     img.src = src;
     imageRef.current = img;
     imageRef.current.addEventListener('load', handleLoad);
-    calculateDisplaySize();
   };
-  console.dir({ src, x, y, width, height, isFitWidth });
+
   const calculateDisplaySize = () => {
     if (!imageRef.current) return;
-    const aspectRatio = imageRef.current?.width / imageRef.current?.height ?? 0.7;
+    const aspectRatio = imageRef.current.width / imageRef.current.height || 1;
+
     if (isFitWidth) {
-      console.log(width, aspectRatio);
       const calcHeight = width / aspectRatio;
-      console.log(calcHeight);
       const displayHeight = calcHeight > height ? height : calcHeight;
-      console.log(width, displayHeight);
       setDisplaySize({ width, height: displayHeight });
+      return;
     }
     const heightDiff = height - imageRef.current.height;
     const widthDiff = width - imageRef.current.width;
@@ -41,6 +39,7 @@ export const URLImage = ({ src, x = 0, y = 0, width, height, isFitWidth = false 
 
   const handleLoad = () => {
     setImage(imageRef.current);
+    calculateDisplaySize();
   };
 
   useEffect(() => {
@@ -56,9 +55,9 @@ export const URLImage = ({ src, x = 0, y = 0, width, height, isFitWidth = false 
     loadImage();
   }, [src]);
 
-  useEffect(() => {
-    calculateDisplaySize();
-  }, [width, height, src, x, y]);
+  // useEffect(() => {
+  //   calculateDisplaySize();
+  // }, [width, height, src, x, y]);
 
   // const aspectRatioHeight = Math.min(width * ((image?.height ?? 1) / (image?.width ?? 1)), height);
 

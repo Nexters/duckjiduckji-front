@@ -19,11 +19,17 @@ import {
   POLAROID_OFFSET_HEIGHT,
   POLAROID_OFFSET_WIDTH,
   POLAROID_UPPER_CLIENT_HEIGHT,
+  POSTIT_HEIHT,
+  POSTIT_WIDTH,
 } from 'web/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { URLImage } from '.';
 import { CSSProperties } from 'styled-components';
 import { Html } from 'react-konva-utils';
+import { useRecoilValue } from 'recoil';
+import { socketApiSelector } from '../../../atoms';
+import { CONTENT_TYPE, CreatePoster, MESSAGE_TYPE, SocketApi } from 'socket-model';
+import { useRouter } from 'next/router';
 
 type Props = {
   polaroid: IPolaroid;
@@ -34,6 +40,8 @@ type Props = {
   onChange: (polaroid: IPolaroid) => void;
   onImageUploadClick: (polaroid: IPolaroid) => void;
   onPolaroidTextChange: (text: string) => void;
+  socketApi: SocketApi;
+  roomId: string;
   color?: string;
 };
 
@@ -45,8 +53,9 @@ export function Polaroid({
   onChange,
   onImageUploadClick,
   onPolaroidTextChange,
+  socketApi,
+  roomId,
   onClick,
-  color,
 }: Props) {
   const [isImageShown, setIsImageShown] = useState(false);
   const shapeRef = useRef(null);
@@ -63,6 +72,45 @@ export function Polaroid({
     trRef.current.nodes([shapeRef.current]);
     trRef.current.getLayer().batchDraw();
   }, [isSelected]);
+
+  const updatePolaroid = () => {
+    if (!socketApi.sendRoom) {
+      return;
+    }
+
+    const images = polaroid.imgUrl ? [{ link: polaroid.imgUrl, order: 1 }] : [];
+    const message: CreatePoster = {
+      msgType: MESSAGE_TYPE.UPDATE,
+      userId: 'user123',
+      roomId,
+      contentId: polaroid.id,
+      contentType: CONTENT_TYPE.postIt,
+      data: {
+        content: polaroid.text,
+        color: polaroid.color,
+        width: POSTIT_WIDTH,
+        height: POSTIT_HEIHT,
+        images,
+        rotation: polaroid.rotation,
+        point: {
+          x: polaroid.x,
+          y: polaroid.y,
+        },
+        opacity: null,
+        font: null,
+        background: {
+          image: null,
+          color: null,
+        },
+      },
+    };
+    socketApi.sendRoom(message);
+  };
+
+  useEffect(() => {
+    if (!polaroid.imgUrl) return;
+    updatePolaroid();
+  }, [polaroid.imgUrl]);
 
   function handleTransformEnd() {
     const node = shapeRef.current;
@@ -100,7 +148,7 @@ export function Polaroid({
           width={POLAROID_OFFSET_WIDTH}
           height={POLAROID_OFFSET_HEIGHT}
           cornerRadius={OUTER_CORNER_RADIUS}
-          fill={color || '#5BB0FF'}
+          fill={polaroid.color || '#5BB0FF'}
           opacity={1}
           shadowColor="black"
           shadowBlur={10}
@@ -203,6 +251,7 @@ export function Polaroid({
               onBlur={() => {
                 setToggleText(true);
                 setPolaroidText();
+                updatePolaroid();
               }}
               onChange={setPolaroidText}
             />

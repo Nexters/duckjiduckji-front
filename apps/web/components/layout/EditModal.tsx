@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Polaroid } from '../editor/PolaroidHTML';
 import { Options } from '../editor/Options';
 import { PostItOptions } from '../editor/PostItOptions';
+import { StickerOptions } from '../editor/StickerOptions';
 
 const Wrapper = styled.div`
   z-index: 100;
@@ -22,7 +23,7 @@ const Wrapper = styled.div`
 
 type Props = {
   setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  type: 'postit' | 'polaroid';
+  type: 'postit' | 'polaroid' | 'sticker';
 };
 
 export const EditModal = ({ setEditOpen, type }: Props) => {
@@ -34,6 +35,7 @@ export const EditModal = ({ setEditOpen, type }: Props) => {
     <Wrapper>
       {type === 'polaroid' && <Options close={closeModal} />}
       {type === 'postit' && <PostItOptions close={closeModal} />}
+      {type === 'sticker' && <StickerOptions close={closeModal} />}
     </Wrapper>
   );
 };

@@ -32,6 +32,10 @@ export interface PosterData {
   opacity?: number;
   font?: string;
   rotation?: number;
+  background: {
+    image: string | null;
+    color: string | null;
+  };
 }
 
 export interface CreatePoster {
@@ -43,8 +47,14 @@ export interface CreatePoster {
   data: PosterData;
 }
 
+export interface DeletePoster
+  extends Pick<
+    CreatePoster,
+    "msgType" | "roomId" | "contentType" | "contentId" | "userId"
+  > {}
+
 export interface SocketApi {
-  sendRoom?: (data?: CreatePoster) => void;
+  sendRoom?: (data?: CreatePoster | DeletePoster) => void;
 }
 
 export interface SocketData {
