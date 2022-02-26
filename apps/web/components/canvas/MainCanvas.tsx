@@ -321,12 +321,23 @@ function MainCanvas({}: Props) {
                     polaroids,
                   }));
                 },
-                onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<PointerEvent>) => {
-                  console.log(polaroid, e);
-                  inputRef.current.focus();
-                },
                 onImageUploadClick: polaroid => {
                   fileInputRef.current.click();
+                },
+                onPolaroidTextChange: text => {
+                  console.log(text);
+                  setShapes(shapes => ({
+                    ...shapes,
+                    polaroids: shapes.polaroids.map(polaroid => {
+                      if (polaroid.id === selectedPolaroidIds[0]) {
+                        return {
+                          ...polaroid,
+                          text,
+                        };
+                      }
+                      return polaroid;
+                    }),
+                  }));
                 },
                 color,
               }}
@@ -349,7 +360,7 @@ function MainCanvas({}: Props) {
         accept="image/*"
         style={{ opacity: 0, position: 'fixed' }}
       />
-      <input
+      {/* <input
         ref={inputRef}
         style={{
           position: 'fixed',
@@ -366,7 +377,7 @@ function MainCanvas({}: Props) {
           e.preventDefault();
           setTypingText(e.target.value);
         }}
-      />
+      /> */}
       <span ref={spanRef} style={{ position: 'fixed', bottom: 100 }}>
         {typingText}
       </span>

@@ -13,6 +13,7 @@ import {
   PHOTO_INPUT_GUIDE_X,
   PHOTO_INPUT_GUIDE_Y,
   POLAROID_BORDER_WIDTH,
+  POLAROID_CLIENT_HEIGHT,
   POLAROID_CLIENT_WIDTH,
   POLAROID_LOWER_CLIENT_HEIGHT,
   POLAROID_OFFSET_HEIGHT,
@@ -21,16 +22,18 @@ import {
 } from 'web/shared/consts';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { URLImage } from '.';
+import { CSSProperties } from 'styled-components';
+import { Html } from 'react-konva-utils';
 
 type Props = {
   polaroid: IPolaroid;
-  onTextAreaDoubleClick: (polaroid: IPolaroid, e: KonvaEventObject<MouseEvent>) => void;
   isDraggable: boolean;
   isSelected: boolean;
   onClick: (e: KonvaEventObject<MouseEvent>, id: IPolaroid) => void;
   onSelect: (polaroid: IPolaroid) => void;
   onChange: (polaroid: IPolaroid) => void;
   onImageUploadClick: (polaroid: IPolaroid) => void;
+  onPolaroidTextChange: (text: string) => void;
   color?: string;
 };
 
@@ -38,16 +41,22 @@ export function Polaroid({
   polaroid,
   isDraggable,
   isSelected,
-  onTextAreaDoubleClick,
   onSelect,
   onChange,
   onImageUploadClick,
+  onPolaroidTextChange,
   onClick,
   color,
 }: Props) {
   const [isImageShown, setIsImageShown] = useState(false);
   const shapeRef = useRef(null);
   const trRef = useRef(null);
+  const textAreaRef = useRef(null);
+  const [toggleText, setToggleText] = useState(true);
+
+  const setPolaroidText = () => {
+    onPolaroidTextChange(textAreaRef.current.value);
+  };
 
   useEffect(() => {
     if (!isSelected) return;
@@ -83,6 +92,7 @@ export function Polaroid({
         onTap={() => onSelect(polaroid)}
         onTransformEnd={handleTransformEnd}
         draggable={isDraggable}
+        onDragStart={() => onSelect(polaroid)}
         onDragEnd={e => {
           onChange({ ...polaroid, x: e.target.x(), y: e.target.y() });
         }}
@@ -149,7 +159,13 @@ export function Polaroid({
             </>
           )}
         </Group>
-        <Group id={polaroid.id} onDblClick={e => onTextAreaDoubleClick(polaroid, e)}>
+        <Group
+          id={polaroid.id}
+          onDblClick={() => {
+            textAreaRef.current.focus();
+            setToggleText(!toggleText);
+          }}
+        >
           <Rect
             x={POLAROID_BORDER_WIDTH}
             y={POLAROID_BORDER_WIDTH + POLAROID_UPPER_CLIENT_HEIGHT + GAP_HEIGHT}
@@ -158,14 +174,38 @@ export function Polaroid({
             cornerRadius={INNER_CORNER_RADIUS}
             fill="white"
           />
-          <Text
-            text={polaroid.text || '내용을 입력해주세요!'}
-            x={POLAROID_BORDER_WIDTH + PADDING}
-            y={POLAROID_BORDER_WIDTH + POLAROID_UPPER_CLIENT_HEIGHT + GAP_HEIGHT + PADDING}
-            fontFamily="Pretendard"
-            fontSize={FONT_SIZE}
-            fill={polaroid.text ? '#595664' : '#B8B7BC'}
-          />
+          {toggleText && (
+            <Text
+              text={polaroid.text || '내용을 입력해주세요!'}
+              x={POLAROID_BORDER_WIDTH + PADDING}
+              y={POLAROID_BORDER_WIDTH + POLAROID_UPPER_CLIENT_HEIGHT + GAP_HEIGHT + PADDING}
+              fontFamily="Pretendard"
+              fontSize={FONT_SIZE}
+              fill={polaroid.text ? '#413E4D' : '#B8B7BC'}
+            />
+          )}
+
+          <Html
+            groupProps={{
+              x: POLAROID_BORDER_WIDTH + PADDING,
+              y: POLAROID_BORDER_WIDTH + POLAROID_UPPER_CLIENT_HEIGHT + GAP_HEIGHT + PADDING,
+            }}
+            divProps={{ style: { opacity: toggleText ? 0 : 1 } }}
+          >
+            <textarea
+              ref={textAreaRef}
+              style={textAreaStyle}
+              onFocus={() => {
+                setToggleText(false);
+                onSelect(polaroid);
+              }}
+              onBlur={() => {
+                setToggleText(true);
+                setPolaroidText();
+              }}
+              onChange={setPolaroidText}
+            />
+          </Html>
         </Group>
       </Group>
       {isSelected && (
@@ -174,3 +214,19 @@ export function Polaroid({
     </>
   );
 }
+
+const textAreaStyle: CSSProperties = {
+  background: 'transparent',
+  resize: 'none',
+  border: 'none',
+  padding: '0',
+  width: `${POLAROID_CLIENT_WIDTH - 2 * PADDING}px`,
+  fontSize: `${FONT_SIZE}px`,
+  outline: 'none',
+  height: `${POLAROID_CLIENT_HEIGHT - 2 * PADDING}px`,
+  position: 'absolute',
+  fontFamily: 'Pretendard',
+  lineHeight: 1,
+  color: '#413E4D',
+  wordBreak: 'break-word',
+};
