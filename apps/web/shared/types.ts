@@ -7,6 +7,7 @@ export interface IPolaroid {
   isDragging: boolean;
   text: string;
   imgUrl: string;
+  color: string;
 }
 
 export interface IPostIt {
@@ -18,6 +19,16 @@ export interface IPostIt {
   isDragging: boolean;
   color?: string;
   text?: string;
+}
+
+export interface ISticker {
+  type: 'sticker';
+  id: string;
+  x: number;
+  y: number;
+  rotation: number;
+  isDragging: boolean;
+  imageURL: string;
 }
 
 export type UserAction = 'browse' | 'pinch';

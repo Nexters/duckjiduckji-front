@@ -5,15 +5,25 @@ import Konva from 'konva';
 import { Stage, Layer } from 'react-konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Polaroid, PostIt, PostItCreation } from 'web/components/canvas/shapes';
-import { shapesState, changeColor, userActionState, changeStageAxis, changePostIt } from 'web/atoms';
+import {
+  shapesState,
+  changeColor,
+  userActionState,
+  changeStageAxis,
+  changePostIt,
+  socketApiSelector,
+  backgroundState,
+} from 'web/atoms';
 import { Coordinates, IPolaroid, IPostIt } from 'web/shared/types';
 import styled, { CSSProperties } from 'styled-components';
+import { MESSAGE_TYPE, CONTENT_TYPE, DeletePoster } from 'socket-model';
 
 import { POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
 import { Background } from './Background';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { uploadFile } from 'web/shared/utils';
+import { SimpleImage } from './shapes/SimpleImage';
 
 const SCALE_BY = 1.01;
 Konva.hitOnDragEnabled = true;
@@ -47,10 +57,12 @@ const getRootParentShape = (target, ROOT_LAYER_ID: number) => {
 
 function MainCanvas({}: Props) {
   const [postItCreation, setPostItCreation] = useRecoilState(changePostIt);
+  const backgroundSrc = useRecoilValue(backgroundState);
   const [stageAxis, setStageAxis] = useRecoilState(changeStageAxis);
   const color = useRecoilValue(changeColor);
   const [shapes, setShapes] = useRecoilState(shapesState);
   const [userAction, setUserAction] = useRecoilState(userActionState);
+  const socketApi = useRecoilValue(socketApiSelector);
   const { width, height } = useWindowSize();
   const stageRef = useRef(null);
   const layerRef = useRef(null);
@@ -97,7 +109,6 @@ function MainCanvas({}: Props) {
     stageRef.current.position(newPos);
     stageRef.current.batchDraw();
   }
-  console.log(stageRef.current?.x());
 
   function handleStageTouchMove(e: KonvaEventObject<TouchEvent>) {
     e.evt.preventDefault();
@@ -163,6 +174,7 @@ function MainCanvas({}: Props) {
 
   function checkDeselect(e: KonvaEventObject<MouseEvent> | KonvaEventObject<TouchEvent>) {
     const clickedOnEmpty = e.target === e.target.getStage();
+    console.log(e.target);
     if (clickedOnEmpty) {
       setSelectedPolaroidIds([]);
       setSelectedPostItIds([]);
@@ -219,6 +231,17 @@ function MainCanvas({}: Props) {
     if (!menuTarget || !menuTarget.target || !layerRef.current) return;
     const target = getRootParentShape(menuTarget.target, layerRef.current._id);
     target.destroy();
+
+    const message: DeletePoster = {
+      msgType: MESSAGE_TYPE.DELETE,
+      roomId: `${roomId}`,
+      contentType: menuTarget.data.type === 'postIt' ? CONTENT_TYPE.postIt : CONTENT_TYPE.polaroid,
+      contentId: menuTarget.data.id,
+      userId: 'user123',
+    };
+
+    socketApi.sendRoom(message);
+
     setMenuOpen(false);
     setShapes(prev => {
       if (menuTarget.data.type === 'polaroid') {
@@ -275,6 +298,7 @@ function MainCanvas({}: Props) {
       >
         <Layer>
           <Background
+            src={backgroundSrc}
             x={-(stageRef.current?.x() ?? 0)}
             y={-(stageRef.current?.y() ?? 0)}
             width={width ?? 0}
@@ -315,6 +339,8 @@ function MainCanvas({}: Props) {
                 polaroid,
                 isDraggable: isShapesDraggable,
                 isSelected: selectedPolaroidIds.includes(polaroid.id),
+                socketApi,
+                roomId: `${roomId}`,
                 onSelect: () => {
                   setSelectedPostItIds([]);
                   setSelectedPolaroidIds([polaroid.id]);
@@ -358,11 +384,17 @@ function MainCanvas({}: Props) {
               y={-stageAxis.y + Math.ceil(height / 2 - POSTIT_HEIHT / 2)}
             />
           )}
+          {shapes.stickers.map((sticker, index) => (
+            <SimpleImage x={sticker.x} y={sticker.y} key={index} src={sticker.imageURL} />
+          ))}
         </Layer>
       </Stage>
       <input
         ref={fileInputRef}
-        onChange={({ target }) => handleFileUpload(target.files)}
+        onChange={({ target }) => {
+          handleFileUpload(target.files);
+          target.value = null;
+        }}
         type="file"
         accept="image/*"
         style={{ opacity: 0, position: 'fixed' }}

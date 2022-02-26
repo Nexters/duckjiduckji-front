@@ -19,13 +19,18 @@ const SocketProvider = ({ children }) => {
 
     // @TODO: Get USER_ID from store.
     const userId = 'userId123';
-    const socketURL = process.env.NODE_ENV === 'production' ? SERVER_PATH.PRODUCTION : SERVER_PATH.MOCK;
+    // const socketURL = process.env.NODE_ENV === 'production' ? SERVER_PATH.PRODUCTION : SERVER_PATH.MOCK;
+    const socketURL = SERVER_PATH.PRODUCTION;
 
     const sock = new sockjs(socketURL);
     const stompClient = stomp.over(sock);
 
     const sendJoinNoti = () => {
-      stompClient.send(`${PUBLISH_PATH.ROOM}/${roomId}`, {}, JSON.stringify({ msgType: MESSAGE_TYPE.JOIN, userId }));
+      stompClient.send(
+        `${PUBLISH_PATH.ROOM}/${roomId}`,
+        {},
+        JSON.stringify({ msgType: MESSAGE_TYPE.JOIN, userId, roomId }),
+      );
     };
     const subscribeRoomAllNoti = () => {
       stompClient.subscribe(`${SUBSCRIBE_PATH.ROOM}/${roomId}`, res => {
