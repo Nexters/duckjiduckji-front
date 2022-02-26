@@ -81,13 +81,12 @@ export function Polaroid({
     const images = polaroid.imgUrl ? [{ link: polaroid.imgUrl, order: 1 }] : [];
     const message: CreatePoster = {
       msgType: MESSAGE_TYPE.UPDATE,
-      userId: 'user123',
+      userId: window.localStorage.getItem('userId'),
       roomId,
       contentId: polaroid.id,
-      contentType: CONTENT_TYPE.postIt,
+      contentType: CONTENT_TYPE.polaroid,
       data: {
         content: polaroid.text,
-        color: polaroid.color,
         width: POSTIT_WIDTH,
         height: POSTIT_HEIHT,
         images,
@@ -100,7 +99,7 @@ export function Polaroid({
         font: null,
         background: {
           image: null,
-          color: null,
+          color: polaroid.color,
         },
       },
     };

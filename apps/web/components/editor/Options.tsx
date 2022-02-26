@@ -152,19 +152,17 @@ export const Options = ({ close }: Props) => {
       imgUrl: undefined,
     };
 
-    // TODO: user 데이터 추가
     const message: CreatePoster = {
       msgType: MESSAGE_TYPE.CREATE,
-      userId: 'user123',
+      userId: window.localStorage.getItem('userId'),
       roomId: `${router.query.roomId}`,
       contentId: newPolaroid.id,
-      contentType: CONTENT_TYPE.postIt,
+      contentType: CONTENT_TYPE.polaroid,
       data: {
         content: newPolaroid.text,
-        color: newPolaroid.color,
         width: POSTIT_WIDTH,
         height: POSTIT_HEIHT,
-        images: [],
+        images: null,
         rotation: newPolaroid.rotation,
         point: {
           x: newPolaroid.x,
@@ -174,7 +172,7 @@ export const Options = ({ close }: Props) => {
         font: null,
         background: {
           image: null,
-          color: null,
+          color: newPolaroid.color,
         },
       },
     };

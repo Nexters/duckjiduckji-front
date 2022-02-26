@@ -237,7 +237,7 @@ function MainCanvas({}: Props) {
       roomId: `${roomId}`,
       contentType: menuTarget.data.type === 'postIt' ? CONTENT_TYPE.postIt : CONTENT_TYPE.polaroid,
       contentId: menuTarget.data.id,
-      userId: 'user123',
+      userId: window.localStorage.getItem('userId'),
     };
 
     socketApi.sendRoom(message);
