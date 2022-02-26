@@ -74,7 +74,6 @@ export function Polaroid({
       rotation: node.rotation(),
     });
   }
-
   return (
     <>
       <Group
@@ -120,6 +119,7 @@ export function Polaroid({
 
           {polaroid.imgUrl ? (
             <URLImage
+              isFitWidth={true}
               src={polaroid.imgUrl}
               x={POLAROID_BORDER_WIDTH}
               y={POLAROID_BORDER_WIDTH}
@@ -193,6 +193,7 @@ export function Polaroid({
             divProps={{ style: { opacity: toggleText ? 0 : 1 } }}
           >
             <textarea
+              spellCheck={false}
               ref={textAreaRef}
               style={textAreaStyle}
               onFocus={() => {

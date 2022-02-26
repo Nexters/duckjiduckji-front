@@ -274,7 +274,12 @@ function MainCanvas({}: Props) {
         onClick={handleStageClick}
       >
         <Layer>
-          <Background x={-stageRef.current?.x()} y={-stageRef.current?.y()} width={width} height={height} />
+          <Background
+            x={-(stageRef.current?.x() ?? 0)}
+            y={-(stageRef.current?.y() ?? 0)}
+            width={width ?? 0}
+            height={height ?? 0}
+          />
         </Layer>
         <Layer ref={layerRef}>
           {/* TODO: 필요시 Generic Shapes 컴포넌트 만들기 */}

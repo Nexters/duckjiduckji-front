@@ -7,9 +7,10 @@ interface Props {
   y: number;
   width?: number;
   height?: number;
+  isFitWidth?: boolean;
 }
 
-export const URLImage = ({ src, x, y, width, height }: Props) => {
+export const URLImage = ({ src, x = 0, y = 0, width, height, isFitWidth = false }: Props) => {
   const imageRef = useRef(null);
   const [image, setImage] = useState(null);
   const [displaySize, setDisplaySize] = useState({ width: 300, height: 300 });
@@ -18,10 +19,20 @@ export const URLImage = ({ src, x, y, width, height }: Props) => {
     img.src = src;
     imageRef.current = img;
     imageRef.current.addEventListener('load', handleLoad);
+    calculateDisplaySize();
   };
-
+  console.dir({ src, x, y, width, height, isFitWidth });
   const calculateDisplaySize = () => {
-    const aspectRatio = imageRef.current.width / imageRef.current.height;
+    if (!imageRef.current) return;
+    const aspectRatio = imageRef.current?.width / imageRef.current?.height ?? 0.7;
+    if (isFitWidth) {
+      console.log(width, aspectRatio);
+      const calcHeight = width / aspectRatio;
+      console.log(calcHeight);
+      const displayHeight = calcHeight > height ? height : calcHeight;
+      console.log(width, displayHeight);
+      setDisplaySize({ width, height: displayHeight });
+    }
     const heightDiff = height - imageRef.current.height;
     const widthDiff = width - imageRef.current.width;
     if (heightDiff > widthDiff) setDisplaySize({ width: height * aspectRatio, height });

@@ -8,7 +8,7 @@ interface Props {
   height: number;
 }
 
-export function Background({ x, y, width, height }: Props) {
+export function Background({ x = 0, y = 0, width, height }: Props) {
   return (
     <URLImage
       {...{
