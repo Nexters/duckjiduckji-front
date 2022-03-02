@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { POLAROID_HEIGHT, POLAROID_WIDTH, POSTIT_HEIHT, POSTIT_WIDTH } from 'web/shared/consts';
+import { POLAROID_OFFSET_HEIGHT, POLAROID_OFFSET_WIDTH } from 'web/shared/consts';
 import { UserAction } from 'web/shared/types';
 
 import { IPostIt } from 'web/shared/types';
@@ -26,8 +26,8 @@ export const shapesState = atom({
         x: 100,
         y: 100,
         rotation: 0,
-        width: POLAROID_WIDTH,
-        height: POLAROID_HEIGHT,
+        width: POLAROID_OFFSET_WIDTH,
+        height: POLAROID_OFFSET_HEIGHT,
         isDragging: false,
         text: '',
         imgUrl: 'https://user-images.githubusercontent.com/27193396/151647337-5802e7c9-0004-4d4a-b134-322fc23d824e.png',
