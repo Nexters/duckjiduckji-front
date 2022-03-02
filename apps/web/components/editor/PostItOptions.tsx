@@ -81,22 +81,24 @@ export const PostItOptions = ({ close }: Props) => {
       text: postItData.text,
     };
 
-    // TODO: user 데이터 추가
     const message: CreatePoster = {
       msgType: MESSAGE_TYPE.CREATE,
-      userId: 'user123',
+      userId: window.localStorage.getItem('userId'),
       roomId: `${router.query.roomId}`,
       contentId: newPostIt.id,
       contentType: CONTENT_TYPE.postIt,
       data: {
         content: newPostIt.text,
-        color: newPostIt.color,
         width: POSTIT_WIDTH,
         height: POSTIT_HEIHT,
         rotation: newPostIt.rotation,
         point: {
           x: newPostIt.x,
           y: newPostIt.y,
+        },
+        background: {
+          image: null,
+          color: newPostIt.color,
         },
       },
     };
