@@ -66,6 +66,7 @@ export const StickerOptions = ({ close }: Props) => {
     '/assets/image/stickers/3_Sticker.png',
     '/assets/image/stickers/4_Sticker.png',
     '/assets/image/stickers/5_Sticker.png',
+    '/assets/image/stickers/character.png',
   ];
 
   return (
