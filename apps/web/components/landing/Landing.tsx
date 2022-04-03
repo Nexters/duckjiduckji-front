@@ -28,6 +28,13 @@ export function Landing() {
         <LinkButton onClick={moveRoomsPage}>
           덕지덕지 시작하기 <ButtonArrow />
         </LinkButton>
+        <button
+          onClick={moveRoomsPage}
+          className="flex justify-center items-center py-4 px-9 w-64 h-16 text-lg font-bold text-white bg-[#6038ff] border-0 rounded-[32px]"
+        >
+          덕지덕지 시작하기
+          <ButtonArrow />
+        </button>
       </Inner>
     </Wrapper>
   );

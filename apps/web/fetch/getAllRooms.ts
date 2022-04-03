@@ -15,7 +15,9 @@ interface Response {
 export async function requestGetAllRooms() {
   const response: Response = await fetch(`${API_SERVER}/rooms`, {
     method: 'GET',
-  }).then(res => res.json());
+  })
+    .then(res => res.json())
+    .catch(e => ({}));
 
   if (!response.success) return false;
 
