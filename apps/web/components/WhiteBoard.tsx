@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { MenuBar } from 'web/components/layout/MenuBar';
 import { ActionBar } from 'web/components/layout/ActionBar';
 import { EditModal } from 'web/components/layout/EditModal';
-import { FloatingCircularMenu } from 'web/components/layout/FloatingCircularMenu';
 import MainCanvas from 'web/components/canvas/MainCanvas';
 
 import { requestGetRoom } from 'web/fetch/getRoom';
