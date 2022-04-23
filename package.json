@@ -10,6 +10,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "dev:w": "turbo run dev --scope=web --no-deps --include-dependencies",
+    "dev:m": "turbo run dev --scope=mobile --no-deps --include-dependencies",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "socket": "yarn workspace mock-socket-server",
