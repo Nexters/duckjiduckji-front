@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "build:m": "turbo run build --scope=mobile --no-deps --include-dependencies",
     "dev": "turbo run dev --parallel",
     "dev:w": "turbo run dev --scope=web --no-deps --include-dependencies",
     "dev:m": "turbo run dev --scope=mobile --no-deps --include-dependencies",
