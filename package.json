@@ -8,8 +8,6 @@
       "packages/*"
     ],
     "nohoist": [
-      "**/react",
-      "**/react/**",
       "**/next",
       "**/next/**"
     ]
