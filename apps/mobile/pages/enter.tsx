@@ -1,5 +1,10 @@
-import Enter from "mobile/components/Enter";
+import Enter from "../components/Enter";
+import Layout from "../components/Layout";
 
 export default function EnterPage() {
-  return <Enter />;
+  return (
+    <Layout title="홈" hasTabBar>
+      <Enter />
+    </Layout>
+  );
 }
